@@ -1,0 +1,33 @@
+back/node_modules/
+front/node_modules/
+
+# Ignore Logs
+/back/logs
+/back/*.log
+/back/npm-debug.log*
+/back/yarn-debug.log*
+/back/yarn-error.log*
+/back/lerna-debug.log*
+/back/.pnpm-debug.log*
+
+# Bower dependency directory (https://bower.io/)
+back/bower_components
+
+# Optional npm cache directory
+back/.npm
+
+# Optional eslint cache
+back/.eslintcache
+
+# Optional stylelint cache
+back/.stylelintcache
+
+# dotenv environment variable files
+back/.env
+back/.env.development.local
+back/.env.test.local
+back/.env.production.local
+back/.env.local
+
+# ignore the dist folder
+back/dist
