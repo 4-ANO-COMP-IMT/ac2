@@ -1,0 +1,61 @@
+name: Check & Create PR
+
+on:
+  push:
+    branches:
+      - dev
+    
+jobs: 
+  check_pr:
+    runs-on: ubuntu-latest
+    outputs:
+      lenPrs: ${{ steps.check_pr.outputs.lenPrs }}
+      isInitialCommit: ${{ steps.check_pr.outputs.isInitialCommit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository }}
+          
+      - id: check_pr
+        name: Check PR list
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ref: ${{ github.ref_name }}
+        run: |
+          if [[ $ref == 'dev' ]]; then
+            lenPrs=$(gh pr list -B prod -H dev --json id,title --jq '. | length')
+            echo "lenPrs=$lenPrs" >> "$GITHUB_OUTPUT"
+          else
+            echo "not implemented yet"
+          fi
+
+          echo "Checking if is initial commit..."
+
+          isInitialCommit=$(git log --oneline -n 3 | grep -o "Initial commit" | wc -l)
+
+          echo "Should be 1 if is initial commit: $isInitialCommit"
+
+          echo $isInitialCommit
+          echo "isInitialCommit=$isInitialCommit" >> "$GITHUB_OUTPUT"
+
+
+           
+  create-pr-prod:
+    needs: check_pr
+    if: ${{ github.ref_name == 'dev' && needs.check_pr.outputs.lenPrs == 0 && needs.check_pr.outputs.isInitialCommit != 1}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v2
+        with:
+          application_id: ${{ vars.SETUP_APP_ID }}
+          application_private_key: ${{ secrets.SETUP_APP_PRIVATE_KEY }}
+                    
+      - name: Create PR dev into prod  
+        env:
+          repo: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+        run: |
+            gh pr create -B prod -H dev --title "Merge branch dev -> prod - Criado Automatico" --body "Criado Automaticamente" --reviewer 4-ANO-COMP-IMT/Admins-repo --repo ${{github.repository}}  
