@@ -31,3 +31,11 @@ back/.env.local
 
 # ignore the dist folder
 back/dist
+
+front/.idea
+front/.DS_Store
+front/*.suo
+front/*.ntvs*
+front/*.njsproj
+front/*.sln
+front/*.sw?
