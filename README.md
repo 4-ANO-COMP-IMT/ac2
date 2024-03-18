@@ -1,8 +1,6 @@
-
 # Project
 
 Uma breve descrição sobre o que esse projeto faz e para quem ele é
-
 
 ## Features
 
@@ -10,7 +8,6 @@ Uma breve descrição sobre o que esse projeto faz e para quem ele é
 - Preview em tempo real
 - Modo tela cheia
 - Multiplataforma
-
 
 ## Setup
 
@@ -21,32 +18,13 @@ Clone this repository with git
   cd ac2
 ```
 
-### Dependencies
+## Folders
 
-Install all the dependencies with **NPM** for both systems
-   
-```bash
-  cd back
-  npm install
-  cd ../front
-  npm install
-```
+- **back**: Back-end folder | Node.js struct
+- **front**: Front-end folder | React struct
 
-This also applies to others package managers, like:
-- PNPM
-- Yarn
-- Bun
-
-### Run the project
-
-To execute these systems, run this inside of each systems directory
-
-```bash
-  npm run dev
-```
 ## Authors
 
-- [Enzo Sakamoto](https://github.com/enzosakamoto)
-- [Flavio Murata](https://github.com/flaviomurata)
-- [Vinícius de Oliveira Berti](https://github.com/viniciusberti)
-
+- [Enzo Sakamoto - 21.00210-0](https://github.com/enzosakamoto)
+- [Flavio Murata - 21.01192-3](https://github.com/flaviomurata)
+- [Vinícius de Oliveira Berti - 21.01219-9](https://github.com/viniciusberti)
