@@ -28,6 +28,7 @@ back/.env.development.local
 back/.env.test.local
 back/.env.production.local
 back/.env.local
+front/.DS_Store
 
 # ignore the dist folder
 back/dist
@@ -39,3 +40,5 @@ front/*.ntvs*
 front/*.njsproj
 front/*.sln
 front/*.sw?
+
+.DS_Store
