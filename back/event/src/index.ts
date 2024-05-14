@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { config } from 'dotenv'
+import { Event } from './shared/domain/entities/event'
 
 type User = {
   id: number
@@ -13,6 +14,16 @@ const server = async () => {
   const app = express()
 
   const PORT = process.env.PORT || 3000
+
+  const event = new Event(
+    '1',
+    'Event Name',
+    1632950400000,
+    1632954000000,
+    600000
+  )
+
+  console.log(event)
 
   app.use(express.json())
   app.use(cors())
