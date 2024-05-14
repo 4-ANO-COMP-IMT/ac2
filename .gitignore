@@ -40,5 +40,7 @@ front/*.ntvs*
 front/*.njsproj
 front/*.sln
 front/*.sw?
+front/.env
+front/.env.local
 
 .DS_Store
