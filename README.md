@@ -28,3 +28,6 @@ Clone this repository with git
 - [Enzo Sakamoto - 21.00210-0](https://github.com/enzosakamoto)
 - [Flavio Murata - 21.01192-3](https://github.com/flaviomurata)
 - [Vinícius de Oliveira Berti - 21.01219-9](https://github.com/viniciusberti)
+- [João Vitor Choueri Branco - 21.01075-7](https://github.com/JoaoVitorBranco)
+- [Pedro Henrique de Sousa Matumoto - 21.00784-5](https://github.com/PedroMatumoto)
+- [Vitor Guirão Soller - 21.01444-2](https://github.com/VgsStudio)
