@@ -4,13 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test-entity": "nodemon test/shared/domain/entities/test_event.ts",
-    "test-events": "nodemon test/shared/domain/repos/test_event_repository_mock.ts",
-    "test-get-event" : "nodemon test/modules/get_event/test_get_event_usecase.ts",
-    "test-control-event": "nodemon test/modules/get_event/test_get_event_controller.ts",
-    "test-get-presenter": "nodemon test/modules/get_event/test_get_event_presenter.ts",
     "dev": "nodemon src/index.ts",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +24,8 @@
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
