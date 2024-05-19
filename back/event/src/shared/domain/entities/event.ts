@@ -6,6 +6,8 @@ export interface EventProps {
   timeInterval: number
   calculateTotalTime: () => number
   calculateCellNumbers: () => number
+  equals: (event: Event) => boolean
+  to_json: () => object
 }
 
 export class Event implements EventProps {
@@ -29,6 +31,26 @@ export class Event implements EventProps {
 
   calculateCellNumbers() {
     return this.calculateTotalTime() / this.timeInterval
+  }
+
+  equals(event: Event) {
+    return (
+      this.id === event.id &&
+      this.name === event.name &&
+      this.startDate === event.startDate &&
+      this.endDate === event.endDate &&
+      this.timeInterval === event.timeInterval
+    )
+  }
+
+  to_json() {
+    return {
+      id: this.id,
+      name: this.name,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      timeInterval: this.timeInterval
+    }
   }
 
   // Getters and Setters
