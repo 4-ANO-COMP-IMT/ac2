@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon test/shared/domain/entities/event_test.ts",
     "dev": "nodemon src/index.ts",
     "lint": "eslint . --ext .ts"
   },
