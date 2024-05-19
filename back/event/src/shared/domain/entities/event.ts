@@ -7,7 +7,15 @@ export interface EventProps {
   calculateTotalTime: () => number
   calculateCellNumbers: () => number
   equals: (event: Event) => boolean
-  to_json: () => object
+  toJson: () => EventJsonProps
+}
+
+export type EventJsonProps = {
+  id: string
+  name: string
+  start_date: number
+  end_date: number
+  time_interval: number
 }
 
 export class Event implements EventProps {
@@ -43,13 +51,13 @@ export class Event implements EventProps {
     )
   }
 
-  to_json() {
+  toJson() {
     return {
       id: this.id,
       name: this.name,
-      startDate: this.startDate,
-      endDate: this.endDate,
-      timeInterval: this.timeInterval
+      start_date: this.startDate,
+      end_date: this.endDate,
+      time_interval: this.timeInterval
     }
   }
 
