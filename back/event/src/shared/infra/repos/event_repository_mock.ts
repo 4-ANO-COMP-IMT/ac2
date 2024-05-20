@@ -1,5 +1,6 @@
 import { EventRepositoryInterface } from './event_repository_interface'
 import { Event } from '../../domain/entities/event'
+import { NotFoundError } from '../../domain/helpers/errors/not_found'
 
 export class EventRepositoryMock implements EventRepositoryInterface {
   private _events: Event[] = [
@@ -24,7 +25,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     const event = this._events.find((event) => event.id === id)
 
     if (!event) {
-      throw new Error('event not found')
+      throw new NotFoundError('event')
     }
 
     return event
@@ -34,7 +35,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     const eventIndex = this._events.findIndex((e) => e.id === event.id)
 
     if (eventIndex === -1) {
-      throw new Error('event not found')
+      throw new NotFoundError('event')
     }
 
     this._events[eventIndex] = event
@@ -53,12 +54,12 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       this._events = this._events.filter((event) => event.id !== id)
       return event
     }
-    throw new Error('event not found')
+    throw new NotFoundError('event')
   }
 
   // Getters and Setters
 
-  public get events(): Event[] {
+  public get events() {
     return this._events
   }
 }
