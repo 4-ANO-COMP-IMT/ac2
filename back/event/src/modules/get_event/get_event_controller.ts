@@ -30,7 +30,6 @@ export class GetEventController implements GetEventControllerProps {
         message: 'event found',
         event: event.toJson()
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.message.includes('not found')) {
         return {
