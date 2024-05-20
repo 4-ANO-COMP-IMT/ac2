@@ -1,13 +1,8 @@
-export interface EventProps {
-  id: string
-  name: string
-  startDate: number
-  endDate: number
-  timeInterval: number
-  calculateTotalTime: () => number
-  calculateCellNumbers: () => number
-  equals: (event: Event) => boolean
-  toJson: () => EventJsonProps
+export interface EventInterface {
+  calculateTotalTime(): number
+  calculateCellNumbers(): number
+  equals(event: Event): boolean
+  toJson(): EventJsonProps
 }
 
 export type EventJsonProps = {
@@ -18,88 +13,94 @@ export type EventJsonProps = {
   time_interval: number
 }
 
-export class Event implements EventProps {
+export class Event implements EventInterface {
+  private _id: string
+  private _name: string
+  private _startDate: number
+  private _endDate: number
+  private _timeInterval: number
+
   constructor(
-    public id: string,
-    public name: string,
-    public startDate: number,
-    public endDate: number,
-    public timeInterval: number
+    id: string,
+    name: string,
+    startDate: number,
+    endDate: number,
+    timeInterval: number
   ) {
-    this.id = id
-    this.name = name
-    this.startDate = startDate
-    this.endDate = endDate
-    this.timeInterval = timeInterval
+    this._id = id
+    this._name = name
+    this._startDate = startDate
+    this._endDate = endDate
+    this._timeInterval = timeInterval
   }
 
   calculateTotalTime() {
-    return this.endDate - this.startDate
+    return this._endDate - this._startDate
   }
 
   calculateCellNumbers() {
-    return this.calculateTotalTime() / this.timeInterval
+    return this.calculateTotalTime() / this._timeInterval
   }
 
   equals(event: Event) {
     return (
-      this.id === event.id &&
-      this.name === event.name &&
-      this.startDate === event.startDate &&
-      this.endDate === event.endDate &&
-      this.timeInterval === event.timeInterval
+      this._id === event._id &&
+      this._name === event._name &&
+      this._startDate === event._startDate &&
+      this._endDate === event._endDate &&
+      this._timeInterval === event._timeInterval
     )
   }
 
   toJson() {
     return {
-      id: this.id,
-      name: this.name,
-      start_date: this.startDate,
-      end_date: this.endDate,
-      time_interval: this.timeInterval
+      id: this._id,
+      name: this._name,
+      start_date: this._startDate,
+      end_date: this._endDate,
+      time_interval: this._timeInterval
     }
   }
 
   // Getters and Setters
 
-  get getId() {
-    return this.id
+  get id() {
+    return this._id
   }
 
-  set setId(id: string) {
-    this.id = id
+  set id(id: string) {
+    this._id = id
   }
 
-  get getName() {
-    return this.name
+  get name() {
+    return this._name
   }
 
-  set setName(name: string) {
-    this.name = name
+  set name(name: string) {
+    this._name = name
   }
 
-  get getStartDate() {
-    return this.startDate
+  get startDate() {
+    return this._startDate
   }
 
-  set setStartDate(startDate: number) {
-    this.startDate = startDate
+  set startDate(startDate: number) {
+    this._startDate = startDate
   }
 
-  get getEndDate() {
-    return this.endDate
+  get endDate() {
+    return this._endDate
   }
 
-  set setEndDate(endDate: number) {
-    this.endDate = endDate
+  set endDate(endDate: number) {
+    this._endDate = endDate
   }
 
-  get getTimeInterval() {
-    return this.timeInterval
+  get timeInterval() {
+    return this._timeInterval
   }
 
-  set setTimeInterval(timeInterval: number) {
-    this.timeInterval = timeInterval
+  set timeInterval(timeInterval: number) {
+    this._timeInterval = timeInterval
   }
 }
