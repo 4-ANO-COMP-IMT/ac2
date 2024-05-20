@@ -1,4 +1,4 @@
-import { Event } from '../../domain/entities/event'
+import { Event } from '../../../../shared/domain/entities/event'
 
 export interface EventRepositoryInterface {
   getEvent(id: string): Promise<Event>

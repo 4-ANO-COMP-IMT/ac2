@@ -1,5 +1,5 @@
-import { Event } from '../../domain/entities/event'
-import { NotFoundError } from '../../domain/helpers/errors/not_found'
+import { Event } from '../../../../shared/domain/entities/event'
+import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
 import { EventRepositoryInterface } from './event_repository_interface'
 
 type FetchProps = {

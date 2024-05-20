@@ -1,4 +1,4 @@
-import { httpStatusCode } from '../../shared/domain/helpers/http'
+import { httpStatusCode } from '../../../shared/domain/helpers/http'
 import { GetEventUsecase } from './get_event_usecase'
 import { GetEventRequest, GetEventResponse } from './protocols'
 

@@ -1,6 +1,6 @@
-import { GetEventUsecase } from '../../../src/modules/get_event/get_event_usecase'
-import { Event } from '../../../src/shared/domain/entities/event'
-import { EventRepositoryMock } from '../../../src/shared/infra/repos/event_repository_mock'
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
+import { Event } from '../../../../src/shared/domain/entities/event'
 
 import { test, expect } from 'vitest'
 

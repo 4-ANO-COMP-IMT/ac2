@@ -1,1 +1,0 @@
-# ESlint Node.js Template for MSS

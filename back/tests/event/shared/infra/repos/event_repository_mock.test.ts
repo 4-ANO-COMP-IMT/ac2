@@ -1,5 +1,5 @@
-import { Event } from '../../../../src/shared/domain/entities/event'
-import { EventRepositoryMock } from '../../../../src/shared/infra/repos/event_repository_mock'
+import { EventRepositoryMock } from '../../../../../src/event/shared/infra/repos/event_repository_mock'
+import { Event } from '../../../../../src/shared/domain/entities/event'
 
 import { test, expect } from 'vitest'
 

@@ -1,8 +1,7 @@
-import { GetEventController } from '../../../src/modules/get_event/get_event_controller'
-import { GetEventUsecase } from '../../../src/modules/get_event/get_event_usecase'
-import { httpStatusCode } from '../../../src/shared/domain/helpers/http'
-import { EventRepositoryMock } from '../../../src/shared/infra/repos/event_repository_mock'
-
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
+import { GetEventController } from '../../../../src/event/modules/get_event/get_event_controller'
+import { httpStatusCode } from '../../../../src/shared/domain/helpers/http'
 import { test, expect } from 'vitest'
 
 test('Test get event controller without id', async () => {

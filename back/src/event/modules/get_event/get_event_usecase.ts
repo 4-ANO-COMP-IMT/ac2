@@ -1,5 +1,5 @@
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
-import { Event } from '../../shared/domain/entities/event'
+import { Event } from '../../../shared/domain/entities/event'
 
 export interface GetEventUsecaseProps {
   repo: EventRepositoryInterface

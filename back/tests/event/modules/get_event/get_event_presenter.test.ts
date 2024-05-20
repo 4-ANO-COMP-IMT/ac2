@@ -1,4 +1,4 @@
-import { GetEventPresenter } from '../../../src/modules/get_event/get_event_presenter'
+import { GetEventPresenter } from '../../../../src/event/modules/get_event/get_event_presenter'
 
 import { test, expect } from 'vitest'
 
