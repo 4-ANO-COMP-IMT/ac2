@@ -1,10 +1,12 @@
-import { httpStatusCode } from '../../../shared/domain/helpers/http'
+import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
 import { GetEventUsecase } from './get_event_usecase'
 import { GetEventRequest, GetEventResponse } from './protocols'
+import { HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import { EventJsonProps } from '../../../shared/domain/entities/event'
 
 interface GetEventControllerProps {
   usecase: GetEventUsecase
-  call(req: GetEventRequest): Promise<GetEventResponse>
+  call(req: HttpRequest<GetEventRequest>): Promise<GetEventResponse>
 }
 
 export class GetEventController implements GetEventControllerProps {
@@ -12,36 +14,23 @@ export class GetEventController implements GetEventControllerProps {
     this.usecase = usecase
   }
 
-  async call(req: GetEventRequest) {
-    const id = req.params.id
+  async call(req: HttpRequest<GetEventRequest>) {
+    const id = req.data?.id
 
     if (!id) {
-      return {
-        status: httpStatusCode.BAD_REQUEST,
-        message: 'id is undefined'
-      }
+      return HttpResponse.badRequest('id is required')
     }
 
     try {
       const event = await this.usecase.call(id)
 
-      return {
-        status: httpStatusCode.OK,
-        message: 'event found',
-        event: event.toJson()
-      }
+      return HttpResponse.ok<EventJsonProps>('event found', event.toJson())
     } catch (error: any) {
       if (error.message.includes('not found')) {
-        return {
-          status: httpStatusCode.NOT_FOUND,
-          message: error.message
-        }
+        return HttpResponse.notFound(error.message)
       }
 
-      return {
-        status: httpStatusCode.INTERNAL_SERVER_ERROR,
-        message: error.message
-      }
+      return HttpResponse.internalServerError(error.message)
     }
   }
 }
