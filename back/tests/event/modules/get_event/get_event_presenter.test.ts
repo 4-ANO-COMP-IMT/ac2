@@ -1,10 +1,11 @@
 import { GetEventPresenter } from '../../../../src/event/modules/get_event/get_event_presenter'
 
 import { test, expect } from 'vitest'
+import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 
 test('Test get event presenter found', async () => {
   const presenter = new GetEventPresenter()
-  const response = await presenter.call({ params: { id: '2' } })
+  const response = await presenter.call(new HttpRequest('get', { id: '2' }))
   const eventExpect = {
     id: '2',
     name: 'Academy Chest Day',
@@ -14,13 +15,13 @@ test('Test get event presenter found', async () => {
   }
   expect(response.status).toBe(200)
   expect(response.message).toBe('event found')
-  expect(response.event).toEqual(eventExpect)
+  expect(response.data).toEqual(eventExpect)
 })
 
 test('Test get event presenter not found', async () => {
   const presenter = new GetEventPresenter()
-  const response = await presenter.call({ params: { id: '4' } })
+  const response = await presenter.call(new HttpRequest('get', { id: '4' }))
   expect(response.status).toBe(404)
   expect(response.message).toBe('event not found')
-  expect(response.event).toBe(undefined)
+  expect(response.data).toBe(undefined)
 })
