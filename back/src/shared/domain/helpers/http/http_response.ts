@@ -1,0 +1,29 @@
+import { httpStatusCode } from './http_status_code'
+
+export class HttpResponse<T = any> {
+  status: number
+  message: string
+  data?: T
+
+  constructor(status: number, message: string, data?: T) {
+    this.status = status
+    this.message = message
+    this.data = data
+  }
+
+  static ok<T>(message: string, data: T) {
+    return new HttpResponse(httpStatusCode.OK, message, data)
+  }
+
+  static badRequest(message: string) {
+    return new HttpResponse(httpStatusCode.BAD_REQUEST, message)
+  }
+
+  static notFound(message: string) {
+    return new HttpResponse(httpStatusCode.NOT_FOUND, message)
+  }
+
+  static internalServerError(message: string) {
+    return new HttpResponse(httpStatusCode.INTERNAL_SERVER_ERROR, message)
+  }
+}
