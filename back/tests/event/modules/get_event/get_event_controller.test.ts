@@ -2,7 +2,7 @@ import { HttpRequest } from './../../../../src/shared/domain/helpers/http/http_r
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
 import { GetEventController } from '../../../../src/event/modules/get_event/get_event_controller'
-import { httpStatusCode } from '../../../../src/shared/domain/helpers/http/http_status_code'
+import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
 import { test, expect } from 'vitest'
 
 test('Test get event controller without id', async () => {
@@ -14,7 +14,7 @@ test('Test get event controller without id', async () => {
       id: ''
     })
   )
-  expect(response.status).toBe(httpStatusCode.BAD_REQUEST)
+  expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
   expect(response.message).toBe('id is required')
   expect(response.data).toBe(undefined)
 })
