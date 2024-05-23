@@ -1,46 +1,44 @@
-back/*/node_modules/
-front/node_modules/
+*/node_modules/
 
 # Ignore Logs
-/back/*/logs
-/back/*/*.log
-/back/*/npm-debug.log*
-/back/*/yarn-debug.log*
-/back/*/yarn-error.log*
-/back/*/lerna-debug.log*
-/back/*/.pnpm-debug.log*
+*/logs
+*/*.log
+*/npm-debug.log*
+*/yarn-debug.log*
+*/yarn-error.log*
+*/lerna-debug.log*
+*/.pnpm-debug.log*
 
 # Bower dependency directory (https://bower.io/)
-back/*/bower_components
+*/bower_components
 
 # Optional npm cache directory
-back/*/.npm
+*/.npm
 
 # Optional eslint cache
-back/*/.eslintcache
+*/.eslintcache
 
 # Optional stylelint cache
-back/*/.stylelintcache
+*/.stylelintcache
 
 # dotenv environment variable files
-back/*/.env
-back/*/.env.development.local
-back/*/.env.test.local
-back/*/.env.production.local
-back/*/.env.local
-back/.DS_Store
+*/.env
+*/.env.development.local
+*/.env.test.local
+*/.env.production.local
+*/.env.local
 
 # ignore the dist folder
-back/*/dist
+*/dist
 
-front/.idea
-front/.DS_Store
-front/*.suo
-front/*.ntvs*
-front/*.njsproj
-front/*.sln
-front/*.sw?
-front/.env
-front/.env.local
+*/.idea
+*/.DS_Store
+*/*.suo
+*/*.ntvs*
+*/*.njsproj
+*/*.sln
+*/*.sw?
+*/.env
+*/.env.local
 
 .DS_Store
