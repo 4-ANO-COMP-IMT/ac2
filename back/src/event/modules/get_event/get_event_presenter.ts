@@ -2,11 +2,12 @@ import { GetEventUsecase } from './get_event_usecase'
 import { GetEventController } from './get_event_controller'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
-import { GetEventRequest, GetEventResponse } from './protocols'
+import { GetEventRequest } from './protocols'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { config } from 'dotenv'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
-import { HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import { Error, HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import { EventJsonProps } from '../../../shared/domain/entities/event'
 
 config()
 
@@ -16,7 +17,7 @@ export interface GetEventPresenterProps {
   controller: GetEventController
   call(
     req: HttpRequest<GetEventRequest>
-  ): Promise<HttpResponse<GetEventResponse>>
+  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
 const stage = process.env.STAGE || 'test'
