@@ -26,15 +26,35 @@ export class PostEventController implements PostEventControllerProps {
 
     const { name, startDate, endDate, timeInterval } = req.data
 
+    if (!name) {
+      return HttpResponse.badRequest('missing name')
+    }
+
+    if (!startDate) {
+      return HttpResponse.badRequest('missing startDate')
+    }
+
+    if (!endDate) {
+      return HttpResponse.badRequest('missing endDate')
+    }
+
+    if (!timeInterval) {
+      return HttpResponse.badRequest('missing timeInterval')
+    }
+
     try {
-      const event = await this.usecase.call(id)
+      const event = await this.usecase.call(
+        name,
+        startDate,
+        endDate,
+        timeInterval
+      )
 
-      return HttpResponse.ok<EventJsonProps>('event found', event.toJson())
+      return HttpResponse.created<EventJsonProps>(
+        'event created',
+        event.toJson()
+      )
     } catch (error: any) {
-      if (error.message.includes('not found')) {
-        return HttpResponse.notFound(error.message)
-      }
-
       return HttpResponse.internalServerError(error.message)
     }
   }
