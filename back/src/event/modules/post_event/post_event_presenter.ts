@@ -1,7 +1,10 @@
 import { config } from 'dotenv'
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
-import { HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import {
+  Error,
+  HttpResponse
+} from '../../../shared/domain/helpers/http/http_response'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
