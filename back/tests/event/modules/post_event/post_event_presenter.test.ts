@@ -36,12 +36,11 @@ test('post event presenter created', async () => {
   repo.resetMock()
 })
 
-describe('post event body', () => {
+describe('post event presenter body', () => {
   it('should return BAD REQUEST if body is missing', async () => {
     const presenter = new PostEventPresenter()
     const request = new HttpRequest('post', {} as PostEventRequest)
     const response = await presenter.call(request)
-    console.log(response)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing name')
     expect(response.data).toBe(undefined)
