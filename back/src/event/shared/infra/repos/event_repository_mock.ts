@@ -3,7 +3,7 @@ import { Event } from '../../../../shared/domain/entities/event'
 import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
 
 export class EventRepositoryMock implements EventRepositoryInterface {
-  private _events: Event[] = [
+  static events: Event[] = [
     new Event(
       '1',
       'Meeting for the project',
@@ -22,7 +22,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
   ]
 
   async getEvent(id: string): Promise<Event> {
-    const event = this._events.find((event) => event.id === id)
+    const event = EventRepositoryMock.events.find((event) => event.id === id)
 
     if (!event) {
       throw new NotFoundError('event')
@@ -32,34 +32,32 @@ export class EventRepositoryMock implements EventRepositoryInterface {
   }
 
   async putEvent(event: Event) {
-    const eventIndex = this._events.findIndex((e) => e.id === event.id)
+    const eventIndex = EventRepositoryMock.events.findIndex(
+      (e) => e.id === event.id
+    )
 
     if (eventIndex === -1) {
       throw new NotFoundError('event')
     }
 
-    this._events[eventIndex] = event
+    EventRepositoryMock.events[eventIndex] = event
 
-    return this._events[eventIndex]
+    return EventRepositoryMock.events[eventIndex]
   }
 
   async createEvent(event: Event) {
-    this._events.push(event)
+    EventRepositoryMock.events.push(event)
     return event
   }
 
   async deleteEvent(id: string) {
-    const event = this._events.find((event) => event.id === id)
+    const event = EventRepositoryMock.events.find((event) => event.id === id)
     if (event) {
-      this._events = this._events.filter((event) => event.id !== id)
+      EventRepositoryMock.events = EventRepositoryMock.events.filter(
+        (event) => event.id !== id
+      )
       return event
     }
     throw new NotFoundError('event')
-  }
-
-  // Getters and Setters
-
-  public get events() {
-    return this._events
   }
 }
