@@ -21,8 +21,7 @@ test('post event presenter created', async () => {
     timeInterval: 300000
   })
   const response = await presenter.call(request)
-  console.log(EventRepositoryMock.events)
-  console.log(response)
+
   const eventExpect = {
     id: '4',
     name: 'Academy Chest Day',

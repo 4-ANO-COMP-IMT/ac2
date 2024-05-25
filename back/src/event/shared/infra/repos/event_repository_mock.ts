@@ -58,7 +58,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       event.endDate,
       event.timeInterval
     )
-    console.log(createdEvent)
+
     EventRepositoryMock.events.push(createdEvent)
     return createdEvent
   }
