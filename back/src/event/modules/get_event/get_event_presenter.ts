@@ -6,7 +6,10 @@ import { GetEventRequest } from './protocols'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { config } from 'dotenv'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
-import { Error, HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import {
+  Error,
+  HttpResponse
+} from '../../../shared/domain/helpers/http/http_response'
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
 config()

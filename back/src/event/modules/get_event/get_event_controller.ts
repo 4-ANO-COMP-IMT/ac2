@@ -1,12 +1,17 @@
 import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
 import { GetEventUsecase } from './get_event_usecase'
 import { GetEventRequest } from './protocols'
-import { Error, HttpResponse } from '../../../shared/domain/helpers/http/http_response'
+import {
+  Error,
+  HttpResponse
+} from '../../../shared/domain/helpers/http/http_response'
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
 interface GetEventControllerProps {
   usecase: GetEventUsecase
-  call(req: HttpRequest<GetEventRequest>): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
+  call(
+    req: HttpRequest<GetEventRequest>
+  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
 export class GetEventController implements GetEventControllerProps {
