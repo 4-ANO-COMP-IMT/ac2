@@ -3,7 +3,12 @@ import { EventRepositoryInterface } from '../../shared/infra/repos/event_reposit
 
 export interface PostEventUsecaseProps {
   repo: EventRepositoryInterface
-  call(id: string): Promise<Event>
+  call(
+    name: string,
+    startDate: number,
+    endDate: number,
+    timeInterval: number
+  ): Promise<Event>
 }
 
 export class PostEventUsecase implements PostEventUsecaseProps {
@@ -11,7 +16,17 @@ export class PostEventUsecase implements PostEventUsecaseProps {
     this.repo = repo
   }
 
-  async call(id: string) {
-    return await this.repo.getEvent(id)
+  async call(
+    name: string,
+    startDate: number,
+    endDate: number,
+    timeInterval: number
+  ) {
+    return await this.repo.createEvent({
+      name,
+      startDate,
+      endDate,
+      timeInterval
+    })
   }
 }
