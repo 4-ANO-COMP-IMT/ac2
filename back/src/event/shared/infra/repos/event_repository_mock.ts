@@ -58,7 +58,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       event.endDate,
       event.timeInterval
     )
-
+    console.log(createdEvent)
     EventRepositoryMock.events.push(createdEvent)
     return createdEvent
   }
@@ -75,8 +75,28 @@ export class EventRepositoryMock implements EventRepositoryInterface {
   }
 
   getLastId() {
-    return EventRepositoryMock.events[
-      EventRepositoryMock.events.length - 1
-    ].id.toString()
+    return (
+      +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
+    ).toString()
+  }
+
+  resetMock() {
+    EventRepositoryMock.events = [
+      new Event(
+        '1',
+        'Meeting for the project',
+        1632950400000,
+        1632954000000,
+        600000
+      ),
+      new Event('2', 'Academy Chest Day', 1632950200000, 1632954000000, 300000),
+      new Event(
+        '3',
+        'Studying Software Engineering',
+        1632950000000,
+        1632954000000,
+        100000
+      )
+    ]
   }
 }

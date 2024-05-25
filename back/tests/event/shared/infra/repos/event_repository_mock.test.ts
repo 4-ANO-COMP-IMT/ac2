@@ -45,6 +45,7 @@ test('Test put event found', async () => {
   expect(event).not.toBe(undefined)
   expect(event).toBeInstanceOf(Event)
   expect(event?.equals(eventExpect)).toBe(true)
+  repo.resetMock()
 })
 
 test('Test put event not found', async () => {
@@ -67,6 +68,7 @@ test('Test delete event found', async () => {
   const event = await repo.deleteEvent('2')
   expect(event).not.toBe(undefined)
   expect(EventRepositoryMock.events.length).toBe(2)
+  repo.resetMock()
 })
 
 test('Test delete event not found', () => {
@@ -84,5 +86,6 @@ test('Test create event', () => {
     endDate: 1632954000000,
     timeInterval: 600000
   })
-  expect(EventRepositoryMock.events.length).toBe(3) // 3 because the mock old third event was deleted above
+  expect(EventRepositoryMock.events.length).toBe(4) // 3 because the mock old third event was deleted above
+  repo.resetMock()
 })
