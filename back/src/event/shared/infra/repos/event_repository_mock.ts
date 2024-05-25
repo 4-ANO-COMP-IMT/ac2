@@ -60,4 +60,24 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     }
     throw new NotFoundError('event')
   }
+
+  resetMock() {
+    EventRepositoryMock.events = [
+      new Event(
+        '1',
+        'Meeting for the project',
+        1632950400000,
+        1632954000000,
+        600000
+      ),
+      new Event('2', 'Academy Chest Day', 1632950200000, 1632954000000, 300000),
+      new Event(
+        '3',
+        'Studying Software Engineering',
+        1632950000000,
+        1632954000000,
+        100000
+      )
+    ]
+  }
 }
