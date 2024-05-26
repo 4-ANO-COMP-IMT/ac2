@@ -1,19 +1,16 @@
-import { config } from 'dotenv'
-
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
+import { environments } from '../../../shared/env/environments'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
 import { GetEventController } from './get_event_controller'
 import { GetEventUsecase } from './get_event_usecase'
 import { GetEventRequest } from './protocols'
-
-config()
 
 export interface GetEventPresenterProps {
   repo: EventRepositoryInterface
@@ -24,7 +21,7 @@ export interface GetEventPresenterProps {
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
-const stage = process.env.STAGE || 'test'
+const stage = environments.stage
 
 export class GetEventPresenter implements GetEventPresenterProps {
   repo: EventRepositoryInterface
