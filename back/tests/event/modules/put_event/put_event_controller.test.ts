@@ -1,9 +1,10 @@
-import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { test, expect } from 'vitest'
-import { PutEventUsecase } from '../../../../src/event/modules/put_event/put_event_usecase'
+import { expect, test } from 'vitest'
+
 import { PutEventController } from '../../../../src/event/modules/put_event/put_event_controller'
+import { PutEventUsecase } from '../../../../src/event/modules/put_event/put_event_usecase'
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
+import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
 
 test('Test put event controller without id', async () => {
   const repo = new EventRepositoryMock()
@@ -18,14 +19,14 @@ test('Test put event controller without id', async () => {
   expect(response.data).toBe(undefined)
 })
 
-test('Test put event controller not found', async () => {
+test('Test put event controller missing body', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new PutEventUsecase(repo)
   const controller = new PutEventController(usecase)
   const request = new HttpRequest('put', { id: '4' })
   const response = await controller.call(request)
-  expect(response.status).toBe(404)
-  expect(response.message).toBe('event not found')
+  expect(response.status).toBe(400)
+  expect(response.message).toBe('missing body')
   expect(response.data).toBe(undefined)
 })
 
@@ -33,17 +34,23 @@ test('Test put event controller found', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new PutEventUsecase(repo)
   const controller = new PutEventController(usecase)
-  const request = new HttpRequest('put', { id: '2' })
+  const request = new HttpRequest('put', {
+    id: '2',
+    name: 'Testing UPDATE',
+    startDate: 123,
+    endDate: 456,
+    timeInterval: 12
+  })
   const response = await controller.call(request)
   const eventExpect = {
     id: '2',
-    name: 'Academy Chest Day',
-    start_date: 1632950200000,
-    end_date: 1632954000000,
-    time_interval: 300000
+    name: 'Testing UPDATE',
+    start_date: 123,
+    end_date: 456,
+    time_interval: 12
   }
   expect(response.status).toBe(200)
-  expect(response.message).toBe('event changed successfully')
+  expect(response.message).toBe('event changed')
   expect(response.data).toEqual(eventExpect)
   repo.resetMock()
 })

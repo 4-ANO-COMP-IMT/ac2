@@ -1,9 +1,10 @@
-import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { test, expect } from 'vitest'
-import { DeleteEventUsecase } from '../../../../src/event/modules/delete_event/delete_event_usecase'
+import { expect, test } from 'vitest'
+
 import { DeleteEventController } from '../../../../src/event/modules/delete_event/delete_event_controller'
+import { DeleteEventUsecase } from '../../../../src/event/modules/delete_event/delete_event_usecase'
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
+import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
 
 test('Test delete event controller without id', async () => {
   const repo = new EventRepositoryMock()

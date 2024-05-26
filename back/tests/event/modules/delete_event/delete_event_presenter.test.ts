@@ -1,7 +1,8 @@
-import { test, expect } from 'vitest'
-import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
+import { expect, test } from 'vitest'
+
 import { DeleteEventPresenter } from '../../../../src/event/modules/delete_event/delete_event_presenter'
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 
 test('Test delete event presenter found', async () => {
   const repo = new EventRepositoryMock()

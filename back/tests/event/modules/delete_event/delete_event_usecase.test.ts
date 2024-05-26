@@ -1,8 +1,8 @@
+import { expect, test } from 'vitest'
+
+import { DeleteEventUsecase } from '../../../../src/event/modules/delete_event/delete_event_usecase'
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { Event } from '../../../../src/shared/domain/entities/event'
-
-import { test, expect } from 'vitest'
-import { DeleteEventUsecase } from '../../../../src/event/modules/delete_event/delete_event_usecase'
 
 test('Test delete event usecase found', async () => {
   const repo = new EventRepositoryMock()

@@ -1,8 +1,8 @@
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
-import { Event } from '../../../../src/shared/domain/entities/event'
+import { expect, test } from 'vitest'
 
-import { test, expect } from 'vitest'
+import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { Event } from '../../../../src/shared/domain/entities/event'
 
 test('Test get event usecase found', async () => {
   const repo = new EventRepositoryMock()

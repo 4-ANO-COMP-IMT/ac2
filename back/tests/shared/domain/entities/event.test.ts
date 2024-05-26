@@ -1,6 +1,6 @@
-import { Event } from '../../../../src/shared/domain/entities/event'
+import { expect, test } from 'vitest'
 
-import { test, expect } from 'vitest'
+import { Event } from '../../../../src/shared/domain/entities/event'
 
 test('Test event', () => {
   const event = new Event(

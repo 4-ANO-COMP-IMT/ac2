@@ -1,9 +1,10 @@
-import { HttpRequest } from './../../../../src/shared/domain/helpers/http/http_request'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
+import { expect, test } from 'vitest'
+
 import { GetEventController } from '../../../../src/event/modules/get_event/get_event_controller'
+import { GetEventUsecase } from '../../../../src/event/modules/get_event/get_event_usecase'
+import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { test, expect } from 'vitest'
+import { HttpRequest } from './../../../../src/shared/domain/helpers/http/http_request'
 
 test('Test get event controller without id', async () => {
   const repo = new EventRepositoryMock()
