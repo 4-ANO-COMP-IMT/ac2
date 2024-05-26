@@ -62,9 +62,22 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return EventRepositoryMock.events[eventIndex]
   }
 
-  async createEvent(event: Event) {
-    EventRepositoryMock.events.push(event)
-    return event
+  async createEvent(event: {
+    name: string
+    startDate: number
+    endDate: number
+    timeInterval: number
+  }): Promise<Event> {
+    const createdEvent = new Event(
+      this.getLastId(),
+      event.name,
+      event.startDate,
+      event.endDate,
+      event.timeInterval
+    )
+
+    EventRepositoryMock.events.push(createdEvent)
+    return createdEvent
   }
 
   async deleteEvent(id: string) {
@@ -96,5 +109,11 @@ export class EventRepositoryMock implements EventRepositoryInterface {
         100000
       )
     ]
+  }
+
+  getLastId() {
+    return EventRepositoryMock.events[
+      EventRepositoryMock.events.length - 1
+    ].id.toString()
   }
 }

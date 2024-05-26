@@ -43,26 +43,7 @@ export class EventRepositoryHttp implements EventRepositoryInterface {
     throw new Error('Method not implemented.')
   }
 
-  async deleteEvent(id: string): Promise<Event> {
-    try {
-      const response = await fetch(`http://localhost:8000/event/${id}`, {
-        method: 'DELETE'
-      })
-      const eventResponse: FetchProps = await response.json()
-
-      if (eventResponse.message) throw new NotFoundError('event')
-
-      const event = new Event(
-        eventResponse.id,
-        eventResponse.name,
-        eventResponse.startDate,
-        eventResponse.endDate,
-        eventResponse.timeInterval
-      )
-
-      return event
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
+  async deleteEvent(): Promise<Event> {
+    throw new Error('Method not implemented.')
   }
 }

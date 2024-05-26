@@ -10,11 +10,8 @@ test('Test get event controller without id', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new GetEventUsecase(repo)
   const controller = new GetEventController(usecase)
-  const response = await controller.call(
-    new HttpRequest('get', {
-      id: ''
-    })
-  )
+  const request = new HttpRequest('get', { id: '' })
+  const response = await controller.call(request)
   expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
   expect(response.message).toBe('id is required')
   expect(response.data).toBe(undefined)
@@ -24,7 +21,8 @@ test('Test get event controller not found', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new GetEventUsecase(repo)
   const controller = new GetEventController(usecase)
-  const response = await controller.call(new HttpRequest('get', { id: '4' }))
+  const request = new HttpRequest('get', { id: '4' })
+  const response = await controller.call(request)
   expect(response.status).toBe(404)
   expect(response.message).toBe('event not found')
   expect(response.data).toBe(undefined)
@@ -34,7 +32,8 @@ test('Test get event controller found', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new GetEventUsecase(repo)
   const controller = new GetEventController(usecase)
-  const response = await controller.call(new HttpRequest('get', { id: '2' }))
+  const request = new HttpRequest('get', { id: '2' })
+  const response = await controller.call(request)
   const eventExpect = (await repo.getEvent('2'))?.toJson()
   expect(response.status).toBe(200)
   expect(response.message).toBe('event found')

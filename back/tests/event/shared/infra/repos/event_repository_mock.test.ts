@@ -404,3 +404,14 @@ test('test delete event not found', () => {
     await repo.deleteEvent('1001')
   }).rejects.toThrowError('event not found')
 })
+
+test('Test create event', () => {
+  const repo = new EventRepositoryMock()
+  repo.createEvent({
+    name: 'Event Name',
+    startDate: 1632950400000,
+    endDate: 1632954000000,
+    timeInterval: 600000
+  })
+  expect(EventRepositoryMock.events.length).toBe(3) // 3 because the mock old third event was deleted above
+})

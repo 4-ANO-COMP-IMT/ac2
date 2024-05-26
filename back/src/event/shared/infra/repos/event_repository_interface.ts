@@ -11,6 +11,11 @@ export interface EventRepositoryInterface {
       timeInterval?: number
     }
   ): Promise<Event>
-  createEvent(event: Event): Promise<Event>
+  createEvent(event: {
+    name: string
+    startDate: number
+    endDate: number
+    timeInterval: number
+  }): Promise<Event>
   deleteEvent(id: string): Promise<Event>
 }
