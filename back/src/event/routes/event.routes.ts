@@ -1,7 +1,8 @@
 import { Router } from 'express'
-import { GetEventPresenter } from '../modules/get_event/get_event_presenter'
+
 import { HttpRequest } from '../../shared/domain/helpers/http/http_request'
 import { DeleteEventPresenter } from '../modules/delete_event/delete_event_presenter'
+import { GetEventPresenter } from '../modules/get_event/get_event_presenter'
 import { PutEventPresenter } from '../modules/put_event/put_event_presenter'
 
 export const eventRouter = Router()
