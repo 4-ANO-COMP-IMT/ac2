@@ -20,8 +20,13 @@ export class PostEventController implements PostEventControllerProps {
   }
 
   async call(req: HttpRequest<PostEventRequest>) {
-    if (!req.data) {
-      return HttpResponse.badRequest('missing data')
+    if (
+      !req.data?.name &&
+      !req.data?.startDate &&
+      !req.data?.endDate &&
+      !req.data?.timeInterval
+    ) {
+      return HttpResponse.badRequest('missing body')
     }
 
     const { name, startDate, endDate, timeInterval } = req.data
