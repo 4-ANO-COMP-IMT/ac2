@@ -1,11 +1,11 @@
-import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
-import { GetEventUsecase } from './get_event_usecase'
-import { GetEventRequest } from './protocols'
+import { EventJsonProps } from '../../../shared/domain/entities/event'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
+import { GetEventUsecase } from './get_event_usecase'
+import { GetEventRequest } from './protocols'
 
 interface GetEventControllerProps {
   usecase: GetEventUsecase

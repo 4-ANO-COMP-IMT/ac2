@@ -1,9 +1,9 @@
+import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { DeleteEventUsecase } from './delete_event_usecase'
 import { DeleteEventRequest } from './protocols'
 

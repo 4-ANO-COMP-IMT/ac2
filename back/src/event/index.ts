@@ -1,6 +1,7 @@
-import express from 'express'
 import cors from 'cors'
 import { config } from 'dotenv'
+import express from 'express'
+
 import { eventRouter } from './routes/event.routes'
 
 const server = async () => {
