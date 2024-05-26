@@ -31,16 +31,33 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return event
   }
 
-  async putEvent(event: Event) {
-    const eventIndex = EventRepositoryMock.events.findIndex(
-      (e) => e.id === event.id
-    )
+  async putEvent(
+    id: string,
+    event: {
+      name?: string
+      start_date?: number
+      end_date?: number
+      time_interval?: number
+    }
+  ) {
+    const eventIndex = EventRepositoryMock.events.findIndex((e) => e.id === id)
 
     if (eventIndex === -1) {
       throw new NotFoundError('event')
     }
 
-    EventRepositoryMock.events[eventIndex] = event
+    if (event.name) {
+      EventRepositoryMock.events[eventIndex].name = event.name
+    }
+    if (event.start_date) {
+      EventRepositoryMock.events[eventIndex].startDate = event.start_date
+    }
+    if (event.end_date) {
+      EventRepositoryMock.events[eventIndex].endDate = event.end_date
+    }
+    if (event.time_interval) {
+      EventRepositoryMock.events[eventIndex].timeInterval = event.time_interval
+    }
 
     return EventRepositoryMock.events[eventIndex]
   }
