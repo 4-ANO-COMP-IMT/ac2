@@ -1,4 +1,5 @@
 import { config } from 'dotenv'
+
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
