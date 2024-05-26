@@ -112,8 +112,8 @@ export class EventRepositoryMock implements EventRepositoryInterface {
   }
 
   getLastId() {
-    return EventRepositoryMock.events[
-      EventRepositoryMock.events.length - 1
-    ].id.toString()
+    return (
+      +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
+    ).toString()
   }
 }
