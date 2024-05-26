@@ -35,9 +35,9 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     id: string,
     event: {
       name?: string
-      start_date?: number
-      end_date?: number
-      time_interval?: number
+      startDate?: number
+      endDate?: number
+      timeInterval?: number
     }
   ) {
     const eventIndex = EventRepositoryMock.events.findIndex((e) => e.id === id)
@@ -49,14 +49,14 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     if (event.name) {
       EventRepositoryMock.events[eventIndex].name = event.name
     }
-    if (event.start_date) {
-      EventRepositoryMock.events[eventIndex].startDate = event.start_date
+    if (event.startDate) {
+      EventRepositoryMock.events[eventIndex].startDate = event.startDate
     }
-    if (event.end_date) {
-      EventRepositoryMock.events[eventIndex].endDate = event.end_date
+    if (event.endDate) {
+      EventRepositoryMock.events[eventIndex].endDate = event.endDate
     }
-    if (event.time_interval) {
-      EventRepositoryMock.events[eventIndex].timeInterval = event.time_interval
+    if (event.timeInterval) {
+      EventRepositoryMock.events[eventIndex].timeInterval = event.timeInterval
     }
 
     return EventRepositoryMock.events[eventIndex]

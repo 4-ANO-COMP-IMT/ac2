@@ -49,7 +49,7 @@ test('Test put name', async () => {
 test('Test put start date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    start_date: 1632950000000
+    startDate: 1632950000000
   })
   const eventExpect = new Event(
     '2',
@@ -71,7 +71,7 @@ test('Test put start date', async () => {
 test('Test put end date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    end_date: 1632954000000
+    endDate: 1632954000000
   })
   const eventExpect = new Event(
     '2',
@@ -93,7 +93,7 @@ test('Test put end date', async () => {
 test('Test put time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    time_interval: 600000
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -116,7 +116,7 @@ test('Test put event name and start date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    start_date: 1632950000000
+    startDate: 1632950000000
   })
   const eventExpect = new Event(
     '2',
@@ -139,7 +139,7 @@ test('Test put event name and end date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    end_date: 1632954000000
+    endDate: 1632954000000
   })
   const eventExpect = new Event(
     '2',
@@ -162,7 +162,7 @@ test('Test put event name and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    time_interval: 600000
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -184,8 +184,8 @@ test('Test put event name and time interval', async () => {
 test('Test put event start date and end date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    start_date: 1632950000000,
-    end_date: 1632954000000
+    startDate: 1632950000000,
+    endDate: 1632954000000
   })
   const eventExpect = new Event(
     '2',
@@ -207,8 +207,8 @@ test('Test put event start date and end date', async () => {
 test('Test put event start date and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    start_date: 1632950000000,
-    time_interval: 600000
+    startDate: 1632950000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -230,8 +230,8 @@ test('Test put event start date and time interval', async () => {
 test('Test put event end date and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    end_date: 1632954000000,
-    time_interval: 600000
+    endDate: 1632954000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -254,8 +254,8 @@ test('Test put event name, start date and end date', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    start_date: 1632950000000,
-    end_date: 1632954000000
+    startDate: 1632950000000,
+    endDate: 1632954000000
   })
   const eventExpect = new Event(
     '2',
@@ -278,8 +278,8 @@ test('Test put event name, start date and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    start_date: 1632950000000,
-    time_interval: 600000
+    startDate: 1632950000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -302,8 +302,8 @@ test('Test put event name, end date and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    end_date: 1632954000000,
-    time_interval: 600000
+    endDate: 1632954000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -325,9 +325,9 @@ test('Test put event name, end date and time interval', async () => {
 test('Test put event start date, end date and time interval', async () => {
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
-    start_date: 1632950000000,
-    end_date: 1632954000000,
-    time_interval: 600000
+    startDate: 1632950000000,
+    endDate: 1632954000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',
@@ -350,9 +350,9 @@ test('Test put event name, start date, end date and time interval', async () => 
   const repo = new EventRepositoryMock()
   const event = await repo.putEvent('2', {
     name: 'Academy Leg Day',
-    start_date: 1632950000000,
-    end_date: 1632954000000,
-    time_interval: 600000
+    startDate: 1632950000000,
+    endDate: 1632954000000,
+    timeInterval: 600000
   })
   const eventExpect = new Event(
     '2',

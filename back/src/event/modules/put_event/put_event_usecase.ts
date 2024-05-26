@@ -6,9 +6,9 @@ export interface PutEventUsecaseProps {
   call(
     id: string,
     name?: string,
-    start_date?: number,
-    end_date?: number,
-    time_interval?: number
+    startDate?: number,
+    endDate?: number,
+    timeInterval?: number
   ): Promise<Event>
 }
 
@@ -20,15 +20,15 @@ export class PutEventUsecase implements PutEventUsecaseProps {
   async call(
     id: string,
     name?: string,
-    start_date?: number,
-    end_date?: number,
-    time_interval?: number
+    startDate?: number,
+    endDate?: number,
+    timeInterval?: number
   ) {
     return await this.repo.putEvent(id, {
       name,
-      start_date,
-      end_date,
-      time_interval
+      startDate,
+      endDate,
+      timeInterval
     })
   }
 }

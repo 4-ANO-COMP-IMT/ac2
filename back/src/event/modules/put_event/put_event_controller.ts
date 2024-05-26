@@ -20,28 +20,28 @@ export class PutEventController implements PutEventControllerProps {
   }
 
   async call(req: HttpRequest<PutEventRequest>) {
-    const id = req.data?.id
-    const name = req.data?.name
-    const start_date = req.data?.start_date
-    const end_date = req.data?.end_date
-    const time_interval = req.data?.time_interval
+    if (!req.data) {
+      return HttpResponse.badRequest('missing body')
+    }
+
+    const { id, name, startDate, endDate, timeInterval } = req.data
 
     if (!id) {
       return HttpResponse.badRequest('id is required')
     }
 
     try {
-      const event_Response = await this.usecase.call(
+      const eventResponse = await this.usecase.call(
         id,
         name,
-        start_date,
-        end_date,
-        time_interval
+        startDate,
+        endDate,
+        timeInterval
       )
 
       return HttpResponse.ok<EventJsonProps>(
-        'event changed successfully',
-        event_Response.toJson()
+        'event changed',
+        eventResponse.toJson()
       )
     } catch (error: any) {
       if (error.message.includes('not found')) {

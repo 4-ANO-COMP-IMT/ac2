@@ -6,9 +6,9 @@ export interface EventRepositoryInterface {
     id: string,
     event: {
       name?: string
-      start_date?: number
-      end_date?: number
-      time_interval?: number
+      startDate?: number
+      endDate?: number
+      timeInterval?: number
     }
   ): Promise<Event>
   createEvent(event: Event): Promise<Event>
