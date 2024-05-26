@@ -1,25 +1,25 @@
 import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
-import { GetEventUsecase } from './get_event_usecase'
-import { GetEventRequest } from './protocols'
+import { DeleteEventUsecase } from './delete_event_usecase'
+import { DeleteEventRequest } from './protocols'
 
-interface GetEventControllerProps {
-  usecase: GetEventUsecase
+interface DeleteEventControllerProps {
+  usecase: DeleteEventUsecase
   call(
-    req: HttpRequest<GetEventRequest>
+    req: HttpRequest<DeleteEventRequest>
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
-export class GetEventController implements GetEventControllerProps {
-  constructor(public usecase: GetEventUsecase) {
+export class DeleteEventController implements DeleteEventControllerProps {
+  constructor(public usecase: DeleteEventUsecase) {
     this.usecase = usecase
   }
 
-  async call(req: HttpRequest<GetEventRequest>) {
+  async call(req: HttpRequest<DeleteEventRequest>) {
     const id = req.data?.id
 
     if (!id) {
@@ -29,7 +29,7 @@ export class GetEventController implements GetEventControllerProps {
     try {
       const event = await this.usecase.call(id)
 
-      return HttpResponse.ok<EventJsonProps>('event found', event.toJson())
+      return HttpResponse.ok<EventJsonProps>('event deleted', event.toJson())
     } catch (error: any) {
       if (error.message.includes('not found')) {
         return HttpResponse.notFound(error.message)

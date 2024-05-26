@@ -1,9 +1,9 @@
-import { EventRepositoryInterface } from './event_repository_interface'
 import { Event } from '../../../../shared/domain/entities/event'
 import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
+import { EventRepositoryInterface } from './event_repository_interface'
 
 export class EventRepositoryMock implements EventRepositoryInterface {
-  private _events: Event[] = [
+  static events: Event[] = [
     new Event(
       '1',
       'Meeting for the project',
@@ -22,7 +22,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
   ]
 
   async getEvent(id: string): Promise<Event> {
-    const event = this._events.find((event) => event.id === id)
+    const event = EventRepositoryMock.events.find((event) => event.id === id)
 
     if (!event) {
       throw new NotFoundError('event')
@@ -31,35 +31,89 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return event
   }
 
-  async putEvent(event: Event) {
-    const eventIndex = this._events.findIndex((e) => e.id === event.id)
+  async putEvent(
+    id: string,
+    event: {
+      name?: string
+      startDate?: number
+      endDate?: number
+      timeInterval?: number
+    }
+  ) {
+    const eventIndex = EventRepositoryMock.events.findIndex((e) => e.id === id)
 
     if (eventIndex === -1) {
       throw new NotFoundError('event')
     }
 
-    this._events[eventIndex] = event
+    if (event.name) {
+      EventRepositoryMock.events[eventIndex].name = event.name
+    }
+    if (event.startDate) {
+      EventRepositoryMock.events[eventIndex].startDate = event.startDate
+    }
+    if (event.endDate) {
+      EventRepositoryMock.events[eventIndex].endDate = event.endDate
+    }
+    if (event.timeInterval) {
+      EventRepositoryMock.events[eventIndex].timeInterval = event.timeInterval
+    }
 
-    return this._events[eventIndex]
+    return EventRepositoryMock.events[eventIndex]
   }
 
-  async createEvent(event: Event) {
-    this._events.push(event)
-    return event
+  async createEvent(event: {
+    name: string
+    startDate: number
+    endDate: number
+    timeInterval: number
+  }): Promise<Event> {
+    const createdEvent = new Event(
+      this.getLastId(),
+      event.name,
+      event.startDate,
+      event.endDate,
+      event.timeInterval
+    )
+
+    EventRepositoryMock.events.push(createdEvent)
+    return createdEvent
   }
 
   async deleteEvent(id: string) {
-    const event = this._events.find((event) => event.id === id)
+    const event = EventRepositoryMock.events.find((event) => event.id === id)
     if (event) {
-      this._events = this._events.filter((event) => event.id !== id)
+      EventRepositoryMock.events = EventRepositoryMock.events.filter(
+        (event) => event.id !== id
+      )
       return event
     }
     throw new NotFoundError('event')
   }
 
-  // Getters and Setters
+  resetMock() {
+    EventRepositoryMock.events = [
+      new Event(
+        '1',
+        'Meeting for the project',
+        1632950400000,
+        1632954000000,
+        600000
+      ),
+      new Event('2', 'Academy Chest Day', 1632950200000, 1632954000000, 300000),
+      new Event(
+        '3',
+        'Studying Software Engineering',
+        1632950000000,
+        1632954000000,
+        100000
+      )
+    ]
+  }
 
-  public get events() {
-    return this._events
+  getLastId() {
+    return (
+      +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
+    ).toString()
   }
 }

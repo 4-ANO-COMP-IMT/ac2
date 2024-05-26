@@ -1,6 +1,6 @@
-import { GetEventPresenter } from '../../../../src/event/modules/get_event/get_event_presenter'
+import { expect, test } from 'vitest'
 
-import { test, expect } from 'vitest'
+import { GetEventPresenter } from '../../../../src/event/modules/get_event/get_event_presenter'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 
 test('Test get event presenter found', async () => {

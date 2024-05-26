@@ -1,6 +1,7 @@
-import express from 'express'
 import cors from 'cors'
-import { config } from 'dotenv'
+import express from 'express'
+
+import { environments } from '../shared/env/environments'
 
 type Event = {
   id: string
@@ -11,10 +12,9 @@ type Event = {
 }
 
 const server = async () => {
-  config()
   const app = express()
 
-  const PORT = process.env.PORT || 8000
+  const PORT = environments.dynamoPort
 
   app.use(express.json())
   app.use(cors())

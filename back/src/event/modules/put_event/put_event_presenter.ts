@@ -8,34 +8,34 @@ import { environments } from '../../../shared/env/environments'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
-import { GetEventController } from './get_event_controller'
-import { GetEventUsecase } from './get_event_usecase'
-import { GetEventRequest } from './protocols'
+import { PutEventRequest } from './protocols'
+import { PutEventController } from './put_event_controller'
+import { PutEventUsecase } from './put_event_usecase'
 
-export interface GetEventPresenterProps {
+export interface PutEventPresenterProps {
   repo: EventRepositoryInterface
-  usecase: GetEventUsecase
-  controller: GetEventController
+  usecase: PutEventUsecase
+  controller: PutEventController
   call(
-    req: HttpRequest<GetEventRequest>
+    req: HttpRequest<PutEventRequest>
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
 const stage = environments.stage
 
-export class GetEventPresenter implements GetEventPresenterProps {
+export class PutEventPresenter implements PutEventPresenterProps {
   repo: EventRepositoryInterface
-  usecase: GetEventUsecase
-  controller: GetEventController
+  usecase: PutEventUsecase
+  controller: PutEventController
 
   constructor() {
     this.repo =
       stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
-    this.usecase = new GetEventUsecase(this.repo)
-    this.controller = new GetEventController(this.usecase)
+    this.usecase = new PutEventUsecase(this.repo)
+    this.controller = new PutEventController(this.usecase)
   }
 
-  async call(req: HttpRequest<GetEventRequest>) {
+  async call(req: HttpRequest<PutEventRequest>) {
     return await this.controller.call(req)
   }
 }

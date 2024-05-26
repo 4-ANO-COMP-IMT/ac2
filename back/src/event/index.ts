@@ -1,11 +1,11 @@
-import express from 'express'
 import cors from 'cors'
-import { config } from 'dotenv'
+import express from 'express'
+
+import { environments } from '../shared/env/environments'
 import { eventRouter } from './routes/event.routes'
 
 const server = async () => {
-  config()
-  const PORT = process.env.PORT || 3000
+  const PORT = environments.eventPort
 
   const app = express()
   app.use(express.json())

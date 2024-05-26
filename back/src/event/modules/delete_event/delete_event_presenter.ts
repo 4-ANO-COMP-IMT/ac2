@@ -8,34 +8,34 @@ import { environments } from '../../../shared/env/environments'
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
-import { GetEventController } from './get_event_controller'
-import { GetEventUsecase } from './get_event_usecase'
-import { GetEventRequest } from './protocols'
+import { DeleteEventController } from './delete_event_controller'
+import { DeleteEventUsecase } from './delete_event_usecase'
+import { DeleteEventRequest } from './protocols'
 
-export interface GetEventPresenterProps {
+export interface DeleteEventPresenterProps {
   repo: EventRepositoryInterface
-  usecase: GetEventUsecase
-  controller: GetEventController
+  usecase: DeleteEventUsecase
+  controller: DeleteEventController
   call(
-    req: HttpRequest<GetEventRequest>
+    req: HttpRequest<DeleteEventRequest>
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
 const stage = environments.stage
 
-export class GetEventPresenter implements GetEventPresenterProps {
+export class DeleteEventPresenter implements DeleteEventPresenterProps {
   repo: EventRepositoryInterface
-  usecase: GetEventUsecase
-  controller: GetEventController
+  usecase: DeleteEventUsecase
+  controller: DeleteEventController
 
   constructor() {
     this.repo =
       stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
-    this.usecase = new GetEventUsecase(this.repo)
-    this.controller = new GetEventController(this.usecase)
+    this.usecase = new DeleteEventUsecase(this.repo)
+    this.controller = new DeleteEventController(this.usecase)
   }
 
-  async call(req: HttpRequest<GetEventRequest>) {
+  async call(req: HttpRequest<DeleteEventRequest>) {
     return await this.controller.call(req)
   }
 }
