@@ -1,11 +1,11 @@
 import { ScheduleJsonProps } from '../../../shared/domain/entities/schedule'
 
-export type GetEventRequest = {
-  id: string
+export type GetSchedulesByEventRequest = {
+  eventId: string
 }
 
-export type GetEventResponse = {
+export type GetSchedulesByEventResponse = {
   status: number
   message: string
-  event?: ScheduleJsonProps
+  schedules?: ScheduleJsonProps
 }
