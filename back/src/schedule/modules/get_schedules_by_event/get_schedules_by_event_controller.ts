@@ -12,7 +12,7 @@ interface GetSchedulesByEventControlerProps {
   usecase: GetSchedulesByEventUsecase
   call(
     req: HttpRequest<GetSchedulesByEventRequest>
-  ): Promise<HttpResponse<ScheduleJsonProps> | HttpResponse<Error>>
+  ): Promise<HttpResponse<ScheduleJsonProps[]> | HttpResponse<Error>>
 }
 
 export class GetEventController implements GetSchedulesByEventControlerProps {
