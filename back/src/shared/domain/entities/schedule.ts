@@ -1,18 +1,3 @@
-// export interface EventInterface {
-//     calculateTotalTime(): number
-//     calculateCellNumbers(): number
-//     equals(event: Event): boolean
-//     toJson(): EventJsonProps
-//   }
-  
-//   export type EventJsonProps = {
-//     id: string
-//     name: string
-//     start_date: number
-//     end_date: number
-//     time_interval: number
-//   }
-  
 export interface ScheduleInterface {
     
 }
