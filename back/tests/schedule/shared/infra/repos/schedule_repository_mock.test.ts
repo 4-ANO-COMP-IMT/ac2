@@ -12,6 +12,7 @@ test('test create schedule', async () => {
   const repo = new ScheduleRepositoryMock()
   const lenBefore: number = ScheduleRepositoryMock.schedules.length
   const schedule = await repo.createSchedule({
+    id: '3bdea174-7ae8-474b-a649-93be4620bba6',
     eventId: '2',
     time: 1632942000000,
     name: 'João'
