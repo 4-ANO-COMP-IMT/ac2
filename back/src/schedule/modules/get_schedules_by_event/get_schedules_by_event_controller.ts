@@ -15,7 +15,9 @@ interface GetSchedulesByEventControlerProps {
   ): Promise<HttpResponse<ScheduleJsonProps[]> | HttpResponse<Error>>
 }
 
-export class GetEventController implements GetSchedulesByEventControlerProps {
+export class GetSchedulesByEventController
+  implements GetSchedulesByEventControlerProps
+{
   constructor(public usecase: GetSchedulesByEventUsecase) {
     this.usecase = usecase
   }
