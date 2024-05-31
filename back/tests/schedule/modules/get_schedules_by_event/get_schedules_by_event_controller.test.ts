@@ -18,19 +18,12 @@ test('Test get schedule by event controller without eventId', async () => {
   expect(response.data).toBe(undefined)
 })
 
-test('Test get schedule by event controller returns an array', async () => {
+test('Test get schedule by event controller returns an object', async () => {
   const repo = new ScheduleRepositoryMock()
   const usecase = new GetSchedulesByEventUsecase(repo)
   const controller = new GetSchedulesByEventController(usecase)
   const request = new HttpRequest('get', { eventId: '2' })
   const response = await controller.call(request)
-  const scheduleExpect = {
-    id: '2',
-    event_id: '2',
-    start_date: 1632950200000,
-    end_date: 1632954000000,
-    time_interval: 300000
-  }
   expect(response.status).toBe(HTTP_STATUS_CODE.OK)
   expect(response.message).toBe('schedules found')
   expect(response.data).toBeTypeOf('object')
