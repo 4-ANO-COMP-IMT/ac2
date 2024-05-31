@@ -7,7 +7,12 @@ export class ScheduleRepositoryHttp implements ScheduleRepositoryInterface {
   getSchedulesByEventId(eventId: string): Promise<Schedule[]> {
     throw new Error('Method not implemented.')
   }
-  createSchedule(schedule: { eventId: string; time: number; name: string }): Promise<Schedule> {
+  createSchedule(schedule: {
+    id: string
+    eventId: string
+    time: number
+    name: string
+  }): Promise<Schedule> {
     throw new Error('Method not implemented.')
   }
   deleteSchedule(scheduleId: string): Promise<Schedule> {

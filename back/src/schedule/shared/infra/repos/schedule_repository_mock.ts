@@ -2,7 +2,6 @@ import { Event } from '../../../../shared/domain/entities/event'
 import { Schedule } from '../../../../shared/domain/entities/schedule'
 import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
 import { ScheduleRepositoryInterface } from './schedule_repository_interface'
-import { v4 as uuidv4 } from 'uuid'
 
 export class ScheduleRepositoryMock implements ScheduleRepositoryInterface {
   static schedules = [
@@ -66,12 +65,13 @@ export class ScheduleRepositoryMock implements ScheduleRepositoryInterface {
   }
 
   createSchedule(schedule: {
+    id: string
     eventId: string
     time: number
     name: string
   }): Promise<Schedule> {
     const newSchedule = new Schedule(
-      uuidv4(),
+      schedule.id,
       schedule.eventId,
       schedule.time,
       schedule.name
