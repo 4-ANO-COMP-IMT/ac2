@@ -18,4 +18,6 @@ jobs:
           cd back
           npm install
       - name: Run tests
-        run: npm test
+        run: |
+          cd back
+          npm test
