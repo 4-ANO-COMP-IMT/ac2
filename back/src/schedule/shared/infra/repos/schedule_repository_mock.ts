@@ -66,12 +66,13 @@ export class ScheduleRepositoryMock implements ScheduleRepositoryInterface {
   }
 
   createSchedule(schedule: {
+    id: string
     eventId: string
     time: number
     name: string
   }): Promise<Schedule> {
     const newSchedule = new Schedule(
-      uuidv4(),
+      schedule.id,
       schedule.eventId,
       schedule.time,
       schedule.name
