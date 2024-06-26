@@ -1,4 +1,4 @@
-import { EntityError } from "../helpers/errors/not_found"
+import { EntityError } from '../helpers/errors/not_found'
 
 export interface AvailabilityInterface {}
 
@@ -24,17 +24,17 @@ export class Availability implements AvailabilityInterface {
 
   equal(availability: Availability) {
     return (
-        this._id === availability._id &&
-        this._startDate === availability._startDate &&
-        this._endDate === availability._endDate
+      this._id === availability._id &&
+      this._startDate === availability._startDate &&
+      this._endDate === availability._endDate
     )
   }
 
   toJson() {
     return {
-        id: this._id,
-        startDate: this._startDate,
-        endDate: this._endDate
+      id: this._id,
+      startDate: this._startDate,
+      endDate: this._endDate
     }
   }
 
@@ -62,5 +62,4 @@ export class Availability implements AvailabilityInterface {
   set endDate(endDate: number) {
     this._endDate = endDate
   }
-
 }

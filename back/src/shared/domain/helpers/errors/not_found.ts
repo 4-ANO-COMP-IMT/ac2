@@ -7,7 +7,7 @@ export class NotFoundError extends Error {
 
 export class EntityError extends Error {
   constructor(entity: string, message: string) {
-    super('Error in entity '+ entity + ': ' + message)
+    super('Error in entity ' + entity + ': ' + message)
     this.name = 'EntityError'
   }
 }
