@@ -8,7 +8,7 @@ test('Test member', () => {
   expect(member.id).toBe('1')
   expect(member.name).toBe('Adam Levine')
   expect(member.password).toBe('Brownas')
-  expect(member.schedules).toEqual([])
+  expect(member.availabilities).toEqual([])
 })
 
 test('Test member without password', () => {
@@ -17,7 +17,7 @@ test('Test member without password', () => {
   expect(member.id).toBe('1')
   expect(member.name).toBe('Adam Levine')
   expect(member.password).toBe(undefined)
-  expect(member.schedules).toEqual([])
+  expect(member.availabilities).toEqual([])
 })
 
 test('Test member toJson', () => {
@@ -25,7 +25,9 @@ test('Test member toJson', () => {
 
   expect(member.toJson()).toEqual({
     id: '1',
-    name: 'Adam Levine'
+    name: 'Adam Levine',
+    password: 'Brownas',
+    availabilities: []
   })
 })
 
@@ -36,7 +38,7 @@ test('Test member toJson without password', () => {
     id: '1',
     name: 'Adam Levine',
     password: undefined,
-    schedules: []
+    availabilities: []
   })
 })
 

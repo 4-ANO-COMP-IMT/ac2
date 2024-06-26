@@ -6,33 +6,33 @@ export type MemberJsonProps = {
   id: string
   name: string
   password?: string | undefined
-  schedules: Availability[]
+  availabilities: Availability[]
 }
 
 export class Member implements MemberInterface {
   private _id: string
   private _name: string
   private _password?: string | undefined
-  private _schedules: Availability[]
+  private _availabilities: Availability[]
 
   constructor(
     id: string,
     name: string,
-    schedules: Availability[],
+    availabilities: Availability[],
     password?: string | undefined
   ) {
     this._id = id
     this._name = name
     this._password = password
-    this._schedules = schedules
+    this._availabilities = availabilities
   }
 
-  equal(schedule: Member) {
+  equal(member: Member) {
     return (
-      this._id === schedule.id &&
-      this._name === schedule.name &&
-      this._password === schedule.password &&
-      this._schedules === schedule.schedules
+      this._id === member.id &&
+      this._name === member.name &&
+      this._password === member.password &&
+      Member.availabilitiesAreEqual(this._availabilities, member.availabilities)
     )
   }
 
@@ -41,7 +41,7 @@ export class Member implements MemberInterface {
       id: this._id,
       name: this._name,
       password: this._password,
-      schedules: this._schedules
+      availabilities: this._availabilities.map(availability => availability.toJson())
     }
   }
 
@@ -58,8 +58,8 @@ export class Member implements MemberInterface {
     return this._password
   }
 
-  get schedules() {
-    return this._schedules
+  get availabilities() {
+    return this._availabilities
   }
 
   set id(id: string) {
@@ -74,7 +74,15 @@ export class Member implements MemberInterface {
     this._password = password
   }
 
-  set schedules(schedules: Availability[]) {
-    this._schedules = schedules
+  set availabilities(availabilities: Availability[]) {
+    this._availabilities = availabilities
+  }
+
+  // Static methods
+  static availabilitiesAreEqual(availabilities1: Availability[], availabilities2: Availability[]) {
+    if (availabilities1.length !== availabilities2.length) {
+      return false
+    }
+    return availabilities1.every((value, index) => value.equal(availabilities2[index]))
   }
 }
