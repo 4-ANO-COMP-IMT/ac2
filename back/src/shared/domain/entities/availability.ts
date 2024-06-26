@@ -2,23 +2,17 @@ import { EntityError } from '../helpers/errors/not_found'
 
 export interface AvailabilityInterface {}
 
-export type AvailabilityJsonProps = {
-  id: string
-  startDate: number // mili
-  endDate: number // mili
-}
-
 export class Availability implements AvailabilityInterface {
   private _id: string
-  private _startDate: number
-  private _endDate: number
+  private _startDate: number // mili
+  private _endDate: number // mili
 
   constructor(id: string, startDate: number, endDate: number) {
     this._id = id
-    this._startDate = startDate
     if (startDate > endDate) {
       throw new EntityError('Availability', 'startDate must be before endDate')
     }
+    this._startDate = startDate
     this._endDate = endDate
   }
 

@@ -2,13 +2,6 @@ import { Availability } from './availability'
 
 export interface MemberInterface {}
 
-export type MemberJsonProps = {
-  id: string
-  name: string
-  password?: string | undefined
-  availabilities: Availability[]
-}
-
 export class Member implements MemberInterface {
   private _id: string
   private _name: string

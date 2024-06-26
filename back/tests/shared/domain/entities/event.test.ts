@@ -1,43 +1,196 @@
 import { expect, test } from 'vitest'
 
 import { Event } from '../../../../src/shared/domain/entities/event'
+import { Member } from '../../../../src/shared/domain/entities/member'
 
-test('Test event', () => {
+test('Test event without members and description', () => {
   const event = new Event(
     '1',
-    'Event Name',
-    1632950400000,
-    1632954000000,
-    600000
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    []
   )
 
   expect(event.id).toBe('1')
-  expect(event.name).toBe('Event Name')
-  expect(event.startDate).toBe(1632950400000)
-  expect(event.endDate).toBe(1632954000000)
-  expect(event.timeInterval).toBe(600000)
+  expect(event.name).toBe('Criar nova música para o Maroon 5')
+  expect(event.startDate).toBe(1719392400000)
+  expect(event.endDate).toBe(1719781200000)
+  expect(event.notEarlier).toBe(32400000)
+  expect(event.notLater).toBe(75600000)
+})
+
+test('Test event with members without description', () => {
+  const members = [
+    new Member('1', 'Adam Levine', [], 'Brownas')
+  ]
+
+  const event = new Event(
+    '1',
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    members
+  )
+
+  expect(event.id).toBe('1')
+  expect(event.name).toBe('Criar nova música para o Maroon 5')
+  expect(event.startDate).toBe(1719392400000)
+  expect(event.endDate).toBe(1719781200000)
+  expect(event.notEarlier).toBe(32400000)
+  expect(event.notLater).toBe(75600000)
+  expect(event.members).toEqual(members)
+})
+
+test('Test event with members and description', () => {
+  const members = [
+    new Member('1', 'Adam Levine', [], 'Brownas')
+  ]
+
+  const event = new Event(
+    '1',
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    members,
+    'Descrição do evento'
+  )
+
+  expect(event.id).toBe('1')
+  expect(event.name).toBe('Criar nova música para o Maroon 5')
+  expect(event.startDate).toBe(1719392400000)
+  expect(event.endDate).toBe(1719781200000)
+  expect(event.notEarlier).toBe(32400000)
+  expect(event.notLater).toBe(75600000)
+  expect(event.members).toEqual(members)
+  expect(event.description).toBe('Descrição do evento')
+})
+
+test('Test event startDate after endDate', () => {
+  expect(() => {
+    new Event(
+      '1',
+      'Criar nova música para o Maroon 5',
+      1719781200000,
+      1719392400000,
+      32400000,
+      75600000,
+      []
+    )
+  }).toThrow()
+})
+
+test('Test event notEarlier after notLater', () => {
+  expect(() => {
+    new Event(
+      '1',
+      'Criar nova música para o Maroon 5',
+      1719392400000,
+      1719781200000,
+      75600000,
+      32400000,
+      []
+    )
+  }).toThrow()
 })
 
 test('Test calculate total time', () => {
   const event = new Event(
     '1',
-    'Event Name',
-    1632950400000,
-    1632954000000,
-    600000
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    []
   )
 
-  expect(event.calculateTotalTime()).toBe(3600000)
+  expect(event.calculateTotalTime()).toBe(388800000)
 })
 
-test('Test calculate cell numbers', () => {
+test('Test equals', () => {
   const event = new Event(
     '1',
-    'Event Name',
-    1632950400000,
-    1632954000000,
-    600000
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    []
   )
 
-  expect(event.calculateCellNumbers()).toBe(6)
+  const event2 = new Event(
+    '1',
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    []
+  )
+
+  expect(event.equals(event2)).toBe(true)
+})
+
+test('Test toJson', () => {
+  const event = new Event(
+    '1',
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    []
+  )
+
+  expect(event.toJson()).toEqual({
+    id: '1',
+    name: 'Criar nova música para o Maroon 5',
+    startDate: 1719392400000,
+    endDate: 1719781200000,
+    notEarlier: 32400000,
+    notLater: 75600000,
+    members: [],
+    description: undefined
+  })
+})
+
+test('Test toJson with members', () => {
+  const members = [
+    new Member('1', 'Adam Levine', [], 'Brownas')
+  ]
+
+  const event = new Event(
+    '1',
+    'Criar nova música para o Maroon 5',
+    1719392400000,
+    1719781200000,
+    32400000,
+    75600000,
+    members
+  )
+
+  expect(event.toJson()).toEqual({
+    id: '1',
+    name: 'Criar nova música para o Maroon 5',
+    startDate: 1719392400000,
+    endDate: 1719781200000,
+    notEarlier: 32400000,
+    notLater: 75600000,
+    members: [
+      {
+        id: '1',
+        name: 'Adam Levine',
+        availabilities: [],
+        password: 'Brownas'
+      }
+    ],
+    description: undefined
+  })
 })
