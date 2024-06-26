@@ -14,7 +14,7 @@ const server = async () => {
   app.use('/event', eventRouter)
 
   app.get('/', (req, res) => {
-    res.send('API is running! 🦍 🚀')
+    res.send('API is running! 🦍 🚀 SIDIS')
   })
 
   app.listen(PORT, () => {
