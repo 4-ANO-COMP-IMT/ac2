@@ -91,7 +91,7 @@ export function EventCard() {
     mode: 'onBlur'
   })
   return (
-    <Card className="w-2/5">
+    <Card className="">
       <CardHeader>
         <CardTitle className="text-primary">Criar evento</CardTitle>
         <CardDescription className="text-secondary">
