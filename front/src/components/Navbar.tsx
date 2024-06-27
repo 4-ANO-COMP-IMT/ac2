@@ -23,7 +23,7 @@ export function Navbar() {
   }
 
   return (
-    <nav className="font-geist fixed left-0 top-0 flex w-full select-none items-center justify-between border-b-[1px] border-gray-300 px-8 py-3 text-[15px] sm:px-16">
+    <nav className="fixed left-0 top-0 z-10 flex w-full select-none items-center justify-between border-b-[1px] border-gray-300 px-8 py-3 font-geist text-[15px] sm:px-16">
       <div className="absolute left-0 top-0 -z-10 h-full w-full bg-white/30 backdrop-blur-sm"></div>
       <div className="hidden items-center justify-center gap-10 sm:flex">
         <h1 className="font-bold text-blue-primary">BoraMarcar</h1>
