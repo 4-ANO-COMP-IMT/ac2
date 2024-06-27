@@ -6,21 +6,23 @@ import { Event } from '../../../../src/shared/domain/entities/event'
 
 test('post event usecase created', async () => {
   const repo = new EventRepositoryMock()
+  const lengthBefore = EventRepositoryMock.events.length
   const usecase = new CreateEventUsecase(repo)
   const event = await usecase.call(
-    'Academy Chest Day',
-    [1719781200000],
-    1632950200000,
-    1632954000000,
-    300000
+    "Treino Popeye", 
+    [1719392400000],
+    32400000,
+    75600000,  
+    "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
   )
 
   expect(event).toBeInstanceOf(Event)
-  expect(event?.name).toBe('Academy Chest Day')
-  expect(event?.dates).toStrictEqual([1719781200000])
-  expect(event?.notEarlier).toBe(1632950200000)
-  expect(event?.notLater).toBe(1632954000000)
-  expect(EventRepositoryMock.events.length).toBe(4)
-  expect(EventRepositoryMock.events[3]).toEqual(event)
+  expect(event.name).toBe("Treino Popeye")
+  expect(event.dates).toStrictEqual([1719392400000])
+  expect(event.notEarlier).toBe(32400000)
+  expect(event.notLater).toBe(75600000)
+  expect(event.description).toBe("Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye")
+  expect(EventRepositoryMock.events.length).toBe(lengthBefore + 1)
+  expect(EventRepositoryMock.events[lengthBefore]).toEqual(event)
   repo.resetMock()
 })

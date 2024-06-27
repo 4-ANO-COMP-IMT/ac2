@@ -22,7 +22,8 @@ test('create event presenter created', async () => {
     name: 'Academy Chest Day',
     dates: [1719781200000],
     notEarlier: 1632950200000,
-    notLater: 1632954000000
+    notLater: 1632954000000,
+    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
   }
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
   expect(response.message).toBe('event created')
@@ -46,7 +47,8 @@ describe('create event presenter body', () => {
       name: '',
       dates: [1719781200000],
       notEarlier: 1632950200000,
-      notLater: 1632954000000
+      notLater: 1632954000000,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
     })
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
@@ -60,7 +62,8 @@ describe('create event presenter body', () => {
       name: 'Academy Chest Day',
       dates: [],
       notEarlier: 1632950200000,
-      notLater: 1632954000000
+      notLater: 1632954000000,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
     })
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
@@ -74,7 +77,8 @@ describe('create event presenter body', () => {
       name: 'Academy Chest Day',
       dates: [1719781200000],
       notEarlier: 0,
-      notLater: 1632954000000
+      notLater: 1632954000000,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
     })
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
@@ -88,7 +92,23 @@ describe('create event presenter body', () => {
       name: 'Academy Chest Day',
       dates: [1719781200000],
       notEarlier: 1632950200000,
-      notLater: 0
+      notLater: 0,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    })
+    const response = await presenter.call(request)
+    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
+    expect(response.message).toBe('missing notLater')
+    expect(response.data).toBe(undefined)
+  })
+
+  it('should return BAD REQUEST if notLater is missing', async () => {
+    const presenter = new CreateEventPresenter()
+    const request = new HttpRequest('create', {
+      name: 'Academy Chest Day',
+      dates: [1719781200000],
+      notEarlier: 1632950200000,
+      notLater: 1632954000000,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
     })
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
