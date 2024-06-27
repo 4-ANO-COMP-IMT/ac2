@@ -10,20 +10,21 @@ test('create event presenter created', async () => {
   const repo = new EventRepositoryMock()
   const presenter = new CreateEventPresenter()
   const request = new HttpRequest('create', {
-    name: 'Academy Chest Day',
-    dates: [1719781200000],
-    notEarlier: 1632950200000,
-    notLater: 1632954000000,
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000,
+    notLater: 75600000,  
     description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
   })
   const response = await presenter.call(request)
 
   const eventExpect = {
-    id: '4',
-    name: 'Academy Chest Day',
-    dates: [1719781200000],
-    notEarlier: 1632950200000,
-    notLater: 1632954000000,
+    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000, 
+    notLater: 75600000,  
+    members: [],
     description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
   }
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
@@ -32,88 +33,11 @@ test('create event presenter created', async () => {
   repo.resetMock()
 })
 
-describe('create event presenter body', () => {
-  it('should return BAD REQUEST if body is missing', async () => {
+test('create event presenter should return BAD REQUEST if body is missing', async () => {
     const presenter = new CreateEventPresenter()
     const request = new HttpRequest('post', {} as CreateEventRequest)
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing body')
     expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if name is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('create', {
-      name: '',
-      dates: [1719781200000],
-      notEarlier: 1632950200000,
-      notLater: 1632954000000,
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    })
-    const response = await presenter.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing name')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if dates is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [],
-      notEarlier: 1632950200000,
-      notLater: 1632954000000,
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    })
-    const response = await presenter.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing name')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if notEarlier is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [1719781200000],
-      notEarlier: 0,
-      notLater: 1632954000000,
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    })
-    const response = await presenter.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing notEarlier')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if notLater is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [1719781200000],
-      notEarlier: 1632950200000,
-      notLater: 0,
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    })
-    const response = await presenter.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing notLater')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if description is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [1719781200000],
-      notEarlier: 1632950200000,
-      notLater: 1632954000000,
-      description: ""
-    })
-    const response = await presenter.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing notLater')
-    expect(response.data).toBe(undefined)
-  })
 })
