@@ -17,6 +17,9 @@ module.exports = {
       }
     },
     extend: {
+      fontFamily: {
+        geist: ['Geist', 'sans-serif']
+      },
       colors: {
         blue: { primary: '#284C63', secondary: '#34607F' },
         border: 'hsl(var(--border))',
@@ -25,11 +28,13 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          // DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: '#284C63',
           foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
+          // DEFAULT: 'hsl(var(--secondary))',
+          DEFAULT: '#34607F',
           foreground: 'hsl(var(--secondary-foreground))'
         },
         destructive: {
