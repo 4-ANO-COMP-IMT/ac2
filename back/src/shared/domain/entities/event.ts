@@ -1,5 +1,15 @@
 import { EntityError } from "../helpers/errors/not_found"
-import { Member } from "./member"
+import { Member, MemberJsonProps } from "./member"
+
+export type EventJsonProps = {
+  id: string
+  name: string
+  dates: number[]
+  notEarlier: number
+  notLater: number
+  members: MemberJsonProps[]
+  description?: string | undefined
+}
 
 export interface EventInterface {}
 
@@ -22,7 +32,7 @@ export class Event implements EventInterface {
       throw new EntityError('Event', 'notEarlier must be before notLater')
     }
     if (0 > notEarlier || notEarlier > 86400000) {
-      throw new EntityError('Event', 'notEarlier must be between 0 and 86400000')
+      throw new EntityError('Event', 'notEarlier must be between 0 and 86400000: ' + notEarlier)
     }
     this._notEarlier = notEarlier
     if (0 > notLater || notLater > 86400000) {

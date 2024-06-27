@@ -1,5 +1,11 @@
 import { EntityError } from '../helpers/errors/not_found'
 
+export type AvailabilityJsonProps = {
+  id: string
+  startDate: number // mili
+  endDate: number // mili
+}
+
 export interface AvailabilityInterface {}
 
 export class Availability implements AvailabilityInterface {

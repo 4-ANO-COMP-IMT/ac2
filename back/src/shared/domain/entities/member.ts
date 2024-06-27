@@ -1,4 +1,11 @@
-import { Availability } from './availability'
+import { Availability, AvailabilityJsonProps } from './availability'
+
+export type MemberJsonProps = {
+  id: string
+  name: string
+  password?: string | undefined
+  availabilities: AvailabilityJsonProps[]
+}
 
 export interface MemberInterface {}
 

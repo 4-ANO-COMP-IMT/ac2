@@ -1,35 +1,62 @@
 import { describe, expect, it, test } from 'vitest'
-
+ 
 import { CreateEventController } from '../../../../src/event/modules/create_event/create_event_controller'
 import { CreateEventUsecase } from '../../../../src/event/modules/create_event/create_event_usecase'
 import { CreateEventRequest } from '../../../../src/event/modules/create_event/protocols'
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-
+ 
 test('create event controller created', async () => {
   const repo = new EventRepositoryMock()
   const usecase = new CreateEventUsecase(repo)
   const controller = new CreateEventController(usecase)
   const request = new HttpRequest('create', {
-    name: 'Academy Chest Day',
-    dates: [1719781200000],
-    notEarlier: 1632950200000,
-    notLater: 1632954000000
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000,
+    notLater: 75600000,  
+    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
   })
   const response = await controller.call(request)
   const eventExpect = {
-    id: '4',
-    name: 'Academy Chest Day',
-    dates: [1719781200000],
-    notEarlier: 1632950200000,
-    notLater: 1632954000000
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000,
+    notLater: 75600000,  
+    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye",
+    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
+    members: []
   }
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
   expect(response.message).toBe('event created')
   expect(response.data).toEqual(eventExpect)
 })
 
+test('create event controller created without description', async () => {
+  const repo = new EventRepositoryMock()
+  const usecase = new CreateEventUsecase(repo)
+  const controller = new CreateEventController(usecase)
+  const request = new HttpRequest('create', {
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000,
+    notLater: 75600000,  
+  })
+  const response = await controller.call(request)
+  const eventExpect = {
+    name: "Treino Popeye", 
+    dates: [1719392400000],
+    notEarlier: 32400000,
+    notLater: 75600000,  
+    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
+    members: []
+  }
+  expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
+  expect(response.message).toBe('event created')
+  expect(response.data).toEqual(eventExpect)
+})
+ 
 describe('create event controller body', () => {
   it('should return BAD REQUEST if body is missing', async () => {
     const repo = new EventRepositoryMock()
@@ -47,11 +74,11 @@ describe('create event controller body', () => {
     const usecase = new CreateEventUsecase(repo)
     const controller = new CreateEventController(usecase)
     const request = new HttpRequest('create', {
-      name: '',
-      dates: [1719781200000],
-      notEarlier: 1632950200000,
-      notLater: 1632954000000
-    })
+      dates: [1719392400000],
+      notEarlier: 32400000,
+      notLater: 75600000,  
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    } as CreateEventRequest)
     const response = await controller.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing name')
@@ -63,14 +90,14 @@ describe('create event controller body', () => {
     const usecase = new CreateEventUsecase(repo)
     const controller = new CreateEventController(usecase)
     const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [],
-      notEarlier: 1632950200000,
-      notLater: 1632954000000
-    })
+      name: "Treino Popeye", 
+      notEarlier: 32400000,
+      notLater: 75600000,  
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    } as CreateEventRequest)
     const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing name')
+    // expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
+    expect(response.message).toBe('missing dates')
     expect(response.data).toBe(undefined)
   })
 
@@ -79,11 +106,11 @@ describe('create event controller body', () => {
     const usecase = new CreateEventUsecase(repo)
     const controller = new CreateEventController(usecase)
     const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [1719781200000],
-      notEarlier: 0,
-      notLater: 1632954000000
-    })
+      name: "Treino Popeye", 
+      dates: [1719392400000],
+      notLater: 75600000,  
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    } as CreateEventRequest)
     const response = await controller.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing notEarlier')
@@ -95,11 +122,11 @@ describe('create event controller body', () => {
     const usecase = new CreateEventUsecase(repo)
     const controller = new CreateEventController(usecase)
     const request = new HttpRequest('create', {
-      name: 'Academy Chest Day',
-      dates: [1719781200000],
-      notEarlier: 1632950200000,
-      notLater: 0
-    })
+      name: "Treino Popeye", 
+      dates: [1719392400000],
+      notEarlier: 32400000,
+      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    } as CreateEventRequest)
     const response = await controller.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing notLater')

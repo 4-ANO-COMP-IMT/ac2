@@ -23,14 +23,14 @@ export class CreateEventController implements CreateEventControllerProps {
     if (
       !req.data?.name &&
       !req.data?.dates &&
-      !req.data?.startDate &&
-      !req.data?.endDate &&
-      !req.data?.timeInterval
+      !req.data?.notEarlier &&
+      !req.data?.notLater &&
+      !req.data?.description
     ) {
       return HttpResponse.badRequest('missing body')
     }
 
-    const { name, dates, startDate, endDate, timeInterval } = req.data
+    const { name, dates, notEarlier, notLater, description } = req.data
 
     if (!name) {
       return HttpResponse.badRequest('missing name')
@@ -40,25 +40,21 @@ export class CreateEventController implements CreateEventControllerProps {
       return HttpResponse.badRequest('missing dates')
     }
 
-    if (!startDate) {
-      return HttpResponse.badRequest('missing startDate')
+    if (!notEarlier) {
+      return HttpResponse.badRequest('missing notEarlier')
     }
 
-    if (!endDate) {
-      return HttpResponse.badRequest('missing endDate')
-    }
-
-    if (!timeInterval) {
-      return HttpResponse.badRequest('missing timeInterval')
+    if (!notLater) {
+      return HttpResponse.badRequest('missing notLater')
     }
 
     try {
       const event = await this.usecase.call(
         name,
         dates,
-        startDate,
-        endDate,
-        timeInterval
+        notEarlier,
+        notLater,
+        description
       )
 
       return HttpResponse.created<EventJsonProps>(

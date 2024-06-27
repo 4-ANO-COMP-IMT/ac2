@@ -75,8 +75,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
         [1719392400000],
         32400000,
         75600000,
-        [
-          new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [], 'Brownas')],
+        [new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [], 'Brownas')],
         'Descrição do evento'
       ),
       new Event(

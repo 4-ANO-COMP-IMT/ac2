@@ -17,7 +17,7 @@
 // export class PostEventController implements PostEventControllerProps {
 //   constructor(public usecase: PostEventUsecase) {
 //     this.usecase = usecase
-//   }
+//   } 
 
 //   async call(req: HttpRequest<PostEventRequest>) {
 //     if (
