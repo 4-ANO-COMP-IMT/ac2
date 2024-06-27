@@ -23,7 +23,7 @@ import { useState } from 'react'
 const hours = Array.from({ length: 24 }, (_, i) => i)
 
 export function EventCard() {
-  const [date, setDate] = useState<{ from: Date; to: Date } | undefined>(
+  const [date, setDate] = useState<Date[] | undefined>(
     undefined
   )
   return (
@@ -104,10 +104,11 @@ export function EventCard() {
             <div className="flex justify-center">
               <Calendar
                 numberOfMonths={2}
-                mode="range"
+                mode="multiple"
                 selected={date}
                 onSelect={setDate}
                 className="flex w-full justify-center rounded-md border"
+                disabled={{ before: new Date() }}
               />
             </div>
           </div>
