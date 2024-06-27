@@ -109,6 +109,8 @@ export function EventCard() {
                 onSelect={setDate}
                 className="flex w-full justify-center rounded-md border"
                 disabled={{ before: new Date() }}
+                min={1}
+                max={7}
               />
             </div>
           </div>
