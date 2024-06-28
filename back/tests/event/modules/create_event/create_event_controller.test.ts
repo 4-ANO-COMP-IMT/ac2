@@ -133,3 +133,50 @@ describe('create event controller body', () => {
     expect(response.data).toBe(undefined)
   })
 })
+
+describe('create event controller entity error', async () => {
+  it('notEarlier must be before notLater', async () => {
+    const repo = new EventRepositoryMock() 
+    const usecase = new CreateEventUsecase(repo)
+    const controller = new CreateEventController(usecase)
+    const request = new HttpRequest('create', {
+      name: "Treino Popeye", 
+      dates: [1719392400000],
+      notEarlier: 75600001,
+      notLater: 75600000,  
+    })
+    const response = await controller.call(request)
+    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
+    expect(response.message).toBe('Error in entity Event: notEarlier must be before notLater')
+  })
+
+  it('notEarlier must be between 0 and 86400000', async () => {
+    const repo = new EventRepositoryMock() 
+    const usecase = new CreateEventUsecase(repo)
+    const controller = new CreateEventController(usecase)
+    const request = new HttpRequest('create', {
+      name: "Treino Popeye", 
+      dates: [1719392400000],
+      notEarlier: -1,
+      notLater: 75600000,  
+    })
+    const response = await controller.call(request)
+    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
+    expect(response.message).toBe('Error in entity Event: notEarlier must be between 0 and 86400000')
+  })
+
+  it('notLater must be between 0 and 86400000', async () => {
+    const repo = new EventRepositoryMock() 
+    const usecase = new CreateEventUsecase(repo)
+    const controller = new CreateEventController(usecase)
+    const request = new HttpRequest('create', {
+      name: "Treino Popeye", 
+      dates: [1719392400000],
+      notEarlier: 75600000,
+      notLater: 7560000000000,  
+    })
+    const response = await controller.call(request)
+    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
+    expect(response.message).toBe('Error in entity Event: notLater must be between 0 and 86400000')
+  })
+})

@@ -32,7 +32,7 @@ export class Event implements EventInterface {
       throw new EntityError('Event', 'notEarlier must be before notLater')
     }
     if (0 > notEarlier || notEarlier > 86400000) {
-      throw new EntityError('Event', 'notEarlier must be between 0 and 86400000: ' + notEarlier)
+      throw new EntityError('Event', 'notEarlier must be between 0 and 86400000')
     }
     this._notEarlier = notEarlier
     if (0 > notLater || notLater > 86400000) {
