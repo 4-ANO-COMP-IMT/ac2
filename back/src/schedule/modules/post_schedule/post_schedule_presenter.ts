@@ -33,7 +33,9 @@ export class PostSchedulePresenter implements PostSchedulePresenterProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new ScheduleRepositoryMock() : new ScheduleRepositoryHttp()
+      stage === 'test'
+        ? new ScheduleRepositoryMock()
+        : new ScheduleRepositoryHttp()
     this.usecase = new PostScheduleUsecase(this.repo)
     this.controller = new PostScheduleController(this.usecase)
   }

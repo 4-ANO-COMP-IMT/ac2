@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
-import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
+
 import { PostScheduleUsecase } from '../../../../src/schedule/modules/post_schedule/post_schedule_usecase'
+import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
 import { Schedule } from '../../../../src/shared/domain/entities/schedule'
 
 test('post schedule usecase created', async () => {

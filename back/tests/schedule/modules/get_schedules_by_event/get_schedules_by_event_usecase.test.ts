@@ -1,8 +1,8 @@
+import e from 'cors'
 import { expect, test } from 'vitest'
 
 import { GetSchedulesByEventUsecase } from '../../../../src/schedule/modules/get_schedules_by_event/get_schedules_by_event_usecase'
 import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
-import e from 'cors'
 
 test('get schedules by event usecase', async () => {
   const repo = new ScheduleRepositoryMock()

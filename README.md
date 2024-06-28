@@ -23,6 +23,44 @@ Clone this repository with git
 - **back**: Back-end folder | Node.js struct
 - **front**: Front-end folder | React struct
 
+## Backend Modules
+
+### `create_event` (http://localhost:3000/event)
+
+- POST request
+
+#### Request
+```
+{
+   "name":"Treino Popeye",
+   "dates":[
+      1719392400000
+   ],
+   "notEarlier":32400000,
+   "notLater":75600000,
+   "description":"Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+}
+```
+
+#### Response
+```
+{
+  "message": "event created",
+  "data": {
+    "id": "48291bd9-f10b-497a-a917-1349fe64530e",
+    "name": "Treino Popeye",
+    "dates": [
+      1719392400000
+    ],
+    "notEarlier": 32400000,
+    "notLater": 75600000,
+    "members": [],
+    "description": "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+  }
+}
+```
+
+
 ## Authors
 
 - [Enzo Sakamoto - 21.00210-0](https://github.com/enzosakamoto)
