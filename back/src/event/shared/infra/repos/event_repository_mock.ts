@@ -55,7 +55,6 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       )
 
       EventRepositoryMock.events.push(createdEvent)
-      console.log("Event created! Length of repo is: " + EventRepositoryMock.events.length)
       return createdEvent
     }
 
