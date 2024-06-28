@@ -13,15 +13,16 @@ export function Home() {
           transition-all duration-300 hover:bg-blue-primary hover:text-white hover:shadow-2xl hover:-translate-y-0.5 ">Criar evento</button>
         </div>
 
-        <div className='flex flex-row  gap-8 justify-center items-center'>
+        <div className='flex gap-8 justify-center items-center flex-col sm:flex-row-reverse
+        '>
 
+          <img src={timeBros} alt="Flying"  />
           <ReviewCard 
             img={'https://media.licdn.com/dms/image/D5603AQFx8dIY-KAcPQ/profile-displayphoto-shrink_200_200/0/1709219070107?e=1724889600&v=beta&t=gpRSFh51T4whCsJNesglU5_VgnlGO96LRpKDHNCe6gs'}
             review={'"BoraMarcar é uma ferramenta excepcional. A interface intuitiva e profissional simplificou significativamente a coordenação de nossos compromissos. Altamente recomendada!"'} 
             name={'Vruno Bilardi'} 
             position={'CEO, e-Core'}/>
             
-          <img src={timeBros} alt="Flying" className="flex flex-col items-start justify-center" />
 
         </div>
 
