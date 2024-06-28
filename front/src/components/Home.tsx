@@ -9,8 +9,12 @@ export function Home() {
           <h1 className=" text-primary font-bold text-7xl">BoraMarcar</h1>
           <p className="text-secondary font-light text-xl text-wrap">Simplificando seus encontos com praticidade e precisão.</p>
           <p className="w-4/5">Ferramenta de agendamento online com interface intuitiva e profissional, que facilita a marcação de compromissos e reuniões ao permitir a visualização rápida dos horários disponíveis de cada participante.</p>
-          <button className="rounded-md border-[1px] border-gray-300 p-2 px-4 text-blue-primary text-xl
-          transition-all duration-300 hover:bg-blue-primary hover:text-white hover:shadow-2xl hover:-translate-y-0.5 ">Criar evento</button>
+          <a href="/event" className="">
+            <button className="rounded-md border-[1px] border-gray-300 p-2 px-4 text-blue-primary text-xl
+            transition-all duration-300 hover:bg-blue-primary hover:text-white hover:shadow-2xl hover:-translate-y-0.5 ">
+                Criar evento
+            </button>
+          </a>
         </div>
 
         <div className='flex gap-8 justify-center items-center flex-col sm:flex-row-reverse
