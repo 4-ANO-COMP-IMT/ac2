@@ -94,9 +94,11 @@ export function Navbar() {
         </>
       )}
       <div className="flex items-center justify-center gap-2">
-        <Button variant="outline" className="px-3 text-primary" size="sm">
-          <a href="/event">Criar evento</a>
-        </Button>
+        <a href="/event">
+          <Button variant="outline" className="px-3 text-primary" size="sm">
+            Criar evento
+          </Button>
+        </a>
         <Button variant="ghost" size="icon">
           <a
             href="https://github.com/4-ANO-COMP-IMT/ac2"
