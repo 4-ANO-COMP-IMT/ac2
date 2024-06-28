@@ -1,7 +1,6 @@
 import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
-import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
 import { EventRepositoryInterface } from './event_repository_interface'
 import { v4 as uuid } from 'uuid'
 
@@ -56,6 +55,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       )
 
       EventRepositoryMock.events.push(createdEvent)
+      console.log("Event created! Length of repo is: " + EventRepositoryMock.events.length)
       return createdEvent
     }
 
