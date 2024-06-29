@@ -1,5 +1,5 @@
 import timeBros from '../assets/time-bros.svg'
-import { ReviewCard } from '../components/ReviewCard'
+import { ReviewCard } from '@/components/review-card'
 
 export function Home() {
   return (

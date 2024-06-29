@@ -1,9 +1,3 @@
-import { useState } from 'react'
-import { FaGithub } from 'react-icons/fa'
-import { IoSunnyOutline } from 'react-icons/io5'
-import { RiMenu2Fill } from 'react-icons/ri'
-import { IoClose } from 'react-icons/io5'
-
 export function ReviewCard(props: {
   img: string
   review: string

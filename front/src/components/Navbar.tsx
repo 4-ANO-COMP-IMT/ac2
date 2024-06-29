@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { useTheme } from '@/hooks/use_theme'
+import { useTheme } from '@/hooks/use-theme'
 import { useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { IoSunnyOutline } from 'react-icons/io5'
@@ -16,7 +16,7 @@ export function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [fade, setFade] = useState(false)
 
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
 
   const handleOpenDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen)
@@ -34,11 +34,11 @@ export function Navbar() {
 
   return (
     <nav className="fixed left-0 top-0 z-10 flex w-full select-none items-center justify-between border-b-[1px] px-8 py-3 font-geist text-[15px] sm:px-16">
-      <div
-        className={`absolute left-0 top-0 -z-10 h-full w-full border-gray-300 backdrop-blur-sm ${theme === 'light' ? 'bg-white/30' : theme === 'dark' ? 'bg-black/30' : 'bg-white/30'}`}
-      ></div>
+      <div className="absolute left-0 top-0 -z-10 h-full w-full border-gray-300 bg-background/30 backdrop-blur-sm"></div>
       <div className="hidden items-center justify-center gap-10 sm:flex">
-        <h1 className="font-bold text-blue-primary">BoraMarcar</h1>
+        <a className="cursor-pointer font-bold text-blue-primary" href="/">
+          BoraMarcar
+        </a>
         <a
           href="/"
           className="font-light text-blue-secondary transition-all duration-200 hover:text-blue-primary"
@@ -65,12 +65,15 @@ export function Navbar() {
             onClick={handleCloseDrawer}
           ></div>
           <div
-            className={`absolute left-0 top-0 z-20 flex h-screen w-3/5 min-w-72 transform flex-col gap-12 p-8 transition-all duration-200 ${theme === 'light' ? 'bg-white' : theme === 'dark' ? 'border-[1px] border-r-gray-300 bg-black' : 'bg-white'} ${fade ? 'translate-x-0' : '-translate-x-96'}`}
+            className={`absolute left-0 top-0 z-20 flex h-screen w-3/5 min-w-72 transform flex-col gap-12 border-[1px] border-r-gray-300 bg-background p-8 transition-all duration-200 ${fade ? 'translate-x-0' : '-translate-x-96'}`}
           >
             <div className="flex items-center justify-between gap-8">
-              <h1 className="text-2xl font-bold text-blue-primary">
+              <a
+                href="/"
+                className="cursor-pointer text-2xl font-bold text-blue-primary"
+              >
                 BoraMarcar
-              </h1>
+              </a>
               <IoClose
                 className="cursor-pointer text-2xl text-blue-primary"
                 onClick={handleCloseDrawer}

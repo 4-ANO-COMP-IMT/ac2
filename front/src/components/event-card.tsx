@@ -31,6 +31,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { useEvent } from '@/hooks/use-event'
+import { useToast } from '@/components/ui/use-toast'
 
 const hours = Array.from({ length: 24 }, (_, i) => i)
 const timezones = Array.from({ length: 25 }, (_, i) => i - 12)
@@ -61,23 +63,42 @@ const formSchema = z.object({
   })
 })
 
-type FormValues = z.infer<typeof formSchema>
+export type FormEventValues = z.infer<typeof formSchema>
 
 export function EventCard() {
+  const { createEvent } = useEvent()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: FormEventValues) => {
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
     console.log(data)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const event = await createEvent(data)
+      toast({
+        title: 'Evento criado com sucesso',
+        description: `O evento ${event.event?.name} foi criado com sucesso`
+      })
+      form.reset()
+      console.log(event)
+    } catch (error) {
+      console.log(error)
+      toast({
+        variant: 'destructive',
+        title: 'Ocorreu um erro ao criar o evento',
+        description: `Erro: ${(error as Error).message}`
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const clearAllFields = () => {
     form.reset()
   }
 
-  const form = useForm<FormValues>({
+  const form = useForm<FormEventValues>({
     resolver: zodResolver(formSchema),
     disabled: isLoading,
     defaultValues: {
