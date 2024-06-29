@@ -7,6 +7,7 @@
     "dev:event": "nodemon src/event/index.ts",
     "dev:dynamo": "nodemon src/dynamo/index.ts",
     "dev:schedule": "nodemon src/schedule/index.ts",
+    "dev:eventBus": "nodemon src/eventBus/index.ts",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "lint:tests": "eslint tests --fix",
@@ -34,6 +35,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

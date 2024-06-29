@@ -1,10 +1,9 @@
+import { ScheduleJsonProps } from '../../../shared/domain/entities/schedule'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-
 import { HttpRequest } from './../../../shared/domain/helpers/http/http_request'
-import { ScheduleJsonProps } from '../../../shared/domain/entities/schedule'
 import { GetSchedulesByEventUsecase } from './get_schedules_by_event_usecase'
 import { GetSchedulesByEventRequest } from './protocols'
 

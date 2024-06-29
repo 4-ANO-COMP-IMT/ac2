@@ -1,17 +1,16 @@
+import { ScheduleJsonProps } from '../../../shared/domain/entities/schedule'
+import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-
-import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
-import { ScheduleJsonProps } from '../../../shared/domain/entities/schedule'
-import { GetSchedulesByEventRequest } from './protocols'
-import { GetSchedulesByEventUsecase } from './get_schedules_by_event_usecase'
-import { GetSchedulesByEventController } from './get_schedules_by_event_controller'
-import { ScheduleRepositoryInterface } from '../../shared/infra/repos/schedule_repository_interface'
 import { environments } from '../../../shared/env/environments'
-import { ScheduleRepositoryMock } from '../../shared/infra/repos/schedule_repository_mock'
 import { ScheduleRepositoryHttp } from '../../shared/infra/repos/schedule_repository_http'
+import { ScheduleRepositoryInterface } from '../../shared/infra/repos/schedule_repository_interface'
+import { ScheduleRepositoryMock } from '../../shared/infra/repos/schedule_repository_mock'
+import { GetSchedulesByEventController } from './get_schedules_by_event_controller'
+import { GetSchedulesByEventUsecase } from './get_schedules_by_event_usecase'
+import { GetSchedulesByEventRequest } from './protocols'
 
 export interface GetEventPresenterProps {
   repo: ScheduleRepositoryInterface

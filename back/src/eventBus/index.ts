@@ -1,27 +1,26 @@
 import cors from 'cors'
 import express from 'express'
+import axios from 'axios'
 import { environments } from '../shared/env/environments'
 
-import { eventRouter } from './routes/event.routes'
 
 const server = async () => {
-  const PORT = environments.eventPort
-
   const app = express()
-  app.use(express.json())
-  app.use(cors())
 
-  app.use('/event', eventRouter)
+  const PORT = environments.eventBusPort
+  const PORT_EVENT = environments.eventPort
+
+  app.use(express.json())
 
   app.get('/', (req, res) => {
-    res.send('API is running! 🦍 🚀 SIDIS')
+    res.send('API is running! 🦍 🚀')
   })
 
   app.post('/eventBus', (req, res) => {
-    console.log("eventBus from EventMSS is listening!")
+    console.log("Listen eventBus!")
+    axios.post('http://localhost:' + PORT_EVENT + '/eventBus', req.body)
     res.status(200).send({ msg: "ok" })
   })
-
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
