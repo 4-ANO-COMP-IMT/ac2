@@ -1,7 +1,7 @@
 import { MemberJsonProps } from './member'
 
 export type Event = {
-  eventName: string
+  name: string
   description?: string
   dates: number[]
   notEarlier: number
@@ -20,7 +20,6 @@ export type EventJsonProps = {
 }
 
 export type CreateEventResponse = {
-  status: number
   message: string
-  event?: EventJsonProps
+  data?: EventJsonProps
 }

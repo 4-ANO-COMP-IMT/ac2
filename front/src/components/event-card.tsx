@@ -70,20 +70,17 @@ export function EventCard() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = async (data: FormEventValues) => {
+  const onSubmit = async (values: FormEventValues) => {
     setIsLoading(true)
-    console.log(data)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      const event = await createEvent(data)
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      const { data } = await createEvent(values)
       toast({
         title: 'Evento criado com sucesso',
-        description: `O evento ${event.event?.name} foi criado com sucesso`
+        description: `O evento ${data?.name} foi criado com sucesso`
       })
       form.reset()
-      console.log(event)
     } catch (error) {
-      console.log(error)
       toast({
         variant: 'destructive',
         title: 'Ocorreu um erro ao criar o evento',

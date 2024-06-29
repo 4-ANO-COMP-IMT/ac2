@@ -7,7 +7,7 @@ export const useEvent = () => {
     event: FormEventValues
   ): Promise<CreateEventResponse> => {
     const eventFormated: Event = {
-      eventName: event.eventName,
+      name: event.eventName,
       description: event.description,
       dates: event.dates.map((date) => new Date(date).getTime()),
       notEarlier: parseInt(event.notEarlierThan) * 60 * 60 * 1000,
@@ -15,7 +15,9 @@ export const useEvent = () => {
       // timezone: parseInt(event.timezone) * 60 * 60 * 1000
     }
 
-    return api.post('/event', eventFormated)
+    const response = await api.post('/event', eventFormated)
+
+    return response.data
   }
 
   return {
