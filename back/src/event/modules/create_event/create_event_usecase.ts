@@ -4,10 +4,10 @@ import { EventRepositoryInterface } from '../../shared/infra/repos/event_reposit
 export interface CreateEventUsecaseProps {
   repo: EventRepositoryInterface
   call(
-    name: string, 
-    dates: number[], 
-    notEarlier: number, 
-    notLater: number, 
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
     description?: string | undefined
   ): Promise<Event>
 }
@@ -18,10 +18,10 @@ export class CreateEventUsecase implements CreateEventUsecaseProps {
   }
 
   async call(
-    name: string, 
-    dates: number[], 
-    notEarlier: number, 
-    notLater: number, 
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
     description?: string | undefined
   ) {
     return await this.repo.createEvent(

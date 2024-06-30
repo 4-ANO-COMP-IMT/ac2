@@ -1,5 +1,5 @@
-import { EntityError } from "../helpers/errors/not_found"
-import { Member, MemberJsonProps } from "./member"
+import { EntityError } from '../helpers/errors/not_found'
+import { Member, MemberJsonProps } from './member'
 
 export type EventJsonProps = {
   id: string
@@ -21,18 +21,28 @@ export class Event implements EventInterface {
   private _notLater: number
   private _members: Member[]
   private _description?: string | undefined
-  
 
-  constructor (id: string, name: string, dates: number[], notEarlier: number, notLater: number, members: Member[], description?: string | undefined) {
+  constructor(
+    id: string,
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    members: Member[],
+    description?: string | undefined
+  ) {
     this._id = id
     this._name = name
     this._dates = dates
-    
+
     if (notEarlier > notLater) {
       throw new EntityError('Event', 'notEarlier must be before notLater')
     }
     if (0 > notEarlier || notEarlier > 86400000) {
-      throw new EntityError('Event', 'notEarlier must be between 0 and 86400000')
+      throw new EntityError(
+        'Event',
+        'notEarlier must be between 0 and 86400000'
+      )
     }
     this._notEarlier = notEarlier
     if (0 > notLater || notLater > 86400000) {
@@ -62,7 +72,7 @@ export class Event implements EventInterface {
       dates: this._dates,
       notEarlier: this._notEarlier,
       notLater: this._notLater,
-      members: this._members.map(member => member.toJson()),
+      members: this._members.map((member) => member.toJson()),
       description: this._description
     }
   }
@@ -119,7 +129,7 @@ export class Event implements EventInterface {
   set members(members: Member[]) {
     this._members = members
   }
-  
+
   set description(description: string | undefined) {
     this._description = description
   }

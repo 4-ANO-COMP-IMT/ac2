@@ -3,9 +3,7 @@ import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_foun
 import { EventRepositoryInterface } from './event_repository_interface'
 
 export class EventRepositoryHttp implements EventRepositoryInterface {
-
   async createEvent(): Promise<Event> {
     throw new Error('Method not implemented.')
   }
-
 }

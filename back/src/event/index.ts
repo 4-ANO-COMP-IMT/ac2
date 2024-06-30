@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
-import { environments } from '../shared/env/environments'
 
+import { environments } from '../shared/env/environments'
 import { eventRouter } from './routes/event.routes'
 
 const server = async () => {
@@ -18,10 +18,9 @@ const server = async () => {
   })
 
   app.post('/eventBus', (req, res) => {
-    console.log("eventBus from EventMSS is listening!")
-    res.status(200).send({ msg: "ok" })
+    console.log('eventBus from EventMSS is listening!')
+    res.status(200).send({ msg: 'ok' })
   })
-
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)

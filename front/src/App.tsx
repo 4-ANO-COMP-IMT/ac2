@@ -1,8 +1,24 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Navbar } from '@/components/navbar'
+import { Home } from '@/pages/Home'
+import { Event } from '@/pages/Event'
+import { ThemeProvider } from '@/contexts/theme-context'
+import { Toaster } from '@/components/ui/toaster'
+
 export default function App() {
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center">
-      <h1 className="text-5xl font-bold">SIBAS</h1>
-      <p>é o sibas!</p>
-    </main>
+    <>
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/event" element={<Event />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Router>
+        <Toaster />
+      </ThemeProvider>
+    </>
   )
 }

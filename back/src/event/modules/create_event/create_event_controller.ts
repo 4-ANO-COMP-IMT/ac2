@@ -62,10 +62,9 @@ export class CreateEventController implements CreateEventControllerProps {
         event.toJson()
       )
     } catch (error: any) {
-      if (error.message.indexOf("Error in entity Event:") != -1){
+      if (error.message.indexOf('Error in entity Event:') != -1) {
         return HttpResponse.badRequest(error.message)
-      }
-      else{
+      } else {
         return HttpResponse.internalServerError(error.message)
       }
     }

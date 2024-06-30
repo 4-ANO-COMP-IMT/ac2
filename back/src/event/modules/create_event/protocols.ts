@@ -1,10 +1,10 @@
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
 export type CreateEventRequest = {
-  name: string, 
-  dates: number[], 
-  notEarlier: number, 
-  notLater: number, 
+  name: string
+  dates: number[]
+  notEarlier: number
+  notLater: number
   description?: string | undefined
 }
 
