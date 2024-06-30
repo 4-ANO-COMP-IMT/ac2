@@ -11,7 +11,7 @@ export function Event() {
   }, [])
 
   return (
-    <main className="flex items-center justify-center overflow-x-hidden py-28">
+    <main className="flex items-center justify-center overflow-x-hidden bg-background py-28 transition-all duration-500">
       <div
         className={`absolute grid h-full w-full grid-cols-2 justify-items-center gap-12 transition-all duration-1000 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >

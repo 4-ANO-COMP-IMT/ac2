@@ -109,12 +109,10 @@ export function EventCard() {
     mode: 'onBlur'
   })
   return (
-    <Card className="">
+    <Card className="transition-all duration-500">
       <CardHeader>
-        <CardTitle className="text-primary">Criar evento</CardTitle>
-        <CardDescription className="text-secondary">
-          Crie seu evento em um clique.
-        </CardDescription>
+        <CardTitle>Criar evento</CardTitle>
+        <CardDescription>Crie seu evento em um clique.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -125,12 +123,11 @@ export function EventCard() {
                 name="eventName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">
-                      Nome do evento
-                    </FormLabel>
+                    <FormLabel>Nome do evento</FormLabel>
                     <FormControl>
                       <Input
                         id="eventName"
+                        className="transition-all duration-500"
                         placeholder="Ex: Daily do projeto"
                         {...field}
                       />
@@ -144,14 +141,12 @@ export function EventCard() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">
-                      Descrição do evento (opcional)
-                    </FormLabel>
+                    <FormLabel>Descrição do evento (opcional)</FormLabel>
                     <FormControl>
                       <Textarea
                         id="description"
                         placeholder="Ex: Reunião de alinhamento diária do projeto"
-                        className="resize-none"
+                        className="resize-none transition-all duration-500"
                         {...field}
                       />
                     </FormControl>
@@ -159,10 +154,7 @@ export function EventCard() {
                   </FormItem>
                 )}
               />
-              <Label
-                htmlFor="notEarlier"
-                className="translate-y-1 text-primary"
-              >
+              <Label htmlFor="notEarlier" className="translate-y-1">
                 Qual será o horário de trabalho?
               </Label>
               <div className="flex justify-between gap-3">
@@ -177,11 +169,11 @@ export function EventCard() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger id="notEarlierThan">
-                              <SelectValue
-                                placeholder="08:00"
-                                className="placeholder:text-secondary"
-                              />
+                            <SelectTrigger
+                              id="notEarlierThan"
+                              className="transition-all duration-500"
+                            >
+                              <SelectValue placeholder="08:00" />
                             </SelectTrigger>
                             <SelectContent position="popper">
                               {hours.map((hour) => {
@@ -203,9 +195,7 @@ export function EventCard() {
                     )}
                   />
                 </div>
-                <div className="flex items-center text-[15px] text-primary">
-                  até
-                </div>
+                <div className="flex items-center text-[15px]">até</div>
                 <div className="w-1/2">
                   <FormField
                     control={form.control}
@@ -217,11 +207,11 @@ export function EventCard() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger id="notLaterThan">
-                              <SelectValue
-                                placeholder="18:00"
-                                className="placeholder:text-secondary"
-                              />
+                            <SelectTrigger
+                              id="notLaterThan"
+                              className="transition-all duration-500"
+                            >
+                              <SelectValue placeholder="18:00" />
                             </SelectTrigger>
                             <SelectContent position="popper">
                               {hours.map((hour) => {
@@ -249,14 +239,14 @@ export function EventCard() {
                 name="dates"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">Datas</FormLabel>
+                    <FormLabel>Datas</FormLabel>
                     <FormControl>
                       <Calendar
                         numberOfMonths={2}
                         mode="multiple"
                         selected={field.value}
                         onSelect={field.onChange}
-                        className="flex justify-center rounded-md border"
+                        className="flex justify-center rounded-md border transition-all duration-500"
                         disabled={{ before: new Date() }}
                         min={1}
                         max={7}
@@ -271,17 +261,17 @@ export function EventCard() {
                 name="timezone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">Fuso horário</FormLabel>
+                    <FormLabel>Fuso horário</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value.toString()}
                       >
-                        <SelectTrigger id="notLaterThan">
-                          <SelectValue
-                            placeholder="-03:00"
-                            className="placeholder:text-secondary"
-                          />
+                        <SelectTrigger
+                          id="notLaterThan"
+                          className="transition-all duration-500"
+                        >
+                          <SelectValue placeholder="-03:00" />
                         </SelectTrigger>
                         <SelectContent position="popper">
                           {timezones.map((timezone) => {
@@ -310,10 +300,18 @@ export function EventCard() {
         </Form>
       </CardContent>
       <CardFooter className="flex justify-around">
-        <Button variant="outline" onClick={clearAllFields}>
+        <Button
+          variant="outline"
+          className="transition-all duration-500"
+          onClick={clearAllFields}
+        >
           Limpar
         </Button>
-        <Button onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+        <Button
+          onClick={form.handleSubmit(onSubmit)}
+          className="transition-all duration-500"
+          disabled={isLoading}
+        >
           {isLoading ? (
             <AiOutlineLoading3Quarters className="animate-spin text-xl" />
           ) : (
