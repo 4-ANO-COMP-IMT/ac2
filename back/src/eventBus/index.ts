@@ -1,8 +1,8 @@
+import axios from 'axios'
 import cors from 'cors'
 import express from 'express'
-import axios from 'axios'
-import { environments } from '../shared/env/environments'
 
+import { environments } from '../shared/env/environments'
 
 const server = async () => {
   const app = express()
@@ -17,9 +17,9 @@ const server = async () => {
   })
 
   app.post('/eventBus', (req, res) => {
-    console.log("Listen eventBus!")
+    console.log('Listen eventBus!')
     axios.post('http://localhost:' + PORT_EVENT + '/eventBus', req.body)
-    res.status(200).send({ msg: "ok" })
+    res.status(200).send({ msg: 'ok' })
   })
 
   app.listen(PORT, () => {

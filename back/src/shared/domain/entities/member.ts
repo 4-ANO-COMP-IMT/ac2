@@ -41,7 +41,9 @@ export class Member implements MemberInterface {
       id: this._id,
       name: this._name,
       password: this._password,
-      availabilities: this._availabilities.map(availability => availability.toJson())
+      availabilities: this._availabilities.map((availability) =>
+        availability.toJson()
+      )
     }
   }
 
@@ -79,10 +81,15 @@ export class Member implements MemberInterface {
   }
 
   // Static methods
-  static availabilitiesAreEqual(availabilities1: Availability[], availabilities2: Availability[]) {
+  static availabilitiesAreEqual(
+    availabilities1: Availability[],
+    availabilities2: Availability[]
+  ) {
     if (availabilities1.length !== availabilities2.length) {
       return false
     }
-    return availabilities1.every((value, index) => value.equal(availabilities2[index]))
+    return availabilities1.every((value, index) =>
+      value.equal(availabilities2[index])
+    )
   }
 }
