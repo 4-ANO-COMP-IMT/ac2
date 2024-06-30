@@ -17,6 +17,15 @@ module.exports = {
       }
     },
     extend: {
+      transitionDuration: {
+        2000: '2000ms',
+        3000: '3000ms',
+        4000: '4000ms',
+        5000: '5000ms',
+        6000: '6000ms',
+        7000: '7000ms',
+        8000: '8000ms'
+      },
       fontFamily: {
         geist: ['Geist', 'sans-serif']
       },
@@ -28,13 +37,13 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          // DEFAULT: 'hsl(var(--primary))',
-          DEFAULT: '#284C63',
+          DEFAULT: 'hsl(var(--primary))',
+          // DEFAULT: '#284C63',
           foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
-          // DEFAULT: 'hsl(var(--secondary))',
-          DEFAULT: '#34607F',
+          DEFAULT: 'hsl(var(--secondary))',
+          // DEFAULT: '#34607F',
           foreground: 'hsl(var(--secondary-foreground))'
         },
         destructive: {
