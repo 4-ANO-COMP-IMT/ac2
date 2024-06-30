@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_ENV_EXAMPLE: string
+  readonly VITE_EVENT_URL: string
 }
 
 interface ImportMeta {

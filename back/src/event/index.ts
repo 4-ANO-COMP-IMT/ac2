@@ -14,7 +14,12 @@ const server = async () => {
   app.use('/event', eventRouter)
 
   app.get('/', (req, res) => {
-    res.send('API is running! 🦍 🚀')
+    res.send('API is running! 🦍 🚀 SIDIS')
+  })
+
+  app.post('/eventBus', (req, res) => {
+    console.log('eventBus from EventMSS is listening!')
+    res.status(200).send({ msg: 'ok' })
   })
 
   app.listen(PORT, () => {

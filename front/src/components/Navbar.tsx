@@ -1,3 +1,11 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { useTheme } from '@/hooks/use-theme'
 import { useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { IoSunnyOutline } from 'react-icons/io5'
@@ -7,6 +15,8 @@ import { IoClose } from 'react-icons/io5'
 export function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [fade, setFade] = useState(false)
+
+  const { setTheme } = useTheme()
 
   const handleOpenDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen)
@@ -23,57 +33,53 @@ export function Navbar() {
   }
 
   return (
-    <nav className="fixed left-0 top-0 z-10 flex w-full select-none items-center justify-between border-b-[1px] border-gray-300 px-8 py-3 font-geist text-[15px] sm:px-16">
-      <div className="absolute left-0 top-0 -z-10 h-full w-full bg-white/30 backdrop-blur-sm"></div>
+    <nav className="fixed left-0 top-0 z-10 flex w-full select-none items-center justify-between px-8 py-3 font-geist text-[15px] sm:px-16">
+      <div className="absolute left-0 top-0 -z-10 h-full w-full border-gray-300 bg-background/30 backdrop-blur-sm transition-all duration-500"></div>
       <div className="hidden items-center justify-center gap-10 sm:flex">
-        <h1 className="font-bold text-blue-primary">BoraMarcar</h1>
-        <a
-          href="/"
-          className="font-light text-blue-secondary transition-all duration-200 hover:text-blue-primary"
-        >
+        <a className="cursor-pointer font-bold" href="/">
+          BoraMarcar
+        </a>
+        <a href="/" className="font-light transition-all duration-500">
           Home
         </a>
-        <a
-          href="/about"
-          className="font-light text-blue-secondary transition-all duration-200 hover:text-blue-primary"
-        >
+        <a href="/about" className="font-light transition-all duration-500">
           Sobre nós
         </a>
       </div>
       <div className="flex items-center justify-center gap-10 sm:hidden">
         <RiMenu2Fill
-          className="cursor-pointer text-xl text-blue-primary"
+          className="cursor-pointer text-xl"
           onClick={handleOpenDrawer}
         />
       </div>
       {isDrawerOpen && (
         <>
           <div
-            className={`absolute left-0 top-0 z-10 h-screen w-full bg-black transition-all duration-200 ${fade ? 'opacity-80' : 'opacity-0'}`}
+            className={`absolute left-0 top-0 z-10 h-screen w-full bg-black transition-all duration-500 ${fade ? 'opacity-80' : 'opacity-0'}`}
             onClick={handleCloseDrawer}
           ></div>
           <div
-            className={`absolute left-0 top-0 z-20 flex h-screen w-3/5 min-w-72 transform flex-col gap-12 bg-white p-8 transition-all duration-200 ${fade ? 'translate-x-0' : '-translate-x-96'}`}
+            className={`absolute left-0 top-0 z-20 flex h-screen w-3/5 min-w-72 transform flex-col gap-12 border-[1px] border-r-gray-300 bg-background p-8 transition-all duration-500 ${fade ? 'translate-x-0' : '-translate-x-96'}`}
           >
             <div className="flex items-center justify-between gap-8">
-              <h1 className="text-2xl font-bold text-blue-primary">
+              <a href="/" className="cursor-pointer text-2xl font-bold">
                 BoraMarcar
-              </h1>
+              </a>
               <IoClose
-                className="cursor-pointer text-2xl text-blue-primary"
+                className="cursor-pointer text-2xl"
                 onClick={handleCloseDrawer}
               />
             </div>
             <div className="flex flex-col gap-4">
               <a
                 href="/"
-                className="text-xl font-light text-blue-secondary transition-all duration-200 hover:text-blue-primary"
+                className="text-xl font-light transition-all duration-500"
               >
                 Home
               </a>
               <a
                 href="/about"
-                className="text-xl font-light text-blue-secondary transition-all duration-200 hover:text-blue-primary"
+                className="text-xl font-light transition-all duration-500"
               >
                 Sobre nós
               </a>
@@ -81,18 +87,51 @@ export function Navbar() {
           </div>
         </>
       )}
-      <div className="flex items-center justify-center gap-6">
-        <button className="rounded-md border-[1px] border-gray-300 p-1 px-3 text-blue-primary transition-all duration-300 hover:bg-blue-primary hover:text-white">
-          Criar evento
-        </button>
-        <a
-          href="https://github.com/4-ANO-COMP-IMT/ac2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaGithub className="cursor-pointer text-xl text-blue-primary" />
+      <div className="flex items-center justify-center gap-2">
+        <a href="/event">
+          <Button
+            variant="ghost"
+            className="border-[1px] border-gray-300 px-3 transition-all duration-500"
+            size="sm"
+          >
+            Criar evento
+          </Button>
         </a>
-        <IoSunnyOutline className="cursor-pointer text-xl text-blue-primary" />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="transition-all duration-500"
+        >
+          <a
+            href="https://github.com/4-ANO-COMP-IMT/ac2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaGithub className="cursor-pointer text-xl" />
+          </a>
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="transition-all duration-500"
+            >
+              <IoSunnyOutline className="cursor-pointer text-xl" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="z-50">
+            <DropdownMenuItem onClick={() => setTheme('light')}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme('dark')}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme('system')}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   )

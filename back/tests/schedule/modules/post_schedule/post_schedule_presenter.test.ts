@@ -1,9 +1,9 @@
 import { describe, expect, it, test } from 'vitest'
 
+import { PostSchedulePresenter } from '../../../../src/schedule/modules/post_schedule/post_schedule_presenter'
+import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
-import { PostSchedulePresenter } from '../../../../src/schedule/modules/post_schedule/post_schedule_presenter'
 
 test('post schedule presenter created', async () => {
   const repo = new ScheduleRepositoryMock()

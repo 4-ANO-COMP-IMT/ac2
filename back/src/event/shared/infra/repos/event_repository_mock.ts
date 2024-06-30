@@ -1,119 +1,135 @@
+import { v4 as uuid } from 'uuid'
+
+import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
-import { NotFoundError } from '../../../../shared/domain/helpers/errors/not_found'
+import { Member } from '../../../../shared/domain/entities/member'
 import { EventRepositoryInterface } from './event_repository_interface'
 
 export class EventRepositoryMock implements EventRepositoryInterface {
   static events: Event[] = [
     new Event(
-      '1',
-      'Meeting for the project',
-      1632950400000,
-      1632954000000,
-      600000
+      '550e8400-e29b-41d4-a716-446655440000',
+      'Criar nova música para o Maroon 5',
+      [1719781200000],
+      32400000,
+      75600000,
+      []
     ),
-    new Event('2', 'Academy Chest Day', 1632950200000, 1632954000000, 300000),
     new Event(
-      '3',
-      'Studying Software Engineering',
-      1632950000000,
-      1632954000000,
-      100000
+      '123e4567-e89b-12d3-a456-426614174000',
+      'Criar nova música para o Maroon 5',
+      [1719392400000],
+      32400000,
+      75600000,
+      [
+        new Member(
+          '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
+          'Adam Levine',
+          [],
+          'Brownas'
+        )
+      ],
+      'Descrição do evento'
+    ),
+    new Event(
+      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
+      'Criar nova música para o Maroon 5',
+      [1719392400000],
+      32400000,
+      75600000,
+      [
+        new Member(
+          'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d',
+          'Adam Levine',
+          [
+            new Availability(
+              '9276e4ba-3f72-4c47-ae7d-987ec3d6f3cd',
+              1719403200000,
+              1719405000000
+            )
+          ],
+          'Brownas'
+        )
+      ],
+      'Descrição do evento'
     )
   ]
 
-  async getEvent(id: string): Promise<Event> {
-    const event = EventRepositoryMock.events.find((event) => event.id === id)
-
-    if (!event) {
-      throw new NotFoundError('event')
-    }
-
-    return event
-  }
-
-  async putEvent(
-    id: string,
-    event: {
-      name?: string
-      startDate?: number
-      endDate?: number
-      timeInterval?: number
-    }
-  ) {
-    const eventIndex = EventRepositoryMock.events.findIndex((e) => e.id === id)
-
-    if (eventIndex === -1) {
-      throw new NotFoundError('event')
-    }
-
-    if (event.name) {
-      EventRepositoryMock.events[eventIndex].name = event.name
-    }
-    if (event.startDate) {
-      EventRepositoryMock.events[eventIndex].startDate = event.startDate
-    }
-    if (event.endDate) {
-      EventRepositoryMock.events[eventIndex].endDate = event.endDate
-    }
-    if (event.timeInterval) {
-      EventRepositoryMock.events[eventIndex].timeInterval = event.timeInterval
-    }
-
-    return EventRepositoryMock.events[eventIndex]
-  }
-
-  async createEvent(event: {
-    name: string
-    startDate: number
-    endDate: number
-    timeInterval: number
-  }): Promise<Event> {
+  async createEvent(
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    description?: string | undefined
+  ): Promise<Event> {
     const createdEvent = new Event(
-      this.getLastId(),
-      event.name,
-      event.startDate,
-      event.endDate,
-      event.timeInterval
+      uuid(),
+      name,
+      dates,
+      notEarlier,
+      notLater,
+      [],
+      description
     )
 
     EventRepositoryMock.events.push(createdEvent)
     return createdEvent
   }
 
-  async deleteEvent(id: string) {
-    const event = EventRepositoryMock.events.find((event) => event.id === id)
-    if (event) {
-      EventRepositoryMock.events = EventRepositoryMock.events.filter(
-        (event) => event.id !== id
-      )
-      return event
-    }
-    throw new NotFoundError('event')
-  }
-
   resetMock() {
     EventRepositoryMock.events = [
       new Event(
-        '1',
-        'Meeting for the project',
-        1632950400000,
-        1632954000000,
-        600000
+        '550e8400-e29b-41d4-a716-446655440000',
+        'Criar nova música para o Maroon 5',
+        [1719781200000],
+        32400000,
+        75600000,
+        []
       ),
-      new Event('2', 'Academy Chest Day', 1632950200000, 1632954000000, 300000),
       new Event(
-        '3',
-        'Studying Software Engineering',
-        1632950000000,
-        1632954000000,
-        100000
+        '123e4567-e89b-12d3-a456-426614174000',
+        'Criar nova música para o Maroon 5',
+        [1719392400000],
+        32400000,
+        75600000,
+        [
+          new Member(
+            '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
+            'Adam Levine',
+            [],
+            'Brownas'
+          )
+        ],
+        'Descrição do evento'
+      ),
+      new Event(
+        '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
+        'Criar nova música para o Maroon 5',
+        [1719392400000],
+        32400000,
+        75600000,
+        [
+          new Member(
+            'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d',
+            'Adam Levine',
+            [
+              new Availability(
+                '9276e4ba-3f72-4c47-ae7d-987ec3d6f3cd',
+                1719403200000,
+                1719405000000
+              )
+            ],
+            'Brownas'
+          )
+        ],
+        'Descrição do evento'
       )
     ]
   }
 
-  getLastId() {
-    return (
-      +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
-    ).toString()
-  }
+  // getLastId() {
+  //   return (
+  //     +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
+  //   ).toString()
+  // }
 }

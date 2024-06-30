@@ -1,10 +1,10 @@
 import { describe, expect, it, test } from 'vitest'
 
+import { PostScheduleController } from '../../../../src/schedule/modules/post_schedule/post_schedule_controller'
+import { PostScheduleUsecase } from '../../../../src/schedule/modules/post_schedule/post_schedule_usecase'
+import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
-import { PostScheduleUsecase } from '../../../../src/schedule/modules/post_schedule/post_schedule_usecase'
-import { PostScheduleController } from '../../../../src/schedule/modules/post_schedule/post_schedule_controller'
 
 test('post schedule controller created', async () => {
   const repo = new ScheduleRepositoryMock()

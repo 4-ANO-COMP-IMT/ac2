@@ -24,7 +24,7 @@ scheduleRouter.delete('/scheduleId=:id', async (req, res) => {
     .status(response.status)
     .json({ message: response.message, data: response.data })
 })
-  
+
 scheduleRouter.post('/eventId=:eventId', async (req, res) => {
   const request = new HttpRequest('post', req.body)
   const presenter = new PostSchedulePresenter()

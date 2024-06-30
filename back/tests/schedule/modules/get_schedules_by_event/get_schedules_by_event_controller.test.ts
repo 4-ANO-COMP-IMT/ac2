@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest'
 
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
-import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
-import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
-import { GetSchedulesByEventUsecase } from '../../../../src/schedule/modules/get_schedules_by_event/get_schedules_by_event_usecase'
 import { GetSchedulesByEventController } from '../../../../src/schedule/modules/get_schedules_by_event/get_schedules_by_event_controller'
+import { GetSchedulesByEventUsecase } from '../../../../src/schedule/modules/get_schedules_by_event/get_schedules_by_event_usecase'
+import { ScheduleRepositoryMock } from '../../../../src/schedule/shared/infra/repos/schedule_repository_mock'
+import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
+import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
 
 test('Test get schedule by event controller without eventId', async () => {
   const repo = new ScheduleRepositoryMock()

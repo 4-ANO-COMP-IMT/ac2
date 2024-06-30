@@ -17,6 +17,15 @@ module.exports = {
       }
     },
     extend: {
+      transitionDuration: {
+        2000: '2000ms',
+        3000: '3000ms',
+        4000: '4000ms',
+        5000: '5000ms',
+        6000: '6000ms',
+        7000: '7000ms',
+        8000: '8000ms'
+      },
       fontFamily: {
         geist: ['Geist', 'sans-serif']
       },
@@ -28,13 +37,13 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          // DEFAULT: 'hsl(var(--primary))',
-          DEFAULT: '#284C63',
+          DEFAULT: 'hsl(var(--primary))',
+          // DEFAULT: '#284C63',
           foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
-          // DEFAULT: 'hsl(var(--secondary))',
-          DEFAULT: '#34607F',
+          DEFAULT: 'hsl(var(--secondary))',
+          // DEFAULT: '#34607F',
           foreground: 'hsl(var(--secondary-foreground))'
         },
         destructive: {
@@ -71,11 +80,25 @@ module.exports = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' }
+        },
+        one: {
+          '0%, 100%': { transform: 'translateX(0px) translateY(0px)' },
+          '25%': { transform: 'translateX(-200px) translateY(250px)' },
+          '50%': { transform: 'translateX(100px) translateY(-200px)' },
+          '75%': { transform: 'translateX(-100px) translateY(-100px)' }
+        },
+        two: {
+          '0%, 100%': { transform: 'translateX(-200px) translateY(200px)' },
+          '25%': { transform: 'translateX(200px) translateY(-150px)' },
+          '50%': { transform: 'translateX(-100px) translateY(150px)' },
+          '75%': { transform: 'translateX(100px) translateY(-100px)' }
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        one: 'one 60s linear infinite',
+        two: 'two 60s linear infinite'
       }
     }
   },
