@@ -15,7 +15,10 @@ export const useEvent = () => {
       // timezone: parseInt(event.timezone) * 60 * 60 * 1000
     }
 
-    const response = await api.post('/event', eventFormated)
+    const response = await api.post(
+      'http://localhost:3000/event', // TODO: change to env
+      eventFormated
+    )
 
     return response.data
   }
