@@ -79,6 +79,7 @@ export function EventCard() {
         title: 'Evento criado com sucesso',
         description: `O evento ${data?.name} foi criado com sucesso`
       })
+      navigator.clipboard.writeText(window.location.origin + `/${data?.id}`)
       form.reset()
     } catch (error) {
       toast({
