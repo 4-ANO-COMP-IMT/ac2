@@ -77,7 +77,7 @@ export function EventCard() {
       const { data } = await createEvent(values)
       toast({
         title: 'Evento criado com sucesso',
-        description: `O evento ${data?.name} foi criado com sucesso`
+        description: `O link do evento ${data?.name} foi copiado para a área de transferência`
       })
       navigator.clipboard.writeText(window.location.origin + `/${data?.id}`)
       form.reset()
