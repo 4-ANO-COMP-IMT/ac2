@@ -4,10 +4,6 @@
       {
         "src": "src/event/index.js",
         "use": "@now/node"
-      },
-      {
-        "src": "src/eventBus/index.js",
-        "use": "@now/node"
       }
     ],
     "routes": [
