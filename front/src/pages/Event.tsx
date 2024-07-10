@@ -1,30 +1,24 @@
-import { EventCard } from '@/components/event-card'
-import { useEffect, useState } from 'react'
+import { PeriodSelector } from '@/components/period-selector'
+import { useParams } from 'react-router-dom'
 
 export function Event() {
-  const [fade, setFade] = useState(false)
+  const { id } = useParams()
+  console.log(id)
+  const mockDates: Date[] = [
+    '2024-07-12T03:00:00.000Z',
+    '2024-07-11T03:00:00.000Z',
+    '2024-07-10T03:00:00.000Z',
+    '2024-07-09T03:00:00.000Z',
+    '2024-07-13T03:00:00.000Z',
+    '2024-07-14T03:00:00.000Z',
+    '2024-07-15T03:00:00.000Z'
+  ].map((date) => new Date(date))
 
-  useEffect(() => {
-    setTimeout(() => {
-      setFade(true)
-    }, 200)
-  }, [])
+  console.log(mockDates[0].toISOString())
 
   return (
-    <main className="flex items-center justify-center overflow-x-hidden bg-background py-28 transition-all duration-500">
-      <div
-        className={`absolute grid h-full w-full grid-cols-2 justify-items-center gap-12 transition-all duration-1000 ${fade ? 'opacity-100' : 'opacity-0'}`}
-      >
-        <div className="h-[320px] w-[320px] animate-one self-end justify-self-end rounded-full bg-blue-900 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-500 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-300 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-one self-start justify-self-start rounded-full  bg-blue-600 opacity-50 blur-[7rem]"></div>
-      </div>
-      <div
-        className={`transition-all duration-500 ${fade ? 'translate-x-0 opacity-100' : 'translate-x-28 opacity-0'}`}
-      >
-        <EventCard />
-      </div>
+    <main className="flex h-screen w-full flex-col items-center justify-center">
+      <PeriodSelector dates={mockDates} />
     </main>
   )
 }
