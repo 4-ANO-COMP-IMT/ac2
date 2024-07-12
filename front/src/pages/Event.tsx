@@ -1,3 +1,4 @@
+import { AnimatedBalls } from '@/components/animated-balls'
 import { PeriodSelector } from '@/components/period-selector'
 // import { useParams } from 'react-router-dom'
 
@@ -14,7 +15,8 @@ export function Event() {
   ].map((date) => new Date(date))
 
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center">
+    <main className="flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+      <AnimatedBalls />
       <PeriodSelector
         dates={mockDates}
         notEarlierThan={8}
