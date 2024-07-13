@@ -30,10 +30,10 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useEvent } from '@/hooks/use-event'
 import { useToast } from '@/components/ui/use-toast'
 import { useNavigate } from 'react-router-dom'
+import { LoadingSpin } from './ui/loading-spin'
 
 const hours = Array.from({ length: 24 }, (_, i) => i)
 const timezones = Array.from({ length: 25 }, (_, i) => i - 12)
@@ -316,11 +316,7 @@ export function EventCard() {
           className="transition-all duration-500"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <AiOutlineLoading3Quarters className="animate-spin text-xl" />
-          ) : (
-            'Criar'
-          )}
+          {isLoading ? <LoadingSpin /> : 'Criar'}
         </Button>
       </CardFooter>
     </Card>
