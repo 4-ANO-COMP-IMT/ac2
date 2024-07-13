@@ -20,6 +20,7 @@ const server = async () => {
   app.listen(PORT, () => {
     console.log(`Schedule is running on port ${PORT}`)
   })
+
 }
 
 server()

@@ -70,18 +70,42 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
       (event) => event.id === eventId
     )
     if (!createEvent) {
-      throw new Error('Event not found')
+      throw new Error('Event not found for eventId: ' + eventId)
     }
     const duplicatedMember = createEvent.members.find(
       (member) => member.name === name
     )
     if (duplicatedMember) {
-      console.log(duplicatedMember)
-      throw new Error('Member already exists')
+      throw new Error('Member already exists with name: ' + duplicatedMember.name)
     }
     createEvent.members.push(createdMember)
     return createdMember
   }
+
+  async getEvent(eventId: string): Promise<Event> {
+    const event = MemberRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    return event
+  }
+
+  async getMemberByName(name: string, eventId: string): Promise<Member | null> {
+    const event = MemberRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    const member = event.members.find((member) => member.name === name)
+    if (!member) {
+      return null
+    }
+    return member
+  }
+
 
   resetMock() {
     MemberRepositoryMock.events = [
