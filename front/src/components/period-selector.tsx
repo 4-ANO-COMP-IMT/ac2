@@ -1,6 +1,8 @@
 import { Card } from '@/components/ui/card'
 import { useTheme } from '@/hooks/use-theme'
 import { useState } from 'react'
+import { toast } from '@/components/ui/use-toast'
+import { useEvent } from '@/hooks/use-event'
 
 type PeriodSelectorProps = {
   dates: Date[]
@@ -21,6 +23,7 @@ export function PeriodSelector({
   timezone
 }: PeriodSelectorProps) {
   const { theme } = useTheme()
+  const { isLogged, paintedDivs, setPaintedDivs } = useEvent()
   const intervals: Interval[] = dates
     .sort((a, b) => a.getTime() - b.getTime())
     .map((date) => {
@@ -36,27 +39,31 @@ export function PeriodSelector({
     })
 
   const [isDragging, setIsDragging] = useState(false)
-  const [paintedDivs, setPaintedDivs] = useState<{
-    [id: number]: number[]
-  }>({})
 
   const handleMouseUp = () => {
     setIsDragging(false)
   }
 
   const handleMouseDown = (id: number, index: number) => {
-    setIsDragging(true)
-    setPaintedDivs((prev) => {
-      const currentIndices = prev[id] || []
-      const isIndexPainted = currentIndices.includes(index)
+    if (isLogged) {
+      setIsDragging(true)
+      setPaintedDivs((prev) => {
+        const currentIndices = prev[id] || []
+        const isIndexPainted = currentIndices.includes(index)
 
-      return {
-        ...prev,
-        [id]: isIndexPainted
-          ? currentIndices.filter((i) => i !== index) // Remove o index se já estiver pintado
-          : [...currentIndices, index] // Adiciona o index se não estiver pintado
-      }
-    })
+        return {
+          ...prev,
+          [id]: isIndexPainted
+            ? currentIndices.filter((i) => i !== index) // Remove o index se já estiver pintado
+            : [...currentIndices, index] // Adiciona o index se não estiver pintado
+        }
+      })
+    } else {
+      toast({
+        title: 'Você precisa estar logado para selecionar um horário',
+        description: 'Clique no botão "Editar" para fazer login'
+      })
+    }
   }
 
   const handleMouseOver = (id: number, index: number) => {
@@ -76,12 +83,12 @@ export function PeriodSelector({
   }
 
   return (
-    <Card className="relative flex py-2 pl-2 pr-3">
+    <Card className="relative flex py-2 pl-2 pr-4">
       <div
         className="absolute left-0 top-0 z-[5] flex h-full w-full"
         onMouseOver={handleMouseUp}
       ></div>
-      <div className="flex h-full flex-col items-center pl-1 pr-2 pt-4">
+      <div className="flex h-full flex-col items-center pl-1 pr-2 pt-12">
         {Array.from({
           length:
             intervals[0].endDate.getHours() -
@@ -101,17 +108,33 @@ export function PeriodSelector({
       {intervals.map((interval, id) => (
         <div
           key={id}
-          className="z-10 flex w-28 flex-col items-center justify-center"
+          className="z-10 flex w-28 flex-col items-center justify-center gap-2"
         >
-          <p
-            className={`text-sm ${theme === 'light' ? 'text-primary/60' : 'text-primary'}`}
-          >
-            {interval.startDate.toLocaleDateString('pt-BR', {
-              weekday: 'short',
-              month: 'short',
-              day: 'numeric'
-            })}
-          </p>
+          <div className="flex flex-col items-center justify-center">
+            <p
+              className={`text-sm ${theme === 'light' ? 'text-primary/60' : 'text-primary'}`}
+            >
+              {interval.startDate.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'short'
+              })}
+            </p>
+            <p
+              className={`text-sm font-bold ${theme === 'light' ? 'text-primary/60' : 'text-primary'}`}
+            >
+              {interval.startDate
+                .toLocaleDateString('pt-BR', {
+                  weekday: 'long'
+                })
+                .charAt(0)
+                .toUpperCase() +
+                interval.startDate
+                  .toLocaleDateString('pt-BR', {
+                    weekday: 'long'
+                  })
+                  .slice(1)}
+            </p>
+          </div>
           <div
             className={`flex w-full select-none flex-col items-center justify-center border-y-[1px] ${theme === 'light' ? 'border-primary/20' : 'border-primary'} ${id === 0 ? 'rounded-l-md border-l-[1px] border-r-[1px]' : 'border-r-[1px]'} ${id === intervals.length - 1 ? 'rounded-r-md' : ''}`}
           >
