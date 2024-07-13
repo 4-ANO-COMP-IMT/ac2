@@ -1,182 +1,108 @@
 import { describe, expect, it, test } from 'vitest'
  
-import { CreateEventController } from '../../../../src/event/modules/create_event/create_event_controller'
-import { CreateEventUsecase } from '../../../../src/event/modules/create_event/create_event_usecase'
-import { CreateEventRequest } from '../../../../src/event/modules/create_event/protocols'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
+import { MemberRepositoryMock } from '../../../../src/member/shared/infra/repos/member_repository_mock'
+import { CreateMemberUsecase } from '../../../../src/member/modules/create_member/create_member_usecase'
+import { CreateMemberController } from '../../../../src/member/modules/create_member/create_member_controller'
+import { CreateMemberRequest } from '../../../../src/member/modules/create_member/protocols'
  
-test('create event controller created', async () => {
-  const repo = new EventRepositoryMock()
-  const usecase = new CreateEventUsecase(repo)
-  const controller = new CreateEventController(usecase)
+test('create member controller created', async () => {
+  const repo = new MemberRepositoryMock()
+  const usecase = new CreateMemberUsecase(repo)
+  const controller = new CreateMemberController(usecase)
   const request = new HttpRequest('create', {
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,  
-    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+    name: "Sollerzinho", 
+    password: "Teste123!"
   })
   const response = await controller.call(request)
-  const eventExpect = {
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,  
-    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye",
-    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
-    members: []
-  }
+
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
-  expect(response.message).toBe('event created')
-  expect(response.data).toEqual(eventExpect)
+  expect(response.message).toBe('member created')
 })
 
-test('create event controller created without description', async () => {
-  const repo = new EventRepositoryMock()
-  const usecase = new CreateEventUsecase(repo)
-  const controller = new CreateEventController(usecase)
+test('create event controller created without password', async () => {
+  const repo = new MemberRepositoryMock()
+  const usecase = new CreateMemberUsecase(repo)
+  const controller = new CreateMemberController(usecase)
   const request = new HttpRequest('create', {
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,  
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+    name: "Soller", 
   })
   const response = await controller.call(request)
-  const eventExpect = {
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,  
-    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
-    members: []
-  }
+
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
-  expect(response.message).toBe('event created')
-  expect(response.data).toEqual(eventExpect)
+  expect(response.message).toBe('member created')
 })
  
 describe('create event controller body', () => {
   it('should return BAD REQUEST if body is missing', async () => {
-    const repo = new EventRepositoryMock()
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {} as CreateEventRequest)
+    const repo = new MemberRepositoryMock()
+    const usecase = new CreateMemberUsecase(repo)
+    const controller = new CreateMemberController(usecase)
+    const request = new HttpRequest('create', {} as CreateMemberRequest)
     const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing body')
+    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.data).toBe(undefined)
   })
 
   it('should return BAD REQUEST if name is missing', async () => {
-    const repo = new EventRepositoryMock()
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      dates: [1719392400000],
-      notEarlier: 32400000,
-      notLater: 75600000,  
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    } as CreateEventRequest)
+    const repo = new MemberRepositoryMock()
+    const usecase = new CreateMemberUsecase(repo)
+    const controller = new CreateMemberController(usecase)
+    const request = new HttpRequest( 'create', {
+      eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+      password: "Teste123!"
+    } as CreateMemberRequest )
     const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing name')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if dates is missing', async () => {
-    const repo = new EventRepositoryMock()
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      notEarlier: 32400000,
-      notLater: 75600000,  
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    } as CreateEventRequest)
-    const response = await controller.call(request)
-    // expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing dates')
-    expect(response.data).toBe(undefined)
-  })
-
-  it('should return BAD REQUEST if notEarlier is missing', async () => {
-    const repo = new EventRepositoryMock()
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      dates: [1719392400000],
-      notLater: 75600000,  
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    } as CreateEventRequest)
-    const response = await controller.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing notEarlier')
     expect(response.data).toBe(undefined)
   })
 
-  it('should return BAD REQUEST if notLater is missing', async () => {
-    const repo = new EventRepositoryMock()
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      dates: [1719392400000],
-      notEarlier: 32400000,
-      description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-    } as CreateEventRequest)
+  it('should return BAD REQUEST if idEvent is missing', async () => {
+    const repo = new MemberRepositoryMock()
+    const usecase = new CreateMemberUsecase(repo)
+    const controller = new CreateMemberController(usecase)
+    const request = new HttpRequest( 'create', {
+      name: "Soller", 
+      password: "Teste123!"
+    } as CreateMemberRequest )
     const response = await controller.call(request)
+    expect(response.message).toBe('missing eventId')
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing notLater')
     expect(response.data).toBe(undefined)
   })
 })
 
-describe('create event controller entity error', async () => {
-  it('notEarlier must be before notLater', async () => {
-    const repo = new EventRepositoryMock() 
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      dates: [1719392400000],
-      notEarlier: 75600001,
-      notLater: 75600000,  
-    })
-    const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('Error in entity Event: notEarlier must be before notLater')
+test('create member controller name already exists', async () => {
+  const repo = new MemberRepositoryMock()
+  const usecase = new CreateMemberUsecase(repo)
+  const controller = new CreateMemberController(usecase)
+  const request = new HttpRequest('create', {
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+    name: "Soller", 
+    password: "Teste123!"
   })
+  const response = await controller.call(request)
 
-  it('notEarlier must be between 0 and 86400000', async () => {
-    const repo = new EventRepositoryMock() 
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      dates: [1719392400000],
-      notEarlier: -1,
-      notLater: 75600000,  
-    })
-    const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('Error in entity Event: notEarlier must be between 0 and 86400000')
-  })
+  expect(response.status).toBe(HTTP_STATUS_CODE.CONFLICT)
+  expect(response.message).toBe('Member already exists with name: Soller')
+})
 
-  it('notLater must be between 0 and 86400000', async () => {
-    const repo = new EventRepositoryMock() 
-    const usecase = new CreateEventUsecase(repo)
-    const controller = new CreateEventController(usecase)
-    const request = new HttpRequest('create', {
-      name: "Treino Popeye", 
-      dates: [1719392400000],
-      notEarlier: 75600000,
-      notLater: 7560000000000,  
-    })
-    const response = await controller.call(request)
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('Error in entity Event: notLater must be between 0 and 86400000')
+test('create member controller event not found', async () => {
+  const repo = new MemberRepositoryMock()
+  const usecase = new CreateMemberUsecase(repo)
+  const controller = new CreateMemberController(usecase)
+  const request = new HttpRequest('create', {
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130004",
+    name: "Soller", 
+    password: "Teste123!"
   })
+  const response = await controller.call(request)
+
+  expect(response.status).toBe(HTTP_STATUS_CODE.NOT_FOUND)
+  expect(response.message).toBe('Event not found for eventId: 9b2f4e8c-8d59-11eb-8dcd-0242ac130004')
 })

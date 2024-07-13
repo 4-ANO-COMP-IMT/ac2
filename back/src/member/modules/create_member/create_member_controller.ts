@@ -1,70 +1,66 @@
-import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { MemberJsonProps } from '../../../shared/domain/entities/member'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { CreateEventUsecase } from './create_member_usecase'
-import { CreateEventRequest } from './protocols'
+import { CreateMemberUsecase } from './create_member_usecase'
+import { CreateMemberRequest } from './protocols'
 
-interface CreateEventControllerProps {
-  usecase: CreateEventUsecase
+interface CreateMemberControllerProps {
+  usecase: CreateMemberUsecase
   call(
-    req: HttpRequest<CreateEventRequest>
-  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
+    req: HttpRequest<CreateMemberRequest>
+  ): Promise<HttpResponse<MemberJsonProps | Error>>
 }
 
-export class CreateEventController implements CreateEventControllerProps {
-  constructor(public usecase: CreateEventUsecase) {
+export class CreateMemberController implements CreateMemberControllerProps {
+  constructor(public usecase: CreateMemberUsecase) {
     this.usecase = usecase
   }
 
-  async call(req: HttpRequest<CreateEventRequest>) {
+  async call(req: HttpRequest<CreateMemberRequest>) {
     if (
-      !req.data?.name &&
-      !req.data?.dates &&
-      !req.data?.notEarlier &&
-      !req.data?.notLater &&
-      !req.data?.description
+      !req.data?.eventId &&
+      !req.data?.name
     ) {
       return HttpResponse.badRequest('missing body')
     }
 
-    const { name, dates, notEarlier, notLater, description } = req.data
+    const { eventId, name, password } = req.data
 
     if (!name) {
       return HttpResponse.badRequest('missing name')
     }
 
-    if (!dates) {
-      return HttpResponse.badRequest('missing dates')
+    if (!eventId) {
+      return HttpResponse.badRequest('missing eventId')
     }
 
-    if (!notEarlier) {
-      return HttpResponse.badRequest('missing notEarlier')
-    }
-
-    if (!notLater) {
-      return HttpResponse.badRequest('missing notLater')
-    }
 
     try {
-      const event = await this.usecase.call(
+      const member = await this.usecase.call(
+        eventId,
         name,
-        dates,
-        notEarlier,
-        notLater,
-        description
+        password,
       )
 
-      return HttpResponse.created<EventJsonProps>(
-        'event created',
-        event.toJson()
+      return HttpResponse.created<MemberJsonProps>(
+        'member created',
+        member.toJson()
       )
     } catch (error: any) {
-      if (error.message.indexOf('Error in entity Event:') != -1) {
+      if (error.message.indexOf('Error in entity Member:') != -1) {
         return HttpResponse.badRequest(error.message)
-      } else {
+      } 
+      else if(error.message.indexOf('not found') != -1) {
+        return HttpResponse.notFound(error.message)
+      }
+      else if(error.message.indexOf('already exists') != -1) {
+        return HttpResponse.conflict(error.message)
+      }
+      else {
+        console.log(error.message)
         return HttpResponse.internalServerError(error.message)
       }
     }

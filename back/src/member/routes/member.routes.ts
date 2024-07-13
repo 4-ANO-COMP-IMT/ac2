@@ -3,14 +3,14 @@ import { Router } from 'express'
 
 import { HttpRequest } from '../../shared/domain/helpers/http/http_request'
 import { environments } from '../../shared/env/environments'
-import { CreateEventPresenter } from '../modules/create_event/create_event_presenter'
+import { CreateEventPresenter } from '../modules/create_member/create_member_presenter'
 
-export const eventRouter = Router()
-const PORT_EVENT_BUS = environments.eventBusPort
+export const memberRouter = Router()
+const PORT_MEMBER_BUS = environments.memberPort
 
-eventRouter.post('/', async (req, res) => {
+memberRouter.post('/', async (req, res) => {
   const request = new HttpRequest('post', req.body)
-  const presenter = new CreateEventPresenter()
+  const presenter = new CreateMemberPresenter()
   const response = await presenter.call(request)
 
   res

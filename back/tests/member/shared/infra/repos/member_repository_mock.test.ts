@@ -2,9 +2,6 @@ import { describe, expect, it, test } from 'vitest'
 
 import { MemberRepositoryMock } from '../../../../../src/member/shared/infra/repos/member_repository_mock'
 
-
-
-
 describe('Test createMember', () => {
 
     it('create a member', () => {
