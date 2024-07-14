@@ -1,4 +1,4 @@
-name: AWS CD
+name: AWS CD Front
 on:
   workflow_dispatch:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
       - add-cd
 jobs:
-  DeployToAWS:
+  DeployToAWSFront:
     environment:
       name: ${{ github.ref_name }}
     runs-on: ubuntu-latest
