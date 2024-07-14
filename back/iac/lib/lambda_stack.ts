@@ -28,7 +28,7 @@ export class LambdaStack extends Construct {
       `${env.STACK_NAME}-${stage}`,
       {
         functionName: `${env.PROJECT_NAME}-${stage}`,
-        code: lambda.Code.fromAsset(path.join(__dirname, `../../dist/`)),
+        code: lambda.Code.fromAsset(path.join(__dirname, `../../back/dist/`)),
         handler: `index.handler`,
         runtime: lambda.Runtime.NODEJS_20_X,
         environment: {
