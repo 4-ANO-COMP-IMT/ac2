@@ -108,6 +108,7 @@
   },
   "exclude": [
     "iac",
-    "node_modules"
+    "node_modules",
+    "tests"
   ]
 }
