@@ -1,10 +1,11 @@
 name: AWS CD Front
 on:
-  workflow_dispatch:
   push:
     branches:
       - dev
       - add-cd
+  workflow_dispatch:
+
 jobs:
   DeployToAWSFront:
     environment:
