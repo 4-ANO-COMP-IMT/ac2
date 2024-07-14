@@ -27,13 +27,13 @@ export class LambdaStack extends Construct {
       this,
       `${env.STACK_NAME}-${stage}`,
       {
-        functionName: `${env.PROJECT_NAME}-${stage}`,
-        code: lambda.Code.fromAsset(path.join(__dirname, `../../back/dist/`)),
+        functionName: `${env.PROJECT_NAME}-${stage}-event`,
+        code: lambda.Code.fromAsset(
+          path.join(__dirname, `../../back/dist/event`)
+        ),
         handler: `index.handler`,
         runtime: lambda.Runtime.NODEJS_20_X,
-        environment: {
-
-        },
+        environment: {},
         timeout: Duration.seconds(15),
         memorySize: 512
       }
