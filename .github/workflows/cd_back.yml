@@ -60,7 +60,9 @@ jobs:
 
       - name: Deploy with CDK
         run: |
+          cd back
           ls
-          cd back/iac
+          cd iac
+          cd iac
           cdk synth
           cdk deploy --require-approval never
