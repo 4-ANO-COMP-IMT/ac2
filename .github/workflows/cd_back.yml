@@ -33,6 +33,10 @@ jobs:
           echo "STACK_NAME=${PROJECT_NAME}StackBack${{github.ref_name}}" >> $GITHUB_ENV
           echo "PROJECT_NAME=${PROJECT_NAME}" >> $GITHUB_ENV
 
+      - name: Installing pnpm
+        run: |
+          npm install -g pnpm
+
       - name: Installing Dependencies to Deploy
         run: |
           cd back/iac
