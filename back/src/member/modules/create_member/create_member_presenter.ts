@@ -1,44 +1,44 @@
 import { config } from 'dotenv'
 
-import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { EventRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
-import { EventRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
-import { EventRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
-import { CreateEventController } from './create_member_controller'
-import { CreateEventUsecase } from './create_member_usecase'
-import { CreateEventRequest } from './protocols'
+import { MemberJsonProps } from '../../../shared/domain/entities/member'
+import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
+import { CreateMemberUsecase } from './create_member_usecase'
+import { CreateMemberController } from './create_member_controller'
+import { CreateMemberRequest } from './protocols'
+import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
+import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
 
 config()
 
-export interface CreateEventPresenterProps {
-  repo: EventRepositoryInterface
-  usecase: CreateEventUsecase
-  controller: CreateEventController
+export interface CreateMemberPresenterProps {
+  repo: MemberRepositoryInterface
+  usecase: CreateMemberUsecase
+  controller: CreateMemberController
   call(
-    req: HttpRequest<CreateEventRequest>
-  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
+    req: HttpRequest<CreateMemberRequest>
+  ): Promise<HttpResponse<MemberJsonProps> | HttpResponse<Error>>
 }
 
 const stage = process.env.STAGE || 'test'
 
-export class CreateEventPresenter implements CreateEventPresenterProps {
-  repo: EventRepositoryInterface
-  usecase: CreateEventUsecase
-  controller: CreateEventController
+export class CreateMemberPresenter implements CreateMemberPresenterProps {
+  repo: MemberRepositoryInterface
+  usecase: CreateMemberUsecase
+  controller: CreateMemberController
 
   constructor() {
     this.repo =
-      stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
-    this.usecase = new CreateEventUsecase(this.repo)
-    this.controller = new CreateEventController(this.usecase)
+      stage === 'test' ? new MemberRepositoryMock() : new MemberRepositoryHttp()
+    this.usecase = new CreateMemberUsecase(this.repo)
+    this.controller = new CreateMemberController(this.usecase)
   }
 
-  async call(req: HttpRequest<CreateEventRequest>) {
+  async call(req: HttpRequest<CreateMemberRequest>) {
     return await this.controller.call(req)
   }
 }

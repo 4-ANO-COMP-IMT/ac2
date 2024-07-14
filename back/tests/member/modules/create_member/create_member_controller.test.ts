@@ -20,6 +20,7 @@ test('create member controller created', async () => {
 
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
   expect(response.message).toBe('member created')
+  repo.resetMock()
 })
 
 test('create event controller created without password', async () => {
@@ -34,6 +35,7 @@ test('create event controller created without password', async () => {
 
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
   expect(response.message).toBe('member created')
+  repo.resetMock()
 })
  
 describe('create event controller body', () => {
@@ -46,6 +48,7 @@ describe('create event controller body', () => {
     expect(response.message).toBe('missing body')
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.data).toBe(undefined)
+    repo.resetMock()
   })
 
   it('should return BAD REQUEST if name is missing', async () => {
@@ -60,6 +63,7 @@ describe('create event controller body', () => {
     expect(response.message).toBe('missing name')
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.data).toBe(undefined)
+    repo.resetMock()
   })
 
   it('should return BAD REQUEST if idEvent is missing', async () => {
@@ -74,22 +78,24 @@ describe('create event controller body', () => {
     expect(response.message).toBe('missing eventId')
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.data).toBe(undefined)
+    repo.resetMock()
   })
-})
-
-test('create member controller name already exists', async () => {
+}) 
+ 
+test('create member controller name already exists', async () => { 
   const repo = new MemberRepositoryMock()
   const usecase = new CreateMemberUsecase(repo)
   const controller = new CreateMemberController(usecase)
   const request = new HttpRequest('create', {
     eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
-    name: "Soller", 
+    name: "Adam Levine", 
     password: "Teste123!"
   })
   const response = await controller.call(request)
 
   expect(response.status).toBe(HTTP_STATUS_CODE.CONFLICT)
   expect(response.message).toBe('Member already exists with name: Soller')
+  repo.resetMock()
 })
 
 test('create member controller event not found', async () => {
@@ -105,4 +111,5 @@ test('create member controller event not found', async () => {
 
   expect(response.status).toBe(HTTP_STATUS_CODE.NOT_FOUND)
   expect(response.message).toBe('Event not found for eventId: 9b2f4e8c-8d59-11eb-8dcd-0242ac130004')
+  repo.resetMock()
 })

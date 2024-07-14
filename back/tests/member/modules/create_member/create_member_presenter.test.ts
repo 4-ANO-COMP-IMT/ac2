@@ -1,43 +1,61 @@
-import { describe, expect, it, test } from 'vitest'
+import { expect, test } from 'vitest'
 
-import { CreateEventPresenter } from '../../../../src/event/modules/create_event/create_event_presenter'
-import { CreateEventRequest } from '../../../../src/event/modules/create_event/protocols'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
+import { MemberRepositoryMock } from '../../../../src/member/shared/infra/repos/member_repository_mock'
+import { CreateMemberPresenter } from '../../../../src/member/modules/create_member/create_member_presenter'
+import { CreateMemberRequest } from '../../../../src/member/modules/create_member/protocols'
 
-test('create event presenter created', async () => {
-  const repo = new EventRepositoryMock()
-  const presenter = new CreateEventPresenter()
+test('create member presenter created', async () => {
+  const repo = new MemberRepositoryMock()
+  const presenter = new CreateMemberPresenter()
   const request = new HttpRequest('create', {
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,  
-    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+    name: "Sollerzinho", 
+    password: "Teste123!"
   })
   const response = await presenter.call(request)
 
-  const eventExpect = {
-    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
-    name: "Treino Popeye", 
-    dates: [1719392400000],
-    notEarlier: 32400000, 
-    notLater: 75600000,  
-    members: [],
-    description: "Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye"
-  }
   expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
-  expect(response.message).toBe('event created')
-  expect(response.data).toEqual(eventExpect)
+  expect(response.message).toBe('member created')
   repo.resetMock()
 })
 
-test('create event presenter should return BAD REQUEST if body is missing', async () => {
-    const presenter = new CreateEventPresenter()
-    const request = new HttpRequest('post', {} as CreateEventRequest)
+test('create member presenter should return BAD REQUEST if body is missing', async () => {
+    const repo = new MemberRepositoryMock()  
+    const presenter = new CreateMemberPresenter()
+    const request = new HttpRequest('post', {} as CreateMemberRequest)
     const response = await presenter.call(request)
     expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
     expect(response.message).toBe('missing body')
     expect(response.data).toBe(undefined)
+    repo.resetMock()
+})
+
+test('create member presenter should return CONFLICT if member already exists', async () => { 
+  const repo = new MemberRepositoryMock() 
+  const presenter = new CreateMemberPresenter()
+  const request = new HttpRequest('post', {
+    eventId: "9b2f4e8c-8d59-11eb-8dcd-0242ac130003",
+    name: "Adam Levine", 
+    password: "Teste123!"
+  } as CreateMemberRequest)
+  const response = await presenter.call(request)
+  expect(response.message).toBe('Member already exists with name: Adam Levine')
+  expect(response.status).toBe(HTTP_STATUS_CODE.CONFLICT)
+  repo.resetMock()
+})
+
+test ('create member presenter should return NOT FOUND if eventId doesnt exists', async () => {
+  const repo = new MemberRepositoryMock()
+  const presenter = new CreateMemberPresenter()
+  const request = new HttpRequest('post', {
+    eventId: "9b2f123",
+    name: "Soller", 
+    password: "Teste123!"
+  } as CreateMemberRequest)
+  const response = await presenter.call(request)
+  expect(response.status).toBe(HTTP_STATUS_CODE.NOT_FOUND)
+  expect(response.message).toBe('Event not found for eventId: 9b2f123')
+  repo.resetMock()
 })
