@@ -45,8 +45,8 @@ jobs:
       - name: Installing Dependencies
         run: |
           cd front/iac
-          pnpm install
-          pnpm install -g aws-cdk
+          npm install
+          npm install -g aws-cdk
       - name: Build and Export
         run: |
           cd front
