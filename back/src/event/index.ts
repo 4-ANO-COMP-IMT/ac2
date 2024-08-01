@@ -3,6 +3,7 @@ import express from 'express'
 
 import { environments } from '../shared/env/environments'
 import { eventRouter } from './routes/event.routes'
+import ServerlessHttp from 'serverless-http'
 
 const server = async () => {
   const PORT = environments.eventPort
@@ -22,9 +23,13 @@ const server = async () => {
     res.status(200).send({ msg: 'ok' })
   })
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-  })
+  if (environments.stage === 'test') {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`)
+    })
+  } else {
+    module.exports.handler = ServerlessHttp(app)
+  }
 }
 
 server()
