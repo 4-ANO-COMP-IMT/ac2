@@ -30,9 +30,10 @@ jobs:
 
       - name: Save PEM in a file
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/github_pem
-          chmod 600 ~/.ssh/github_pem
+          ls 
+          cd ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > github-pem.pem
+          chmod 600 github-pem.pem
 
       # - name: Rsync to repo
       #   run: |
@@ -40,6 +41,6 @@ jobs:
 
       - name: SSH to EC2
         run: |
-          ssh -i ~/.ssh/github_pem ${{ vars.EC2_ENDPOINT }}
+          ssh -i ~/.ssh/github-pem.pem ${{ vars.EC2_ENDPOINT }}
           cd app
           npm run build && sudo systemctl restart myapp.service
