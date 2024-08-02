@@ -28,14 +28,11 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Install SSH
-        run: sudo apt-get install openssh-client
-
       - uses: actions/checkout@v3
       - name: Save PEM in a file
         run: |
-          ls 
-          cd ~/.ssh
+          mkdir -p ~/.ssh
+          ls
           echo "${{ secrets.EC2_KEY }}" > github-pem.pem
           chmod 600 github-pem.pem
 
