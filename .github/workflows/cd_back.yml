@@ -32,8 +32,8 @@ jobs:
       - name: Save PEM in a file
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KEY }}" > github-pem.pem
-          chmod 600 github-pem.pem
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/github-pem.pem
+          chmod 600  ~/.ssh/github-pem.pem
           cd ~/.ssh && ls
 
       # - name: Rsync to repo
