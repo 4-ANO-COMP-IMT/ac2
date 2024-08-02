@@ -30,7 +30,7 @@ jobs:
 
       - name: Rsync to repo
         run: |
-          rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh -i ${{ vars.EC2_KEY }}" . ${{ vars.EC2_ENDPOINT }}:~/app
+          rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh $EC2_KEY" . ${{ vars.EC2_ENDPOINT }}:~/app
         env:
           EC2_KEY: |
             ${{ secrets.EC2_KEY }}
