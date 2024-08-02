@@ -36,7 +36,7 @@ jobs:
 
       - name: Rsync to repo
         run: |
-          rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh ~/.ssh/github_pem" . ${{ vars.EC2_ENDPOINT }}:~/app
+          rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh -i ~/.ssh/github_pem" . ${{ vars.EC2_ENDPOINT }}:~/app
 
       - name: SSH to EC2
         run: |
