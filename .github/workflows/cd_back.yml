@@ -28,21 +28,15 @@ jobs:
         with:
           node-version: 18.x
 
-      - uses: actions/checkout@v3
-      - name: Save PEM in a file
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/github-pem.pem
-          chmod 600  ~/.ssh/github-pem.pem
-          cd ~/.ssh && ls
-
-      # - name: Rsync to repo
-      #   run: |
-      #     rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh -i ~/.ssh/github_pem" . ${{ vars.EC2_ENDPOINT }}:~/app
-
-      - name: SSH to EC2
-        run: |
-          cd ~/.ssh && ls
-          ssh -i ~/.ssh/github-pem.pem ${{ vars.EC2_ENDPOINT }}
-          cd app
-          npm run build && sudo systemctl restart myapp.service
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "./back"
+          REMOTE_HOST: ${{ vars.EC2_ENDPOINT }}
+          REMOTE_USER: ubuntu
+          TARGET: ~/app
+          EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc"
+          SCRIPT_AFTER: |
+            npm run build && sudo systemctl restart myapp.service
