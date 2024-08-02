@@ -40,6 +40,6 @@ jobs:
 
       - name: SSH to EC2
         run: |
-          ssh -i ${{ secrets.EC2_KEY }} ${{ vars.EC2_ENDPOINT }}
+          ssh -i ~/.ssh/github_pem ${{ vars.EC2_ENDPOINT }}
           cd app
           npm run build && sudo systemctl restart myapp.service
