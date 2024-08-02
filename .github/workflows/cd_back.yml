@@ -1,0 +1,39 @@
+name: AWS CD Back
+on:
+  push:
+    branches:
+      - dev
+      - add-backend-cd
+
+  workflow_dispatch:
+
+jobs:
+  DeployToAWSFront:
+    environment:
+      name: ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActionsRoleAC2
+          role-session-name: github-action
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Rsync to repo
+        run: |
+          rsync -avz \back --exclude 'node_modules' --exclude '.git' --exclude '.env' -e "ssh -i ${{ secrets.EC2_KEY }}" . ${{ vars.EC2_ENDPOINT }}:~/app
+
+      - name: SSH to EC2
+        run: |
+          ssh -i ${{ secrets.EC2_KEY }} ${{ vars.EC2_ENDPOINT }}
+          cd app
+          npm run build && sudo systemctl restart myapp.service
