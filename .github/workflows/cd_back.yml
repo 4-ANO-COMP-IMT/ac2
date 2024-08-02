@@ -29,7 +29,10 @@ jobs:
           node-version: 18.x
 
       - name: Save PEM in a file
-        run: echo "${{ secrets.EC2_KEY }}" > ~/.ssh/github_pem && chmod 600 ~/.ssh/github_pem
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/github_pem
+          chmod 600 ~/.ssh/github_pem
 
       - name: Rsync to repo
         run: |
