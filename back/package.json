@@ -13,7 +13,11 @@
     "lint:fix": "eslint src --fix",
     "lint:tests": "eslint tests --fix",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "start:event": "node dist/event/index.js",
+    "start:dynamo": "node dist/dynamo/index.js",
+    "start:schedule": "node dist/schedule/index.js",
+    "start:eventBus": "node dist/eventBus/index.js"
   },
   "keywords": [],
   "author": "",
