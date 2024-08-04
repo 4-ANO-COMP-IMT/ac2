@@ -58,7 +58,7 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
   async createMember(
     eventId: string,
     name: string,
-    password?: string | undefined
+    password?: string 
   ): Promise<Member> {
     const createdMember = new Member(
       uuid(),
