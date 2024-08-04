@@ -37,6 +37,6 @@ jobs:
           REMOTE_HOST: ${{ vars.EC2_ENDPOINT }}
           REMOTE_USER: "ubuntu"
           TARGET: "~/app"
-          EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc"
+          EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc, tests"
           SCRIPT_AFTER: |
-            npm run build && sudo systemctl restart myapp.service
+            npm install typescript && npm run build && sudo systemctl restart myapp.service
