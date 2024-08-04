@@ -33,7 +33,7 @@ jobs:
         with:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "./back"
+          SOURCE: "back/"
           REMOTE_HOST: ${{ vars.EC2_ENDPOINT }}
           REMOTE_USER: "ubuntu"
           TARGET: "~/app"
