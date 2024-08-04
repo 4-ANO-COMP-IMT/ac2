@@ -33,7 +33,7 @@ export function Navbar() {
   }
 
   return (
-    <nav className="fixed left-0 top-0 z-10 flex w-full select-none items-center justify-between px-8 py-3 font-geist text-[15px] sm:px-16">
+    <nav className="fixed left-0 top-0 z-50 flex w-full select-none items-center justify-between px-8 py-3 font-geist text-[15px] sm:px-16">
       <div className="absolute left-0 top-0 -z-10 h-full w-full border-gray-300 bg-background/30 backdrop-blur-sm transition-all duration-500"></div>
       <div className="hidden items-center justify-center gap-10 sm:flex">
         <a className="cursor-pointer font-bold" href="/">

@@ -30,9 +30,10 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useEvent } from '@/hooks/use-event'
 import { useToast } from '@/components/ui/use-toast'
+import { useNavigate } from 'react-router-dom'
+import { LoadingSpin } from './ui/loading-spin'
 
 const hours = Array.from({ length: 24 }, (_, i) => i)
 const timezones = Array.from({ length: 25 }, (_, i) => i - 12)
@@ -69,18 +70,20 @@ export function EventCard() {
   const { createEvent } = useEvent()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const onSubmit = async (values: FormEventValues) => {
     setIsLoading(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       const { data } = await createEvent(values)
       toast({
         title: 'Evento criado com sucesso',
-        description: `O link do evento ${data?.name} foi copiado para a área de transferência`
+        description: `Você será redirecionado para a página do evento...`
       })
-      navigator.clipboard.writeText(window.location.origin + `/${data?.id}`)
       form.reset()
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      navigate('/event/' + data?.id)
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -313,11 +316,7 @@ export function EventCard() {
           className="transition-all duration-500"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <AiOutlineLoading3Quarters className="animate-spin text-xl" />
-          ) : (
-            'Criar'
-          )}
+          {isLoading ? <LoadingSpin /> : 'Criar'}
         </Button>
       </CardFooter>
     </Card>
