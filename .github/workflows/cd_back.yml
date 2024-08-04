@@ -41,8 +41,8 @@ jobs:
           ARGS: "-rlgoDzvc -i --delete"
           SOURCE: "back/"
           REMOTE_HOST: ${{ vars.EC2_ENDPOINT }}
-          REMOTE_USER: "ubuntu"            
-          TARGET: "app/"
+          REMOTE_USER: "ubuntu"
+          TARGET: "~/app"
           EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc, tests"
           SCRIPT_AFTER: |
-            sudo systemctl restart myapp.service
+            cd app && npm install && sudo systemctl restart myapp.service
