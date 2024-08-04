@@ -6,8 +6,6 @@
   "scripts": {
     "dev:event": "nodemon src/event/index.ts",
     "dev:member": "nodemon src/member/index.ts",
-    "dev:dynamo": "nodemon src/dynamo/index.ts",
-    "dev:schedule": "nodemon src/schedule/index.ts",
     "dev:eventBus": "nodemon src/eventBus/index.ts",
     "build": "npx tsc",
     "lint": "eslint src",
@@ -16,8 +14,6 @@
     "test": "vitest",
     "test:run": "vitest run",
     "start:event": "node dist/event/index.js",
-    "start:dynamo": "node dist/dynamo/index.js",
-    "start:schedule": "node dist/schedule/index.js",
     "start:eventBus": "node dist/eventBus/index.js"
   },
   "keywords": [],
