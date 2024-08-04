@@ -10,7 +10,7 @@ import { EventProvider } from './contexts/event-context.tsx'
 export default function App() {
   return (
     <>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme"> 
         <EventProvider>
           <Router>
             <Navbar />
