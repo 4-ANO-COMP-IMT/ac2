@@ -94,7 +94,7 @@ test('create member controller name already exists', async () => {
   const response = await controller.call(request)
 
   expect(response.status).toBe(HTTP_STATUS_CODE.CONFLICT)
-  expect(response.message).toBe('Member already exists with name: Soller')
+  expect(response.message).toBe('Member already exists with name: Adam Levine')
   repo.resetMock()
 })
 
