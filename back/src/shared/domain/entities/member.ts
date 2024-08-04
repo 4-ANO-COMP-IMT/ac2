@@ -14,7 +14,7 @@ export class Member implements MemberInterface {
   private _name: string
   private _password?: string | undefined
   private _availabilities: Availability[]
-
+ 
   constructor(
     id: string,
     name: string,
