@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - dev
-      - add-backend-cd
 
   workflow_dispatch:
 
