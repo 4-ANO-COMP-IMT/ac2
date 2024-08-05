@@ -20,7 +20,7 @@ test('get event presenter ok', async () => {
   repo.resetMock()
 })
 
-test('create event presenter should return BAD REQUEST if body is missing', async () => {
+test('create event presenter should return BAD REQUEST if eventId is missing', async () => {
   const repo = new EventRepositoryMock()
   const presenter = new GetEventPresenter()
   const request = new HttpRequest('get', {
@@ -28,7 +28,7 @@ test('create event presenter should return BAD REQUEST if body is missing', asyn
   const response = await presenter.call(request as HttpRequest<GetEventRequest>)
 
   expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-  expect(response.message).toBe('missing body')
+  expect(response.message).toBe('missing eventId')
   expect(response.data).toEqual(undefined)
   repo.resetMock()
 })

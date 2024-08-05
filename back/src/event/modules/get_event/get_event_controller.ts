@@ -23,7 +23,7 @@ export class GetEventController implements GetEventControllerProps {
     if (
       !req.data?.eventId
     ) {
-      return HttpResponse.badRequest('missing body')
+      return HttpResponse.badRequest('missing eventId')
     }
 
     const { eventId } = req.data

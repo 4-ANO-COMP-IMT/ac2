@@ -29,7 +29,7 @@ test('get event controller without body', async () => {
   })
   const response = await controller.call(request as HttpRequest<GetEventRequest>)
   expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-  expect(response.message).toBe('missing body')
+  expect(response.message).toBe('missing eventId')
 })
 
 test('get event controller not found', async () => {
