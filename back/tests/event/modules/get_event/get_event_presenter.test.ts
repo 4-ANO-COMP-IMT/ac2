@@ -1,45 +1,48 @@
-import { describe, expect, it, test } from 'vitest'
+import { expect, test } from 'vitest'
 
-import { CreateEventPresenter } from '../../../../src/event/modules/create_event/create_event_presenter'
-import { CreateEventRequest } from '../../../../src/event/modules/create_event/protocols'
 import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
+import { GetEventPresenter } from '../../../../src/event/modules/get_event/get_event_presenter'
+import { GetEventRequest } from '../../../../src/event/modules/get_event/protocols'
 
-test('create event presenter created', async () => {
+test('get event presenter ok', async () => {
   const repo = new EventRepositoryMock()
-  const presenter = new CreateEventPresenter()
-  const request = new HttpRequest('create', {
-    name: 'Treino Popeye',
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,
-    description:
-      'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
+  const presenter = new GetEventPresenter()
+  const request = new HttpRequest('get', {
+    eventId: EventRepositoryMock.events[0].id
   })
   const response = await presenter.call(request)
 
-  const eventExpect = {
-    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
-    name: 'Treino Popeye',
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,
-    members: [],
-    description:
-      'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
-  }
-  expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
-  expect(response.message).toBe('event created')
-  expect(response.data).toEqual(eventExpect)
+  expect(response.status).toBe(HTTP_STATUS_CODE.OK)
+  expect(response.message).toBe('event found')
+  expect(response.data).toEqual(EventRepositoryMock.events[0].toJson())
   repo.resetMock()
 })
 
 test('create event presenter should return BAD REQUEST if body is missing', async () => {
-  const presenter = new CreateEventPresenter()
-  const request = new HttpRequest('post', {} as CreateEventRequest)
-  const response = await presenter.call(request)
+  const repo = new EventRepositoryMock()
+  const presenter = new GetEventPresenter()
+  const request = new HttpRequest('get', {
+  })
+  const response = await presenter.call(request as HttpRequest<GetEventRequest>)
+
   expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
   expect(response.message).toBe('missing body')
-  expect(response.data).toBe(undefined)
+  expect(response.data).toEqual(undefined)
+  repo.resetMock()
+})
+
+test('create event presenter should return NOT FOUND if eventId does not exists', async () => {
+  const repo = new EventRepositoryMock()
+  const presenter = new GetEventPresenter() 
+  const request = new HttpRequest('get', {
+    eventId: "123!"
+  })
+  const response = await presenter.call(request as HttpRequest<GetEventRequest>)
+
+  expect(response.status).toBe(HTTP_STATUS_CODE.NOT_FOUND)
+  expect(response.message).toBe('Event not found for eventId: 123!')
+  expect(response.data).toEqual(undefined)
+  repo.resetMock()
 })
