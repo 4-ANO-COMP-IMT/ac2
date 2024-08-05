@@ -1,0 +1,47 @@
+name: AWS CD Back
+on:
+  push:
+    branches:
+      - dev
+
+  workflow_dispatch:
+
+jobs:
+  DeployToAWSBackend:
+    environment:
+      name: ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActionsRoleAC2
+          role-session-name: github-action
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Build backend
+        run: |
+          cd back/
+          npm install
+          npm run build
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "back/"
+          REMOTE_HOST: ${{ vars.EC2_ENDPOINT }}
+          REMOTE_USER: "ubuntu"
+          TARGET: "~/app"
+          EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc, tests"
+          SCRIPT_AFTER: |
+            cd app && npm install && sudo systemctl restart event_mss.service member_mss.service eventbus_mss.service
