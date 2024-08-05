@@ -16,6 +16,16 @@ eventRouter.post('/', async (req, res) => {
     .json({ message: response.message, data: response.data })
 })
 
+eventRouter.post('/get', async (req, res) => {
+  const request = new HttpRequest('post', req.body)
+  const handler = new CommunicationHandler()
+  const response = await handler.call(request)
+
+  res
+    .status(response.status)
+    .json({ message: response.message, data: response.data })
+})
+
 eventRouter.post('/communication', async (req, res) => {
   const request = new HttpRequest('post', req.body)
   const handler = new CommunicationHandler()
