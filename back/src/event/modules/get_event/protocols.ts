@@ -1,14 +1,10 @@
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
-export type CreateEventRequest = {
-  name: string
-  dates: number[]
-  notEarlier: number
-  notLater: number
-  description?: string | undefined
+export type GetEventRequest = {
+  eventId: string
 }
 
-export type CreateEventResponse = {
+export type GetEventResponse = {
   status: number
   message: string
   event?: EventJsonProps

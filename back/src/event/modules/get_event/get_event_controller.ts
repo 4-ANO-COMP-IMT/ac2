@@ -4,66 +4,45 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { CreateEventUsecase } from './get_event_usecase'
-import { CreateEventRequest } from './protocols'
+import { GetEventUsecase } from './get_event_usecase'
+import { GetEventRequest } from './protocols'
 
-interface CreateEventControllerProps {
-  usecase: CreateEventUsecase
+interface GetEventControllerProps {
+  usecase: GetEventUsecase
   call(
-    req: HttpRequest<CreateEventRequest>
+    req: HttpRequest<GetEventRequest>
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
-export class CreateEventController implements CreateEventControllerProps {
-  constructor(public usecase: CreateEventUsecase) {
+export class GetEventController implements GetEventControllerProps {
+  constructor(public usecase: GetEventUsecase) {
     this.usecase = usecase
   }
 
-  async call(req: HttpRequest<CreateEventRequest>) {
+  async call(req: HttpRequest<GetEventRequest>) {
     if (
-      !req.data?.name &&
-      !req.data?.dates &&
-      !req.data?.notEarlier &&
-      !req.data?.notLater &&
-      !req.data?.description
+      !req.data?.eventId
     ) {
       return HttpResponse.badRequest('missing body')
     }
 
-    const { name, dates, notEarlier, notLater, description } = req.data
+    const { eventId } = req.data
 
-    if (!name) {
-      return HttpResponse.badRequest('missing name')
-    }
-
-    if (!dates) {
-      return HttpResponse.badRequest('missing dates')
-    }
-
-    if (!notEarlier) {
-      return HttpResponse.badRequest('missing notEarlier')
-    }
-
-    if (!notLater) {
-      return HttpResponse.badRequest('missing notLater')
-    }
 
     try {
       const event = await this.usecase.call(
-        name,
-        dates,
-        notEarlier,
-        notLater,
-        description
+        eventId
       )
 
-      return HttpResponse.created<EventJsonProps>(
-        'event created',
+      return HttpResponse.ok<EventJsonProps>(
+        'event found',
         event.toJson()
       )
     } catch (error: any) {
       if (error.message.indexOf('Error in entity Event:') != -1) {
         return HttpResponse.badRequest(error.message)
+      } else if (error.message.indexOf('Event not found for eventId:') != -1) {
+        return HttpResponse.notFound(error.message)
       } else {
         return HttpResponse.internalServerError(error.message)
       }

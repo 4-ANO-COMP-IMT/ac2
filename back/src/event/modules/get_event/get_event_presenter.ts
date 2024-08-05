@@ -10,7 +10,7 @@ import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_h
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
 import { CreateEventController } from './get_event_controller'
-import { CreateEventUsecase } from './get_event_usecase'
+import { CreateEventUsecase } from './create_event_usecase'
 import { CreateEventRequest } from './protocols'
 
 config()
