@@ -1,5 +1,4 @@
 import { describe, expect, it, test } from 'vitest'
-
 import { CreateMemberController } from '../../../../src/member/modules/create_member/create_member_controller'
 import { CreateMemberUsecase } from '../../../../src/member/modules/create_member/create_member_usecase'
 import { CreateMemberRequest } from '../../../../src/member/modules/create_member/protocols'

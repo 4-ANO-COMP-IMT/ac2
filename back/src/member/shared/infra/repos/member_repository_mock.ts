@@ -58,14 +58,9 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
   async createMember(
     eventId: string,
     name: string,
-    password?: string 
+    password?: string
   ): Promise<Member> {
-    const createdMember = new Member(
-      uuid(),
-      name,
-      [],
-      password
-    )
+    const createdMember = new Member(uuid(), name, [], password)
     const createEvent = MemberRepositoryMock.events.find(
       (event) => event.id === eventId
     )
@@ -76,7 +71,9 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
       (member) => member.name === name
     )
     if (duplicatedMember) {
-      throw new Error('Member already exists with name: ' + duplicatedMember.name)
+      throw new Error(
+        'Member already exists with name: ' + duplicatedMember.name
+      )
     }
     createEvent.members.push(createdMember)
     return createdMember
@@ -105,7 +102,6 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
     }
     return member
   }
-
 
   resetMock() {
     MemberRepositoryMock.events = [
@@ -157,5 +153,4 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
       )
     ]
   }
-
 }

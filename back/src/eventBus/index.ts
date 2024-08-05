@@ -27,7 +27,7 @@ const server = async () => {
     console.log(`Server is running on port ${PORT}`)
   })
 
-  app.post('/communication', async (req, res) => { 
+  app.post('/communication', async (req, res) => {
     /*
       check the type of the request, the route and send it to the correct service
       body: {
@@ -38,7 +38,7 @@ const server = async () => {
         }
       }
     */
-   try{
+    try {
       let response = null
       let port = null
       if (req.body.mss === 'event') {
@@ -49,10 +49,12 @@ const server = async () => {
         console.log('Invalid request!')
         res.status(500).send({ msg: 'Invalid MSS' })
       }
-      response = await axios.post('http://localhost:' + port + '/' + req.body.mss + "/communication", req.body)
+      response = await axios.post(
+        'http://localhost:' + port + '/' + req.body.mss + '/communication',
+        req.body
+      )
       res.status(response.status).send(response.data)
-   }
-    catch{
+    } catch {
       console.log('Invalid request!')
       res.status(500).send({ msg: 'MSS is off' })
     }

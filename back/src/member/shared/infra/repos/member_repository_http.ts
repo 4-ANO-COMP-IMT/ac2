@@ -1,7 +1,6 @@
+import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
 import { MemberRepositoryInterface } from './member_repository_interface'
-import { Event } from '../../../../shared/domain/entities/event'
-
 
 export class MemberRepositoryHttp implements MemberRepositoryInterface {
   async createMember(): Promise<Member> {

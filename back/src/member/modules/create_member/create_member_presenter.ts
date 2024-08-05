@@ -1,17 +1,17 @@
 import { config } from 'dotenv'
 
+import { MemberJsonProps } from '../../../shared/domain/entities/member'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { MemberJsonProps } from '../../../shared/domain/entities/member'
-import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
-import { CreateMemberUsecase } from './create_member_usecase'
-import { CreateMemberController } from './create_member_controller'
-import { CreateMemberRequest } from './protocols'
-import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
 import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
+import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
+import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
+import { CreateMemberController } from './create_member_controller'
+import { CreateMemberUsecase } from './create_member_usecase'
+import { CreateMemberRequest } from './protocols'
 
 config()
 

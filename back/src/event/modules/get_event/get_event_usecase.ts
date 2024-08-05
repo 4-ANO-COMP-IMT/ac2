@@ -3,9 +3,7 @@ import { EventRepositoryInterface } from '../../shared/infra/repos/event_reposit
 
 export interface GetEventUsecaseProps {
   repo: EventRepositoryInterface
-  call(
-    eventId: string
-  ): Promise<Event>
+  call(eventId: string): Promise<Event>
 }
 
 export class GetEventUsecase implements GetEventUsecaseProps {
@@ -13,11 +11,7 @@ export class GetEventUsecase implements GetEventUsecaseProps {
     this.repo = repo
   }
 
-  async call(
-    eventId: string
-  ) {
-    return await this.repo.getEvent(
-      eventId
-    )
+  async call(eventId: string) {
+    return await this.repo.getEvent(eventId)
   }
 }

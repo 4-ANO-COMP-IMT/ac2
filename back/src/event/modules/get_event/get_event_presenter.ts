@@ -9,8 +9,8 @@ import {
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
-import { GetEventUsecase } from './get_event_usecase'
 import { GetEventController } from './get_event_controller'
+import { GetEventUsecase } from './get_event_usecase'
 import { GetEventRequest } from './protocols'
 
 config()
@@ -32,7 +32,7 @@ export class GetEventPresenter implements GetEventPresenterProps {
   controller: GetEventController
 
   constructor() {
-    console.log("running controller!")
+    console.log('running controller!')
     this.repo =
       stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
     this.usecase = new GetEventUsecase(this.repo)

@@ -20,24 +20,16 @@ export class GetEventController implements GetEventControllerProps {
   }
 
   async call(req: HttpRequest<GetEventRequest>) {
-    if (
-      !req.data?.eventId
-    ) {
+    if (!req.data?.eventId) {
       return HttpResponse.badRequest('missing eventId')
     }
 
     const { eventId } = req.data
 
-
     try {
-      const event = await this.usecase.call(
-        eventId
-      )
+      const event = await this.usecase.call(eventId)
 
-      return HttpResponse.ok<EventJsonProps>(
-        'event found',
-        event.toJson()
-      )
+      return HttpResponse.ok<EventJsonProps>('event found', event.toJson())
     } catch (error: any) {
       if (error.message.indexOf('Error in entity Event:') != -1) {
         return HttpResponse.badRequest(error.message)

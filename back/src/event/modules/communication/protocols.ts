@@ -11,5 +11,3 @@ export type CommunicationResponse = {
   message: string
   event?: EventJsonProps
 }
-
-
