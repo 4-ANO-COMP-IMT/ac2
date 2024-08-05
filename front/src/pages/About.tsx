@@ -50,7 +50,7 @@ const contributors: Contributor[] = [
   {
     name: 'Flavio Murata',
     img: 'https://media.licdn.com/dms/image/D4D03AQFLFTsYOrEWQw/profile-displayphoto-shrink_400_400/0/1698003298526?e=1726704000&v=beta&t=9ShKkyt9ykRfpuqnIt1chKuBxzjJtzazsbL6oWgIPTs',
-    position: 'Menino de TI, DICK'
+    position: 'Menino de TI, DIQ'
   }
 ]
 
