@@ -6,51 +6,59 @@ import {
   CardHeader,
   CardTitle
 } from '../components/ui/card'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselPrevious,
-  CarouselNext,
-  CarouselItem
-} from '../components/ui/carousel'
-import Autoplay from 'embla-carousel-autoplay'
+import { Github, Linkedin } from 'lucide-react'
 
 type Contributor = {
   img: string
   name: string
   position: string
+  github: string
+  linkedin: string
 }
 
 const contributors: Contributor[] = [
   {
     name: 'João Branco',
     img: 'https://media.licdn.com/dms/image/C4D03AQFiRdVm6Y3EpA/profile-displayphoto-shrink_800_800/0/1621979338107?e=1725494400&v=beta&t=-sBAQWAkvZYSLHr2qKXrqB3xNAOFogO6i-Qd3GZ8giM',
-    position: 'Hacker ético, Anonymous'
+    position: 'Hacker ético, Anonymous',
+    github: 'https://github.com/JoaoVitorBranco',
+    linkedin:
+      'https://www.linkedin.com/in/jo%C3%A3o-vitor-choueri-branco-a756ab209/'
   },
   {
     name: 'Vitor Soller',
     img: 'https://avatars.githubusercontent.com/u/81604963?v=4',
-    position: 'PO, Vivo'
+    position: 'PO, Vivo',
+    github: 'https://github.com/VgsStudio',
+    linkedin: 'https://www.linkedin.com/in/vitor-soller/'
   },
   {
     name: 'Pedro Matumoto',
     img: 'https://avatars.githubusercontent.com/u/85521574?v=4',
-    position: 'Sonegador de Imposto, Receita Federal'
+    position: 'Sonegador de Imposto, Receita Federal',
+    github: 'https://github.com/PedroMatumoto',
+    linkedin: 'https://www.linkedin.com/in/pedromatumoto/'
   },
   {
     name: 'Vinicius Berti',
     img: 'https://avatars.githubusercontent.com/u/98232929?v=4',
-    position: 'CEO, Gostosinho'
+    position: 'CEO, Gostosinho',
+    github: 'https://github.com/ViniciusBerti',
+    linkedin: 'https://www.linkedin.com/in/vinicius-berti-a80354209/'
   },
   {
     name: 'Enzo Sakamoto',
     img: 'https://avatars.githubusercontent.com/u/98707474?v=4',
-    position: 'Jogador de Beachtennis, XP Investimentos'
+    position: 'Jogador de Beachtennis, XP Investimentos',
+    github: 'https://github.com/enzosakamoto',
+    linkedin: 'https://www.linkedin.com/in/enzosakamoto/'
   },
   {
     name: 'Flavio Murata',
     img: 'https://media.licdn.com/dms/image/D4D03AQFLFTsYOrEWQw/profile-displayphoto-shrink_400_400/0/1698003298526?e=1726704000&v=beta&t=9ShKkyt9ykRfpuqnIt1chKuBxzjJtzazsbL6oWgIPTs',
-    position: 'Menino de TI, DIQ'
+    position: 'Menino de TI, DIQ',
+    github: 'https://github.com/flaviomurata',
+    linkedin: 'https://www.linkedin.com/in/02mrt/'
   }
 ]
 
@@ -64,7 +72,7 @@ export function About() {
   }, [])
 
   return (
-    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-12 py-48 text-center font-geist transition-all duration-500">
+    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-12 py-24 text-center font-geist transition-all duration-500">
       <div
         className={`absolute grid h-full w-full grid-cols-2 justify-items-center gap-12 transition-all duration-2000 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
@@ -84,45 +92,41 @@ export function About() {
         Conheça nossa equipe de desenvolvedores
       </p>
       <div
-        className={`flex w-full transform items-center justify-center pt-12 transition-all duration-3000 ${fade ? 'opacity-100' : 'opacity-0'}`}
+        className={`grid transform grid-cols-1 gap-6 pt-12 transition-all duration-3000 sm:grid-cols-2 lg:grid-cols-3 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
-        <Carousel
-          plugins={[
-            Autoplay({
-              delay: 5000
-            })
-          ]}
-          opts={{
-            align: 'start'
-          }}
-          className="max-w-lg px-24 sm:px-0 lg:max-w-4xl"
-        >
-          <CarouselContent>
-            {contributors.map((contributor, index) => (
-              <CarouselItem
-                key={index}
-                className="basis-full sm:basis-1/2 lg:basis-1/3"
-              >
-                <div className="p-1">
-                  <Card className="min-h-[16rem] transition-all duration-500">
-                    <CardHeader className="items-center pb-0">
-                      <Avatar className="h-[100px] w-[100px]">
-                        <AvatarImage src={contributor.img} />
-                        <AvatarFallback>
-                          {`${contributor.name.split(' ')[0].substring(0, 1)}${contributor.name.split(' ')[1].substring(0, 1)}`}
-                        </AvatarFallback>
-                      </Avatar>
-                      <CardTitle>{contributor.name}</CardTitle>
-                      <CardDescription>{contributor.position}</CardDescription>
-                    </CardHeader>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        {contributors.map((contributor, index) => (
+          <Card
+            key={index}
+            className="min-h-[16rem] transition-all duration-500"
+          >
+            <CardHeader className="items-center pb-0">
+              <Avatar className="h-[100px] w-[100px]">
+                <AvatarImage src={contributor.img} />
+                <AvatarFallback>
+                  {`${contributor.name.split(' ')[0].substring(0, 1)}${contributor.name.split(' ')[1].substring(0, 1)}`}
+                </AvatarFallback>
+              </Avatar>
+              <CardTitle>{contributor.name}</CardTitle>
+              <CardDescription>{contributor.position}</CardDescription>
+              <div className="flex space-x-4 pt-1">
+                <a
+                  href={contributor.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="text-xl text-gray-500 hover:text-black" />
+                </a>
+                <a
+                  href={contributor.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Linkedin className="text-xl text-gray-500 hover:text-blue-700" />
+                </a>
+              </div>
+            </CardHeader>
+          </Card>
+        ))}
       </div>
     </main>
   )
