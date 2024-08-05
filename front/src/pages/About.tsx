@@ -64,7 +64,7 @@ export function About() {
   }, [])
 
   return (
-    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-12 py-48 text-center font-geist">
+    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-12 py-48 text-center font-geist transition-all duration-500">
       <div
         className={`absolute grid h-full w-full grid-cols-2 justify-items-center gap-12 transition-all duration-2000 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
@@ -73,13 +73,19 @@ export function About() {
         <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-300 opacity-50 blur-[7rem]"></div>
         <div className="h-[320px] w-[320px] animate-one self-start justify-self-start rounded-full  bg-blue-600 opacity-50 blur-[7rem]"></div>
       </div>
-      <h1 className="text-center text-4xl font-bold sm:text-6xl lg:text-8xl">
+      <h1
+        className={`transform text-4xl font-bold transition-all duration-1000 sm:text-6xl lg:text-8xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
+      >
         Contribuidores
       </h1>
-      <p className="text-wrap text-lg font-light lg:text-2xl ">
+      <p
+        className={`transform text-wrap text-lg font-light transition-all duration-2000 lg:text-2xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
+      >
         Conheça nossa equipe de desenvolvedores
       </p>
-      <div className="flex w-full items-center justify-center pt-12">
+      <div
+        className={`flex w-full transform items-center justify-center pt-12 transition-all duration-3000 ${fade ? 'opacity-100' : 'opacity-0'}`}
+      >
         <Carousel
           plugins={[
             Autoplay({
@@ -98,7 +104,7 @@ export function About() {
                 className="basis-full sm:basis-1/2 lg:basis-1/3"
               >
                 <div className="p-1">
-                  <Card className="min-h-[16rem]">
+                  <Card className="min-h-[16rem] transition-all duration-500">
                     <CardHeader className="items-center pb-0">
                       <Avatar className="h-[100px] w-[100px]">
                         <AvatarImage src={contributor.img} />
