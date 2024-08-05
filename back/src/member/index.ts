@@ -11,7 +11,7 @@ const server = async () => {
   app.use(express.json())
   app.use(cors())
 
-  app.use('/member', memberRouter)
+  app.use('/', memberRouter)
 
   app.get('/', (req, res) => {
     res.send('API is running! 🦍 🚀 SIDIS')
