@@ -12,7 +12,7 @@ const server = async () => {
   app.use(express.json())
   app.use(cors())
 
-  app.use('/event', eventRouter)
+  app.use('/', eventRouter)
 
   app.get('/', (req, res) => {
     res.send('API is running! 🚀')
