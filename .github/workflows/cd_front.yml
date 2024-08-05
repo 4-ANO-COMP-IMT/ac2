@@ -53,6 +53,9 @@ jobs:
           cd front
           pnpm install
           pnpm run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+
       - name: Setup envs
         run: |
           echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
