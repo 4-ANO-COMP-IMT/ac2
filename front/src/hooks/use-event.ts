@@ -16,7 +16,7 @@ export const useEvent = () => {
     }
 
     const response = await api.post(
-      'http://localhost:3000/event', // TODO: change to env
+      'event/', // TODO: change to env
       eventFormated
     )
 

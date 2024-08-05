@@ -57,6 +57,7 @@ jobs:
           pnpm run build
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_EVENT_URL: ${{ vars.VITE_API_URL }}
 
       - name: Setup envs
         run: |
