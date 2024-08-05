@@ -46,6 +46,7 @@ const server = async () => {
       } else if (req.body.mss === 'member') {
         port = PORT_MEMBER
       } else {
+        console.log(req.body)
         console.log('Invalid request!')
         res.status(500).send({ msg: 'Invalid MSS' })
       }
