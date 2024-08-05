@@ -106,7 +106,6 @@ export class EventRepositoryMock implements EventRepositoryInterface {
             '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
             'Adam Levine',
             [],
-            'Brownas'
           )
         ],
         'Descrição do evento'
