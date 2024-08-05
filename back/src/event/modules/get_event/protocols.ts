@@ -1,12 +1,10 @@
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
-export type CommunicationRequest = {
-  mss: string
-  type: string
-  params: any
+export type GetEventRequest = {
+  eventId: string
 }
 
-export type CommunicationResponse = {
+export type GetEventResponse = {
   status: number
   message: string
   event?: EventJsonProps

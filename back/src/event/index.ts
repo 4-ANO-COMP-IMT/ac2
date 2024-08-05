@@ -1,9 +1,9 @@
 import cors from 'cors'
 import express from 'express'
+import ServerlessHttp from 'serverless-http'
 
 import { environments } from '../shared/env/environments'
 import { eventRouter } from './routes/event.routes'
-import ServerlessHttp from 'serverless-http'
 
 const server = async () => {
   const PORT = environments.eventPort

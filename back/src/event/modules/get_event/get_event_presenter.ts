@@ -9,38 +9,37 @@ import {
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
-import { CommunicationRequest } from './protocols'
+import { GetEventController } from './get_event_controller'
+import { GetEventUsecase } from './get_event_usecase'
+import { GetEventRequest } from './protocols'
 
 config()
 
-export interface CommunicationHandlerProps {
+export interface GetEventPresenterProps {
   repo: EventRepositoryInterface
+  usecase: GetEventUsecase
+  controller: GetEventController
   call(
-    req: HttpRequest<CommunicationRequest>
+    req: HttpRequest<GetEventRequest>
   ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
 }
 
 const stage = process.env.STAGE || 'test'
 
-export class CommunicationHandler implements CommunicationHandlerProps {
+export class GetEventPresenter implements GetEventPresenterProps {
   repo: EventRepositoryInterface
+  usecase: GetEventUsecase
+  controller: GetEventController
 
   constructor() {
+    console.log('running controller!')
     this.repo =
       stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
+    this.usecase = new GetEventUsecase(this.repo)
+    this.controller = new GetEventController(this.usecase)
   }
 
-  async call(req: HttpRequest<CommunicationRequest>) {
-    if (req.data?.type === 'getEvent') {
-      try {
-        console.log('req.data.params.id: ', req.data.params.id)
-        const event = await this.repo.getEvent(req.data.params.id)
-        return HttpResponse.ok<EventJsonProps>('Event found', event.toJson())
-      } catch {
-        return HttpResponse.notFound('Event not found')
-      }
-    } else {
-      return HttpResponse.badRequest('Invalid type')
-    }
+  async call(req: HttpRequest<GetEventRequest>) {
+    return await this.controller.call(req)
   }
 }

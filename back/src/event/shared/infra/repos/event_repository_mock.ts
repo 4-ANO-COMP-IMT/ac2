@@ -76,9 +76,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return createdEvent
   }
 
-  async getEvent(
-    eventId: string
-  ): Promise<Event> {
+  async getEvent(eventId: string): Promise<Event> {
     const event = EventRepositoryMock.events.find(
       (event) => event.id === eventId
     )

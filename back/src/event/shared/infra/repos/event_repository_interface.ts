@@ -9,7 +9,5 @@ export interface EventRepositoryInterface {
     description?: string | undefined
   ): Promise<Event>
 
-  getEvent(
-    eventId: string
-  ): Promise<Event>
+  getEvent(eventId: string): Promise<Event>
 }

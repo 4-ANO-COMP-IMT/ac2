@@ -20,10 +20,7 @@ export class CreateMemberController implements CreateMemberControllerProps {
   }
 
   async call(req: HttpRequest<CreateMemberRequest>) {
-    if (
-      !req.data?.eventId &&
-      !req.data?.name
-    ) {
+    if (!req.data?.eventId && !req.data?.name) {
       return HttpResponse.badRequest('missing body')
     }
 
@@ -37,13 +34,8 @@ export class CreateMemberController implements CreateMemberControllerProps {
       return HttpResponse.badRequest('missing eventId')
     }
 
-
     try {
-      const member = await this.usecase.call(
-        eventId,
-        name,
-        password,
-      )
+      const member = await this.usecase.call(eventId, name, password)
 
       return HttpResponse.created<MemberJsonProps>(
         'member created',
@@ -52,14 +44,11 @@ export class CreateMemberController implements CreateMemberControllerProps {
     } catch (error: any) {
       if (error.message.indexOf('Error in entity Member:') != -1) {
         return HttpResponse.badRequest(error.message)
-      } 
-      else if(error.message.indexOf('not found') != -1) {
+      } else if (error.message.indexOf('not found') != -1) {
         return HttpResponse.notFound(error.message)
-      }
-      else if(error.message.indexOf('already exists') != -1) {
+      } else if (error.message.indexOf('already exists') != -1) {
         return HttpResponse.conflict(error.message)
-      }
-      else {
+      } else {
         console.log(error.message)
         return HttpResponse.internalServerError(error.message)
       }
