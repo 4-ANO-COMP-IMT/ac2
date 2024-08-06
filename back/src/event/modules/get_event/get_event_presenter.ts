@@ -32,7 +32,6 @@ export class GetEventPresenter implements GetEventPresenterProps {
   controller: GetEventController
 
   constructor() {
-    console.log('running controller!')
     this.repo =
       stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
     this.usecase = new GetEventUsecase(this.repo)
