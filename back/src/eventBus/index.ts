@@ -51,7 +51,7 @@ const server = async () => {
         res.status(500).send({ msg: 'Invalid MSS' })
       }
       response = await axios.post(
-        'http://localhost:' + port + '/' + req.body.mss + '/communication',
+        'http://localhost:' + port + '/communication',
         req.body
       )
       res.status(response.status).send(response.data)
