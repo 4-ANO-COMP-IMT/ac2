@@ -9,36 +9,36 @@ import {
 import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
-import { CreateMemberController } from './login_member_controller'
-import { CreateMemberUsecase } from './login_member_usecase'
-import { CreateMemberRequest } from './protocols'
+import { LoginMemberController } from './login_member_controller'
+import { LoginMemberUsecase } from './login_member_usecase'
+import { LoginMemberRequest } from './protocols'
 
 config()
 
-export interface CreateMemberPresenterProps {
+export interface LoginMemberPresenterProps {
   repo: MemberRepositoryInterface
-  usecase: CreateMemberUsecase
-  controller: CreateMemberController
+  usecase: LoginMemberUsecase
+  controller: LoginMemberController
   call(
-    req: HttpRequest<CreateMemberRequest>
-  ): Promise<HttpResponse<MemberJsonProps> | HttpResponse<Error>>
+    req: HttpRequest<LoginMemberRequest>
+  ): Promise<HttpResponse<boolean> | HttpResponse<Error>>
 }
 
 const stage = process.env.STAGE || 'test'
 
-export class CreateMemberPresenter implements CreateMemberPresenterProps {
+export class LoginMemberPresenter implements LoginMemberPresenterProps {
   repo: MemberRepositoryInterface
-  usecase: CreateMemberUsecase
-  controller: CreateMemberController
+  usecase: LoginMemberUsecase
+  controller: LoginMemberController
 
   constructor() {
     this.repo =
       stage === 'test' ? new MemberRepositoryMock() : new MemberRepositoryHttp()
-    this.usecase = new CreateMemberUsecase(this.repo)
-    this.controller = new CreateMemberController(this.usecase)
+    this.usecase = new LoginMemberUsecase(this.repo)
+    this.controller = new LoginMemberController(this.usecase)
   }
 
-  async call(req: HttpRequest<CreateMemberRequest>) {
+  async call(req: HttpRequest<LoginMemberRequest>) {
     return await this.controller.call(req)
   }
 }
