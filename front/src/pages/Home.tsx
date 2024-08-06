@@ -117,11 +117,6 @@ export function Home() {
         className={`flex w-full transform items-center justify-center transition-all duration-7000 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
         <Carousel
-          plugins={[
-            Autoplay({
-              delay: 5000
-            })
-          ]}
           opts={{
             align: 'start'
           }}

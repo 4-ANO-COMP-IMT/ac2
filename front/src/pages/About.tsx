@@ -72,7 +72,7 @@ export function About() {
   }, [])
 
   return (
-    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-4 pt-20 text-center font-geist transition-all duration-500 lg:fixed">
+    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-4 pt-20 text-center font-geist transition-all duration-500">
       <div
         className={`absolute grid h-full w-full grid-cols-1 justify-items-center gap-12 transition-all duration-2000 sm:grid-cols-2 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
