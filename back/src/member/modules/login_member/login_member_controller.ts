@@ -4,23 +4,23 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { CreateMemberUsecase } from './login_member_usecase'
-import { CreateMemberRequest } from './protocols'
+import { LoginMemberUsecase } from './login_member_usecase'
+import { LoginMemberRequest } from './protocols'
 
-interface CreateMemberControllerProps {
-  usecase: CreateMemberUsecase
+interface LoginMemberControllerProps {
+  usecase: LoginMemberUsecase
   call(
-    req: HttpRequest<CreateMemberRequest>
-  ): Promise<HttpResponse<MemberJsonProps | Error>>
+    req: HttpRequest<LoginMemberRequest>
+  ): Promise<HttpResponse<boolean | Error>>
 }
 
-export class CreateMemberController implements CreateMemberControllerProps {
-  constructor(public usecase: CreateMemberUsecase) {
+export class LoginMemberController implements LoginMemberControllerProps {
+  constructor(public usecase: LoginMemberUsecase) {
     this.usecase = usecase
   }
 
-  async call(req: HttpRequest<CreateMemberRequest>) {
-    if (!req.data?.eventId && !req.data?.name) {
+  async call(req: HttpRequest<LoginMemberRequest>) {
+    if (!req.data?.eventId && !req.data?.name && !req.data?.password) {
       return HttpResponse.badRequest('missing body')
     }
 
@@ -34,20 +34,27 @@ export class CreateMemberController implements CreateMemberControllerProps {
       return HttpResponse.badRequest('missing eventId')
     }
 
-    try {
-      const member = await this.usecase.call(eventId, name, password)
+    if (!password) {
+      return HttpResponse.badRequest('missing password')
+    }
 
-      return HttpResponse.created<MemberJsonProps>(
-        'member created',
-        member.toJson()
-      )
+    try {
+      const validation = await this.usecase.call(eventId, name, password)
+
+      if (!validation) {
+        return HttpResponse.unauthorized('invalid credentials for user ' + name)
+      }
+      else {
+        return HttpResponse.ok<boolean>('user logged in', validation)
+      }
+
     } catch (error: any) {
       if (error.message.indexOf('Error in entity Member:') != -1) {
         return HttpResponse.badRequest(error.message)
       } else if (error.message.indexOf('not found') != -1) {
         return HttpResponse.notFound(error.message)
-      } else if (error.message.indexOf('already exists') != -1) {
-        return HttpResponse.conflict(error.message)
+      } else if (error.message.indexOf('does not exists') != -1) {
+        return HttpResponse.notFound(error.message)
       } else {
         console.log(error.message)
         return HttpResponse.internalServerError(error.message)

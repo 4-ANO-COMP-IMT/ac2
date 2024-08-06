@@ -1,12 +1,12 @@
 import { EventJsonProps } from '../../../shared/domain/entities/event'
 
-export type CreateMemberRequest = {
+export type LoginMemberRequest = {
   eventId: string
   name: string
-  password?: string
+  password: string
 }
 
-export type CreateMemberResponse = {
+export type LoginMemberResponse = {
   status: number
   message: string
   event?: EventJsonProps
