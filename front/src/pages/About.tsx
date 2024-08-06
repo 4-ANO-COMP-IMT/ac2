@@ -72,9 +72,9 @@ export function About() {
   }, [])
 
   return (
-    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-12 py-24 text-center font-geist transition-all duration-500">
+    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-4 pt-20 text-center font-geist transition-all duration-500 lg:fixed">
       <div
-        className={`absolute grid h-full w-full grid-cols-2 justify-items-center gap-12 transition-all duration-2000 ${fade ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute grid h-full w-full grid-cols-1 justify-items-center gap-12 transition-all duration-2000 sm:grid-cols-2 ${fade ? 'opacity-100' : 'opacity-0'}`}
       >
         <div className="h-[320px] w-[320px] animate-one self-end justify-self-end rounded-full bg-blue-900 opacity-50 blur-[7rem]"></div>
         <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-500 opacity-50 blur-[7rem]"></div>
