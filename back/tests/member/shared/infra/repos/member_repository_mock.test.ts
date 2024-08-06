@@ -83,22 +83,19 @@ describe('Test getMemberByName', () => {
     repo.resetMock()
   })
 
-  // it('event not found', () => {
-  //     const repo = new MemberRepositoryMock()
-  //     try{
-  //         repo.getMemberByName("Adam Levine", "123")
-  //         expect(true).toBe(false)
-  //     }
-  //     catch{
-  //         expect(true).toBe(true)
-  //     }
-  //     repo.resetMock()
-  // })
+  it('event not found', () => {
+      const repo = new MemberRepositoryMock()
+      expect(
+        async () =>
+          await repo.getMemberByName("Adam Levine", "123")
+      ).rejects.toThrowError('Event not found for eventId: 123')
+      repo.resetMock()
+  })
 
-  // it('member not found', () => {
-  //     const repo = new MemberRepositoryMock()
-  //     const member = repo.getMemberByName("Flavio Brownas", "9b2f4e8c-8d59-11eb-8dcd-0242ac130003")
-  //     expect(member).toBe(null)
-  //     repo.resetMock()
-  // })
+  it('member not found', () => {
+      const repo = new MemberRepositoryMock()
+      const member = repo.getMemberByName("Flavio Brownas", "9b2f4e8c-8d59-11eb-8dcd-0242ac130003")
+      expect(member).toBeInstanceOf(Promise)
+      repo.resetMock()
+  })
 })

@@ -29,6 +29,10 @@ export class HttpResponse<T = any> {
     return new HttpResponse(HTTP_STATUS_CODE.BAD_REQUEST, message)
   }
 
+  static unauthorized(message: string): HttpResponse<Error> {
+    return new HttpResponse(HTTP_STATUS_CODE.UNAUTHORIZED, message)
+  }
+
   static notFound(message: string): HttpResponse<Error> {
     return new HttpResponse(HTTP_STATUS_CODE.NOT_FOUND, message)
   }
@@ -36,6 +40,8 @@ export class HttpResponse<T = any> {
   static conflict(message: string): HttpResponse<Error> {
     return new HttpResponse(HTTP_STATUS_CODE.CONFLICT, message)
   }
+
+
 
   static internalServerError(message: string): HttpResponse<Error> {
     return new HttpResponse(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR, message)
