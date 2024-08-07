@@ -5,9 +5,9 @@ import { toast } from '@/components/ui/use-toast'
 import { useEvent } from '@/hooks/use-event'
 
 type PeriodSelectorProps = {
-  dates: Date[]
-  notEarlierThan: number
-  notLaterThan: number
+  dates: number[]
+  notEarlier: number
+  notLater: number
   timezone: number
 }
 
@@ -18,19 +18,22 @@ type Interval = {
 
 export function PeriodSelector({
   dates,
-  notEarlierThan,
-  notLaterThan,
+  notEarlier,
+  notLater,
   timezone
 }: PeriodSelectorProps) {
   const { theme } = useTheme()
   const { isLogged, paintedDivs, setPaintedDivs } = useEvent()
+  const [isDragging, setIsDragging] = useState(false)
+
   const intervals: Interval[] = dates
-    .sort((a, b) => a.getTime() - b.getTime())
+    .sort((a, b) => a - b)
     .map((date) => {
       const startDate = new Date(date)
-      startDate.setHours(notEarlierThan)
+      startDate.setHours(notEarlier)
+      console.log(startDate)
       const endDate = new Date(date)
-      endDate.setHours(notLaterThan)
+      endDate.setHours(notLater)
       return {
         // Add timezone offset
         startDate: new Date(startDate.getTime() + timezone * 60 * 60 * 1000),
@@ -38,7 +41,7 @@ export function PeriodSelector({
       }
     })
 
-  const [isDragging, setIsDragging] = useState(false)
+  console.log(intervals)
 
   const handleMouseUp = () => {
     setIsDragging(false)
@@ -97,7 +100,7 @@ export function PeriodSelector({
         }).map((_, index) => (
           <p
             key={index}
-            className={`text-sm ${theme === 'light' ? 'text-primary/60' : 'text-primary'} ${index !== 0 ? `pt-[32px]` : ''}`}
+            className={`text-sm text-foreground ${index !== 0 ? `pt-[32px]` : ''}`}
           >
             {(index + intervals[0].startDate.getHours() - timezone)
               .toString()
@@ -111,17 +114,13 @@ export function PeriodSelector({
           className="z-10 flex w-28 flex-col items-center justify-center gap-2"
         >
           <div className="flex flex-col items-center justify-center">
-            <p
-              className={`text-sm ${theme === 'light' ? 'text-primary/60' : 'text-primary'}`}
-            >
+            <p className={`text-sm text-foreground`}>
               {interval.startDate.toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: 'short'
               })}
             </p>
-            <p
-              className={`text-sm font-bold ${theme === 'light' ? 'text-primary/60' : 'text-primary'}`}
-            >
+            <p className={`text-sm font-bold text-foreground`}>
               {interval.startDate
                 .toLocaleDateString('pt-BR', {
                   weekday: 'long'
