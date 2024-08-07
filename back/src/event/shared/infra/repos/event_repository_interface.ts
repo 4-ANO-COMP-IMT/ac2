@@ -8,4 +8,6 @@ export interface EventRepositoryInterface {
     notLater: number,
     description?: string | undefined
   ): Promise<Event>
+
+  getEvent(eventId: string): Promise<Event>
 }

@@ -26,7 +26,6 @@ export class EventRepositoryMock implements EventRepositoryInterface {
           '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
           'Adam Levine',
           [],
-          'Brownas'
         )
       ],
       'Descrição do evento'
@@ -76,6 +75,16 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return createdEvent
   }
 
+  async getEvent(eventId: string): Promise<Event> {
+    const event = EventRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    return event
+  }
+
   resetMock() {
     EventRepositoryMock.events = [
       new Event(
@@ -97,7 +106,6 @@ export class EventRepositoryMock implements EventRepositoryInterface {
             '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
             'Adam Levine',
             [],
-            'Brownas'
           )
         ],
         'Descrição do evento'

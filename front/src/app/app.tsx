@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/contexts/theme-context'
 import { Toaster } from '@/components/ui/toaster'
 import { EventProvider } from '../contexts/event-context.tsx'
 import { NotFound } from './pages/NotFound.tsx'
+import { About } from './pages/About.tsx'
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
               <Route path="/" element={<Home />} />
               <Route path="/event" element={<CreateEvent />} />
               <Route path="/event/:id" element={<Event />} />
+              <Route path="/about" element={<About />} />
               <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<Home />} />
             </Routes>

@@ -9,6 +9,7 @@ const server = async () => {
 
   const PORT = environments.eventBusPort
   const PORT_EVENT = environments.eventPort
+  const PORT_MEMBER = environments.memberPort
 
   app.use(express.json())
 
@@ -24,6 +25,40 @@ const server = async () => {
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
+  })
+
+  app.post('/communication', async (req, res) => {
+    /*
+      check the type of the request, the route and send it to the correct service
+      body: {
+        mss: string (event, member, availability),
+        type: string (getEvent, updateMember, ...),
+        params: {
+          ...
+        }
+      }
+    */
+    try {
+      let response = null
+      let port = null
+      if (req.body.mss === 'event') {
+        port = PORT_EVENT
+      } else if (req.body.mss === 'member') {
+        port = PORT_MEMBER
+      } else {
+        console.log(req.body)
+        console.log('Invalid request!')
+        res.status(500).send({ msg: 'Invalid MSS' })
+      }
+      response = await axios.post(
+        'http://localhost:' + port + '/communication',
+        req.body
+      )
+      res.status(response.status).send(response.data)
+    } catch {
+      console.log('Invalid request!')
+      res.status(500).send({ msg: 'MSS is off' })
+    }
   })
 }
 

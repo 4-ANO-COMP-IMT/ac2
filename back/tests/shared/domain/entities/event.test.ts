@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
+import { Availability } from '../../../../src/shared/domain/entities/availability'
 import { Event } from '../../../../src/shared/domain/entities/event'
 import { Member } from '../../../../src/shared/domain/entities/member'
-import { Availability } from '../../../../src/shared/domain/entities/availability'
 
 test('Test event without members and description', () => {
   const event = new Event(
@@ -22,9 +22,7 @@ test('Test event without members and description', () => {
 })
 
 test('Test event with members without description', () => {
-  const members = [
-    new Member('1', 'Adam Levine', [], 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', [], 'Brownas')]
 
   const event = new Event(
     '1',
@@ -44,9 +42,7 @@ test('Test event with members without description', () => {
 })
 
 test('Test event with members and description', () => {
-  const members = [
-    new Member('1', 'Adam Levine', [], 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', [], 'Brownas')]
 
   const event = new Event(
     '1',
@@ -68,13 +64,9 @@ test('Test event with members and description', () => {
 })
 
 test('Test full event', () => {
-  const availabilities = [
-    new Availability('1', 1719403200000, 1719405000000)
-  ]
+  const availabilities = [new Availability('1', 1719403200000, 1719405000000)]
 
-  const members = [
-    new Member('1', 'Adam Levine', availabilities, 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', availabilities, 'Brownas')]
 
   const event = new Event(
     '1',
@@ -109,7 +101,6 @@ test('Test event notEarlier after notLater', () => {
 })
 
 test('Test event notEarlier wrong value', () => {
-
   expect(() => {
     new Event(
       '1',
@@ -134,7 +125,6 @@ test('Test event notEarlier wrong value', () => {
 })
 
 test('Test event notLater wrong value', () => {
-
   expect(() => {
     new Event(
       '1',
@@ -181,9 +171,7 @@ test('Test equals', () => {
 })
 
 test('Test equals with members', () => {
-  const members = [
-    new Member('1', 'Adam Levine', [], 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', [], 'Brownas')]
 
   const event = new Event(
     '1',
@@ -228,9 +216,7 @@ test('Test toJson', () => {
 })
 
 test('Test toJson with members', () => {
-  const members = [
-    new Member('1', 'Adam Levine', [], 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', [], 'Brownas')]
 
   const event = new Event(
     '1',
@@ -244,7 +230,7 @@ test('Test toJson with members', () => {
   expect(event.toJson()).toEqual({
     id: '1',
     name: 'Criar nova música para o Maroon 5',
-    dates:[1719392400000],
+    dates: [1719392400000],
     notEarlier: 32400000,
     notLater: 75600000,
     members: [
@@ -260,13 +246,9 @@ test('Test toJson with members', () => {
 })
 
 test('Test toJson full', () => {
-  const availabilities = [
-    new Availability('1', 1719403200000, 1719405000000)
-  ]
+  const availabilities = [new Availability('1', 1719403200000, 1719405000000)]
 
-  const members = [
-    new Member('1', 'Adam Levine', availabilities, 'Brownas')
-  ]
+  const members = [new Member('1', 'Adam Levine', availabilities, 'Brownas')]
 
   const event = new Event(
     '1',
@@ -281,7 +263,7 @@ test('Test toJson full', () => {
   expect(event.toJson()).toEqual({
     id: '1',
     name: 'Criar nova música para o Maroon 5',
-    dates: [1719392400000],    
+    dates: [1719392400000],
     notEarlier: 32400000,
     notLater: 75600000,
     members: [
