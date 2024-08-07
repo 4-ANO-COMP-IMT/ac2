@@ -1,6 +1,7 @@
 import { EventContext } from '@/contexts/event-context'
 import { api } from '@/utils/http/api'
-import { EventResponse, Event } from '@/types/event'
+import { Event } from '@/types/event'
+import { Response } from '@/types/response'
 import { useContext } from 'react'
 import { v4 as uuid } from 'uuid'
 import { FormEventValues } from '@/types/schemas/event-form-schema'
@@ -14,7 +15,9 @@ export const useEvent = () => {
 
   const { isLogged, setIsLogged, paintedDivs, setPaintedDivs } = context
 
-  const createEvent = async (data: FormEventValues): Promise<EventResponse> => {
+  const createEvent = async (
+    data: FormEventValues
+  ): Promise<Response<Event>> => {
     const event: Event = {
       id: uuid(),
       name: data.eventName,
@@ -31,7 +34,7 @@ export const useEvent = () => {
     return response.data
   }
 
-  const getEvent = async (id: string): Promise<EventResponse> => {
+  const getEvent = async (id: string): Promise<Response<Event>> => {
     const response = await api.get(`/event/?eventId=${id}`)
 
     return response.data
