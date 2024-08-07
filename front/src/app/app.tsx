@@ -1,16 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navbar } from '@/components/navbar'
-import { Home } from '@/pages/Home'
-import { CreateEvent } from '@/pages/CreateEvent'
-import { Event } from '@/pages/Event'
+import { Home } from '@/app/pages/Home.tsx'
+import { CreateEvent } from '@/app/pages/CreateEvent.tsx'
+import { Event } from '@/app/pages/Event.tsx'
 import { ThemeProvider } from '@/contexts/theme-context'
 import { Toaster } from '@/components/ui/toaster'
-import { EventProvider } from './contexts/event-context.tsx'
+import { EventProvider } from '../contexts/event-context.tsx'
+import { NotFound } from './pages/NotFound.tsx'
 
-export default function App() {
+export function App() {
   return (
     <>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme"> 
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <EventProvider>
           <Router>
             <Navbar />
@@ -18,6 +19,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/event" element={<CreateEvent />} />
               <Route path="/event/:id" element={<Event />} />
+              <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </Router>
