@@ -36,10 +36,12 @@ import { MdContentCopy } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa6'
 import { Event as EventType } from '@/types/event'
 import { toast } from '@/components/ui/use-toast'
+import { useMember } from '@/hooks/use-member'
 
 export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { createMember, loginMember } = useMember()
   const { getEvent } = useEvent()
   const { isLogged, setIsLogged, setPaintedDivs } = useEvent()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -47,47 +49,82 @@ export function Event() {
   const [isCopied, setIsCopied] = useState(false)
   const [event, setEvent] = useState<EventType | null>(null)
 
-  useEffect(() => {
-    const handleEvent = async () => {
-      if (id) {
-        try {
-          const response = await getEvent(id)
-          setEvent({
-            id: response.data?.id || '',
-            name: response.data?.name || '',
-            dates: response.data?.dates || [],
-            notEarlier: response.data?.notEarlier
-              ? response.data?.notEarlier / 1000 / 60 / 60
-              : 8,
-            notLater: response.data?.notLater
-              ? response.data?.notLater / 1000 / 60 / 60
-              : 18,
-            members: response.data?.members || [],
-            description: response.data?.description
-          })
-        } catch (error) {
-          if ((error as AxiosError).response?.status === 404) {
-            navigate('/404')
-          } else {
-            navigate('/')
-          }
+  const handleEvent = async () => {
+    if (id) {
+      try {
+        const response = await getEvent(id)
+        setEvent({
+          id: response.data?.id || '',
+          name: response.data?.name || '',
+          dates: response.data?.dates || [],
+          notEarlier: response.data?.notEarlier
+            ? response.data?.notEarlier / 1000 / 60 / 60
+            : 8,
+          notLater: response.data?.notLater
+            ? response.data?.notLater / 1000 / 60 / 60
+            : 18,
+          members: response.data?.members
+            ? response.data?.members.map((member) => {
+                return {
+                  ...member,
+                  name: member.name
+                    .replace(/\./g, ' ')
+                    .split(' ')
+                    .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+                    .join(' ')
+                }
+              })
+            : [],
+          description: response.data?.description
+        })
+      } catch (error) {
+        if ((error as AxiosError).response?.status === 404) {
+          navigate('/404')
+        } else {
+          navigate('/')
         }
-      } else {
-        navigate('/')
       }
+    } else {
+      navigate('/')
     }
+  }
 
+  useEffect(() => {
     handleEvent()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onSubmit = async (values: LoginFormValues) => {
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    // setUsers((prev) => [...prev, values.username])
-    console.log(values)
-    setIsLogged(true)
-    setIsDialogOpen(false)
+    try {
+      await loginMember(values)
+      toast({
+        title: 'Usuário logado',
+        description: 'Agora você pode salvar suas preferências de horário!'
+      })
+      setIsLogged(true)
+      setIsDialogOpen(false)
+    } catch (error) {
+      if ((error as AxiosError).response?.status === 404) {
+        try {
+          await createMember(values)
+          toast({
+            title: 'Usuário criado',
+            description: 'Agora você pode salvar suas preferências de horário!'
+          })
+          setIsLogged(true)
+          setIsDialogOpen(false)
+          handleEvent()
+        } catch (error) {
+          console.log(error)
+        }
+      } else if ((error as AxiosError).response?.status === 401) {
+        toast({
+          title: 'Senha incorreta',
+          description: 'Tente novamente'
+        })
+      }
+    }
     setIsLoading(false)
   }
 
@@ -99,11 +136,11 @@ export function Event() {
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: '',
-      password: ''
+      password: '',
+      eventId: event?.id || ''
     }
   })
 
-  console.log(event?.dates)
   return (
     <main className="relative flex h-screen w-full items-center justify-center overflow-hidden">
       <AnimatedBalls />
@@ -231,8 +268,20 @@ export function Event() {
                       </Form>
                       <DialogFooter>
                         <Button
-                          type="submit"
-                          onClick={form.handleSubmit(onSubmit)}
+                          type="button"
+                          onClick={() => {
+                            form.setValue(
+                              'username',
+                              form
+                                .getValues('username')
+                                .trim()
+                                .split(/\s+/)
+                                .join('.')
+                                .toLowerCase()
+                            )
+                            form.setValue('eventId', event.id)
+                            return onSubmit(form.getValues())
+                          }}
                         >
                           {isLoading ? <LoadingSpin /> : 'Enviar'}
                         </Button>
