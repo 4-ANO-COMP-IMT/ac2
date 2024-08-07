@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { enviroments } from '../env/enviroments'
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_EVENT_URL,
+  baseURL: enviroments.apiUrl,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
