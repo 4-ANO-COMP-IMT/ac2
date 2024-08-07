@@ -31,7 +31,6 @@ export function PeriodSelector({
     .map((date) => {
       const startDate = new Date(date)
       startDate.setHours(notEarlier)
-      console.log(startDate)
       const endDate = new Date(date)
       endDate.setHours(notLater)
       return {
@@ -40,8 +39,6 @@ export function PeriodSelector({
         endDate: new Date(endDate.getTime() + timezone * 60 * 60 * 1000)
       }
     })
-
-  console.log(intervals)
 
   const handleMouseUp = () => {
     setIsDragging(false)
