@@ -9,8 +9,3 @@ export type Event = {
   members: Member[]
   description?: string
 }
-
-export type EventResponse = {
-  message: string
-  data?: Event
-}
