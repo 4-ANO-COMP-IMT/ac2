@@ -33,11 +33,7 @@ export class LoginMemberController implements LoginMemberControllerProps {
     if (!eventId) {
       return HttpResponse.badRequest('missing eventId')
     }
-
-    if (!password) {
-      return HttpResponse.badRequest('missing password')
-    }
-
+    
     try {
       const validation = await this.usecase.call(eventId, name, password)
 

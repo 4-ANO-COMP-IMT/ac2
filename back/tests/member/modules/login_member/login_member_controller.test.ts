@@ -113,19 +113,4 @@ describe('login member controller missing', async () => {
     expect(response.message).toBe('missing name')
     repo.resetMock()
   })
-
-  it('body', async () => {
-    const repo = new MemberRepositoryMock()
-    const usecase = new LoginMemberUsecase(repo)
-    const controller = new LoginMemberController(usecase)
-    const request = new HttpRequest('post', {
-      eventId: '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
-      name: 'Adam Levine',
-    } as LoginMemberRequest)
-    const response = await controller.call(request)
-
-    expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-    expect(response.message).toBe('missing password')
-    repo.resetMock()
-  })
 })
