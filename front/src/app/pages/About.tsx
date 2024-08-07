@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle
-} from '../components/ui/card'
+} from '@/components/ui/card'
 import { Github, Linkedin } from 'lucide-react'
 
 type Contributor = {

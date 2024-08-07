@@ -1,29 +1,48 @@
-import { FormEventValues } from '@/components/event-card'
+import { EventContext } from '@/contexts/event-context'
 import { api } from '@/utils/http/api'
-import { CreateEventResponse, Event } from '@/utils/types/event'
+import { EventResponse, Event } from '@/types/event'
+import { useContext } from 'react'
+import { v4 as uuid } from 'uuid'
+import { FormEventValues } from '@/types/schemas/event-form-schema'
 
 export const useEvent = () => {
-  const createEvent = async (
-    event: FormEventValues
-  ): Promise<CreateEventResponse> => {
-    const eventFormated: Event = {
-      name: event.eventName,
-      description: event.description,
-      dates: event.dates.map((date) => new Date(date).getTime()),
-      notEarlier: parseInt(event.notEarlierThan) * 60 * 60 * 1000,
-      notLater: parseInt(event.notLaterThan) * 60 * 60 * 1000
+  const context = useContext(EventContext)
+
+  if (!context) {
+    throw new Error('useEvent must be used within an EventProvider')
+  }
+
+  const { isLogged, setIsLogged, paintedDivs, setPaintedDivs } = context
+
+  const createEvent = async (data: FormEventValues): Promise<EventResponse> => {
+    const event: Event = {
+      id: uuid(),
+      name: data.eventName,
+      description: data.description,
+      dates: data.dates.map((date) => new Date(date).getTime()),
+      notEarlier: parseInt(data.notEarlier) * 60 * 60 * 1000,
+      notLater: parseInt(data.notLater) * 60 * 60 * 1000,
+      members: []
       // timezone: parseInt(event.timezone) * 60 * 60 * 1000
     }
 
-    const response = await api.post(
-      'event/', // TODO: change to env
-      eventFormated
-    )
+    const response = await api.post('/event/', event)
+
+    return response.data
+  }
+
+  const getEvent = async (id: string): Promise<EventResponse> => {
+    const response = await api.get(`/event/?eventId=${id}`)
 
     return response.data
   }
 
   return {
-    createEvent
+    createEvent,
+    getEvent,
+    isLogged,
+    setIsLogged,
+    paintedDivs,
+    setPaintedDivs
   }
 }

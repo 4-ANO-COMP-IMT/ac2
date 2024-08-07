@@ -26,61 +26,38 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { useEvent } from '@/hooks/use-event'
 import { useToast } from '@/components/ui/use-toast'
+import { useNavigate } from 'react-router-dom'
+import { LoadingSpin } from './ui/loading-spin'
+import { FormEventValues, formSchema } from '@/types/schemas/event-form-schema'
 
 const hours = Array.from({ length: 24 }, (_, i) => i)
 const timezones = Array.from({ length: 25 }, (_, i) => i - 12)
-
-const formSchema = z.object({
-  eventName: z
-    .string()
-    .min(3, {
-      message: 'O nome do evento deve ter no mínimo 3 caracteres'
-    })
-    .max(50, {
-      message: 'O nome do evento deve ter no máximo 50 caracteres'
-    }),
-  description: z.string().max(200, {
-    message: 'A descrição do evento deve ter no máximo 200 caracteres'
-  }),
-  notEarlierThan: z.string().regex(/^(2[0-3]|1[0-9]|[0-9])$/, {
-    message: 'O horário deve ser entre 0 e 23'
-  }),
-  notLaterThan: z.string().regex(/^(2[0-3]|1[0-9]|[0-9])$/, {
-    message: 'O horário deve ser entre 0 e 23'
-  }),
-  dates: z.array(z.date()).nonempty({
-    message: 'Selecione ao menos uma data'
-  }),
-  timezone: z.string().regex(/^-?(0|1[0-2]|[1-9])$/, {
-    message: 'A timezone deve ser um número entre -12 e 12'
-  })
-})
-
-export type FormEventValues = z.infer<typeof formSchema>
 
 export function EventCard() {
   const { createEvent } = useEvent()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const onSubmit = async (values: FormEventValues) => {
     setIsLoading(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      // await new Promise((resolve) => setTimeout(resolve, 1000))
       const { data } = await createEvent(values)
       toast({
         title: 'Evento criado com sucesso',
-        description: `O link do evento ${data?.name} foi copiado para a área de transferência`
+        description: `Você será redirecionado para a página do evento...`,
+        duration: 3000
       })
-      navigator.clipboard.writeText(window.location.origin + `/${data?.id}`)
       form.reset()
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      // await new Promise((resolve) => setTimeout(resolve, 2000))
+      navigate('/event/' + data?.id)
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -102,8 +79,8 @@ export function EventCard() {
     defaultValues: {
       eventName: '',
       description: '',
-      notEarlierThan: '8',
-      notLaterThan: '18',
+      notEarlier: '8',
+      notLater: '18',
       dates: [],
       timezone: '-3'
     },
@@ -162,7 +139,7 @@ export function EventCard() {
                 <div className="w-1/2">
                   <FormField
                     control={form.control}
-                    name="notEarlierThan"
+                    name="notEarlier"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -171,7 +148,7 @@ export function EventCard() {
                             defaultValue={field.value}
                           >
                             <SelectTrigger
-                              id="notEarlierThan"
+                              id="notEarlier"
                               className="transition-all duration-500"
                             >
                               <SelectValue placeholder="08:00" />
@@ -200,7 +177,7 @@ export function EventCard() {
                 <div className="w-1/2">
                   <FormField
                     control={form.control}
-                    name="notLaterThan"
+                    name="notLater"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
@@ -209,7 +186,7 @@ export function EventCard() {
                             defaultValue={field.value}
                           >
                             <SelectTrigger
-                              id="notLaterThan"
+                              id="notLater"
                               className="transition-all duration-500"
                             >
                               <SelectValue placeholder="18:00" />
@@ -269,7 +246,7 @@ export function EventCard() {
                         defaultValue={field.value.toString()}
                       >
                         <SelectTrigger
-                          id="notLaterThan"
+                          id="notLater"
                           className="transition-all duration-500"
                         >
                           <SelectValue placeholder="-03:00" />
@@ -313,11 +290,7 @@ export function EventCard() {
           className="transition-all duration-500"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <AiOutlineLoading3Quarters className="animate-spin text-xl" />
-          ) : (
-            'Criar'
-          )}
+          {isLoading ? <LoadingSpin /> : 'Criar'}
         </Button>
       </CardFooter>
     </Card>
