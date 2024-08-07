@@ -30,7 +30,8 @@ export function NotFound() {
         <p
           className={`mt-8 w-full transform text-center text-sm transition-all duration-3000 sm:w-3/5 lg:w-2/5 lg:text-base ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
         >
-          O evento que você procura não foi encontrado, mas você pode criar um novo evento!
+          O evento que você procura não foi encontrado, mas você pode criar um
+          novo evento!
         </p>
         <a href="/event">
           <Button
@@ -45,9 +46,7 @@ export function NotFound() {
 
       <div
         className={`flex w-full transform items-center justify-center transition-all duration-7000 ${fade ? 'opacity-100' : 'opacity-0'}`}
-      >
-        
-      </div>
+      ></div>
     </main>
   )
 }
