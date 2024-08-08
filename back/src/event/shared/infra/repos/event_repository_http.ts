@@ -10,4 +10,8 @@ export class EventRepositoryHttp implements EventRepositoryInterface {
   async getEvent(): Promise<Event> {
     throw new NotFoundError('Event not found')
   }
+
+  async createMember(): Promise<Event> {
+    throw new Error('Method not implemented.')
+  }
 }

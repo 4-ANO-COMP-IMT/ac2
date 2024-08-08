@@ -55,6 +55,25 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
       throw new Error('Member already exists with name: ' + name)
     }
 
-    return await this.repo.createMember(eventId, name, password)
+    const new_member = await this.repo.createMember(eventId, name, password)
+
+    // inform to other MSS the creation of a member
+    try {
+      response = await axios.post(
+        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        {
+          mss: 'all',
+          type: 'createMember',
+          params: {
+            eventId: eventId,
+            memberId: new_member.id,
+            name: name,
+            password: password
+          }
+        }
+      )
+    } catch (err) {}
+
+    return new_member
   }
 }

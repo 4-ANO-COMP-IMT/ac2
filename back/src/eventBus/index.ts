@@ -38,26 +38,59 @@ const server = async () => {
         }
       }
     */
-    try {
-      let response = null
-      let port = null
-      if (req.body.mss === 'event') {
-        port = PORT_EVENT
-      } else if (req.body.mss === 'member') {
-        port = PORT_MEMBER
-      } else {
-        console.log(req.body)
-        console.log('Invalid request!')
-        res.status(500).send({ msg: 'Invalid MSS' })
+    let response = null
+    let port = null
+    if (req.body.mss === 'all') {
+      try{
+        response = await axios.post(
+         'http://localhost:' + PORT_EVENT + '/communication',
+         req.body
+        )
       }
-      response = await axios.post(
-        'http://localhost:' + port + '/communication',
-        req.body
-      )
-      res.status(response.status).send(response.data)
-    } catch {
-      console.log('Invalid request!')
-      res.status(500).send({ msg: 'MSS is off' })
+      catch{
+        console.log('Event MSS is off')
+      }
+      try{
+        response = await axios.post(
+         'http://localhost:' + PORT_MEMBER + '/communication',
+         req.body
+        )
+      }
+      catch{
+        console.log('Member MSS is off')
+      }
+      // try{
+      //   response = await axios.post(
+      //    'http://localhost:' + PORT_AVAILABILITY + '/communication',
+      //    req.body
+      //   )
+      // }
+      // catch{
+      //   console.log('Availability MSS is off')
+      // }
+      res.status(200).send('ok')
+    } else {
+      try {
+        if (req.body.mss === 'event') {
+          port = PORT_EVENT
+        } else if (req.body.mss === 'member') {
+          port = PORT_MEMBER
+        // } else if (req.body.mss === 'availability') {
+        //   port = PORT_AVAILABILITY
+        } else {
+          console.log(req.body)
+          console.log('Invalid request!')
+          res.status(500).send({ msg: 'Invalid MSS' })
+        }
+        response = await axios.post(
+          'http://localhost:' + port + '/communication',
+          req.body
+        )
+        res.status(response.status).send(response.data)
+      } catch {
+        console.log('Invalid request!')
+        res.status(500).send({ msg: 'MSS is off' })
+      }
     }
   })
 }
