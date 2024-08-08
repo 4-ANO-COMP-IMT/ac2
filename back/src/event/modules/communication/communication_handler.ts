@@ -17,7 +17,7 @@ export interface CommunicationHandlerProps {
   repo: EventRepositoryInterface
   call(
     req: HttpRequest<CommunicationRequest>
-  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
+  ): Promise<HttpResponse<any> | HttpResponse<Error>>
 }
 
 const stage = process.env.STAGE || 'test'
@@ -38,6 +38,18 @@ export class CommunicationHandler implements CommunicationHandlerProps {
         return HttpResponse.ok<EventJsonProps>('Event found', event.toJson())
       } catch {
         return HttpResponse.notFound('Event not found')
+      }
+    } else if (req.data?.type === 'createMember') {
+      try {
+        const member = await this.repo.createMember(
+          req.data.params.eventId,
+          req.data.params.memberId,
+          req.data.params.name,
+          req.data.params.password
+        )
+        return HttpResponse.ok<EventJsonProps>('Member created', member.toJson())
+      } catch {
+        return HttpResponse.badRequest('Member already exists')
       }
     } else {
       return HttpResponse.badRequest('Invalid type')

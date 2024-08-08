@@ -85,6 +85,32 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return event
   }
 
+  async createMember(
+    eventId: string,
+    memberId: string,
+    name: string,
+    password?: string | undefined
+  ): Promise<Event> {
+    const event = EventRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
+    const member = new Member(memberId, name, [], password)
+
+    const duplicateMember = event.members.find(
+      (member) => member.name === name
+    )
+    if (duplicateMember) {
+      throw new Error('Member already exists with name: ' + name)
+    }
+
+    event.members.push(member)
+    return event
+  }
+
   resetMock() {
     EventRepositoryMock.events = [
       new Event(

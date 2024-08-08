@@ -10,4 +10,11 @@ export interface EventRepositoryInterface {
   ): Promise<Event>
 
   getEvent(eventId: string): Promise<Event>
+
+  createMember(
+    eventId: string,
+    memberId: string,
+    name: string,
+    password?: string | undefined
+  ): Promise<Event>
 }
