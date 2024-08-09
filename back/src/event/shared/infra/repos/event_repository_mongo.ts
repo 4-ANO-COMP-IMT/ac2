@@ -43,15 +43,7 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
         notLater,
         description
       })
-      return new Event(
-        uuid(),
-        name,
-        dates,
-        notEarlier,
-        notLater,
-        [],
-        description
-      )
+      return new Event(id, name, dates, notEarlier, notLater, [], description)
     } catch (error) {
       throw new Error('Error creating event')
     }
