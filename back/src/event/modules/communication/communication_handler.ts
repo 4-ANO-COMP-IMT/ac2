@@ -47,7 +47,10 @@ export class CommunicationHandler implements CommunicationHandlerProps {
           req.data.params.name,
           req.data.params.password
         )
-        return HttpResponse.ok<EventJsonProps>('Member created', member.toJson())
+        return HttpResponse.ok<EventJsonProps>(
+          'Member created',
+          member.toJson()
+        )
       } catch {
         return HttpResponse.badRequest('Member already exists')
       }

@@ -21,13 +21,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       [1719392400000],
       32400000,
       75600000,
-      [
-        new Member(
-          '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
-          'Adam Levine',
-          [],
-        )
-      ],
+      [new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [])],
       'Descrição do evento'
     ),
     new Event(
@@ -100,9 +94,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
 
     const member = new Member(memberId, name, [], password)
 
-    const duplicateMember = event.members.find(
-      (member) => member.name === name
-    )
+    const duplicateMember = event.members.find((member) => member.name === name)
     if (duplicateMember) {
       throw new Error('Member already exists with name: ' + name)
     }
@@ -127,13 +119,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
         [1719392400000],
         32400000,
         75600000,
-        [
-          new Member(
-            '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
-            'Adam Levine',
-            [],
-          )
-        ],
+        [new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [])],
         'Descrição do evento'
       ),
       new Event(

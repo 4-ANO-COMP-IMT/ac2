@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
 import { HttpRequest } from '../../shared/domain/helpers/http/http_request'
+import { CommunicationHandler } from '../modules/communication/communication_handler'
 import { CreateMemberPresenter } from '../modules/create_member/create_member_presenter'
 import { LoginMemberPresenter } from '../modules/login_member/login_member_presenter'
-import { CommunicationHandler } from '../modules/communication/communication_handler'
 
 export const memberRouter = Router()
 
