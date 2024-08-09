@@ -55,8 +55,22 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
     }
   }
 
-  getEvent(eventId: string): Promise<Event> {
-    throw new Error('Method not implemented.')
+  async getEvent(eventId: string): Promise<Event> {
+    try {
+      const event = await this.collection.findOne({ id: eventId })
+
+      return new Event(
+        event.id,
+        event.name,
+        event.dates,
+        event.notEarlier,
+        event.notLater,
+        event.members,
+        event.description
+      )
+    } catch (error) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
   }
   createMember(
     eventId: string,
