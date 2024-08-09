@@ -33,17 +33,15 @@ export class LoginMemberController implements LoginMemberControllerProps {
     if (!eventId) {
       return HttpResponse.badRequest('missing eventId')
     }
-    
+
     try {
       const validation = await this.usecase.call(eventId, name, password)
 
       if (!validation) {
         return HttpResponse.unauthorized('invalid credentials for user ' + name)
-      }
-      else {
+      } else {
         return HttpResponse.ok<boolean>('user logged in', validation)
       }
-
     } catch (error: any) {
       if (error.message.indexOf('Error in entity Member:') != -1) {
         return HttpResponse.badRequest(error.message)

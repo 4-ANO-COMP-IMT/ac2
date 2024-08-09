@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { environments } from '../../../shared/env/environments'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 
@@ -6,11 +7,7 @@ const PORT_EVENTBUS = environments.eventBusPort
 
 export interface LoginMemberUsecaseProps {
   repo: MemberRepositoryInterface
-  call(
-    eventId: string,
-    name: string,
-    password: string
-  ): Promise<boolean>
+  call(eventId: string, name: string, password: string): Promise<boolean>
 }
 
 export class LoginMemberUsecase implements LoginMemberUsecaseProps {
@@ -54,7 +51,7 @@ export class LoginMemberUsecase implements LoginMemberUsecaseProps {
     }
 
     // validate password if exists
-    if (member.password){
+    if (member.password) {
       if (member.password != password) {
         return false
       }

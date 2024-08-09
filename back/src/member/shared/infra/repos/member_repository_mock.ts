@@ -21,13 +21,7 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
       [1719392400000],
       32400000,
       75600000,
-      [
-        new Member(
-          '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
-          'Adam Levine',
-          [],
-        )
-      ],
+      [new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [])],
       'Descrição do evento'
     ),
     new Event(
@@ -53,6 +47,28 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
       'Descrição do evento'
     )
   ]
+
+  async createEvent(
+    id: string,
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    description?: string | undefined
+  ): Promise<Event> {
+    const createdEvent = new Event(
+      id,
+      name,
+      dates,
+      notEarlier,
+      notLater,
+      [],
+      description
+    )
+
+    MemberRepositoryMock.events.push(createdEvent)
+    return createdEvent
+  }
 
   async createMember(
     eventId: string,
@@ -118,13 +134,7 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
         [1719392400000],
         32400000,
         75600000,
-        [
-          new Member(
-            '66b2a2dc-7c7b-4f21-a7d5-4b798207a022',
-            'Adam Levine',
-            [],
-          )
-        ],
+        [new Member('66b2a2dc-7c7b-4f21-a7d5-4b798207a022', 'Adam Levine', [])],
         'Descrição do evento'
       ),
       new Event(

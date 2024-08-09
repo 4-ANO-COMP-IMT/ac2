@@ -41,22 +41,21 @@ const server = async () => {
     let response = null
     let port = null
     if (req.body.mss === 'all') {
-      try{
+      try {
         response = await axios.post(
-         'http://localhost:' + PORT_EVENT + '/communication',
-         req.body
+          'http://localhost:' + PORT_EVENT + '/communication',
+          req.body
         )
-      }
-      catch{
+      } catch (error) {
         console.log('Event MSS is off')
       }
-      try{
+      try {
         response = await axios.post(
-         'http://localhost:' + PORT_MEMBER + '/communication',
-         req.body
+          'http://localhost:' + PORT_MEMBER + '/communication',
+          req.body
         )
-      }
-      catch{
+      } catch (error) {
+        console.log(error)
         console.log('Member MSS is off')
       }
       // try{
@@ -75,8 +74,8 @@ const server = async () => {
           port = PORT_EVENT
         } else if (req.body.mss === 'member') {
           port = PORT_MEMBER
-        // } else if (req.body.mss === 'availability') {
-        //   port = PORT_AVAILABILITY
+          // } else if (req.body.mss === 'availability') {
+          //   port = PORT_AVAILABILITY
         } else {
           console.log(req.body)
           console.log('Invalid request!')
@@ -88,7 +87,7 @@ const server = async () => {
         )
         res.status(response.status).send(response.data)
       } catch {
-        console.log('Invalid request!')
+        console.log('Invalid request! 1')
         res.status(500).send({ msg: 'MSS is off' })
       }
     }

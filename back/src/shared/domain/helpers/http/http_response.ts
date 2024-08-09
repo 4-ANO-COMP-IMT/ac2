@@ -41,8 +41,6 @@ export class HttpResponse<T = any> {
     return new HttpResponse(HTTP_STATUS_CODE.CONFLICT, message)
   }
 
-
-
   static internalServerError(message: string): HttpResponse<Error> {
     return new HttpResponse(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR, message)
   }

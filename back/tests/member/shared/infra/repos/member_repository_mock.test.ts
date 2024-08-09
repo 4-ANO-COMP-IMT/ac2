@@ -84,18 +84,49 @@ describe('Test getMemberByName', () => {
   })
 
   it('event not found', () => {
-      const repo = new MemberRepositoryMock()
-      expect(
-        async () =>
-          await repo.getMemberByName("Adam Levine", "123")
-      ).rejects.toThrowError('Event not found for eventId: 123')
-      repo.resetMock()
+    const repo = new MemberRepositoryMock()
+    expect(
+      async () => await repo.getMemberByName('Adam Levine', '123')
+    ).rejects.toThrowError('Event not found for eventId: 123')
+    repo.resetMock()
   })
 
   it('member not found', () => {
-      const repo = new MemberRepositoryMock()
-      const member = repo.getMemberByName("Flavio Brownas", "9b2f4e8c-8d59-11eb-8dcd-0242ac130003")
-      expect(member).toBeInstanceOf(Promise)
-      repo.resetMock()
+    const repo = new MemberRepositoryMock()
+    const member = repo.getMemberByName(
+      'Flavio Brownas',
+      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+    )
+    expect(member).toBeInstanceOf(Promise)
+    repo.resetMock()
   })
+})
+
+test('Test createEvent', () => {
+  const repo = new MemberRepositoryMock()
+  const lengthBefore = MemberRepositoryMock.events.length
+
+  repo.createEvent(
+    'adhuhuadhuasd',
+    'Show do M5',
+    [1719392400000],
+    32400000,
+    75600000,
+    'description'
+  )
+
+  const lengthAfter = MemberRepositoryMock.events.length
+
+  expect(lengthAfter).toBe(lengthBefore + 1)
+  expect(MemberRepositoryMock.events[lengthAfter - 1].name).toBe('Show do M5')
+  expect(MemberRepositoryMock.events[lengthAfter - 1].dates).toStrictEqual([
+    1719392400000
+  ])
+  expect(MemberRepositoryMock.events[lengthAfter - 1].notEarlier).toBe(32400000)
+  expect(MemberRepositoryMock.events[lengthAfter - 1].notLater).toBe(75600000)
+  expect(MemberRepositoryMock.events[lengthAfter - 1].description).toBe(
+    'description'
+  )
+
+  repo.resetMock()
 })

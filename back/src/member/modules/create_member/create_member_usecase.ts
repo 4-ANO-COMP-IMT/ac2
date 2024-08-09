@@ -41,7 +41,6 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
       } else if (response.status == 500) {
         // MSS is off
         const event = await this.repo.getEvent(eventId)
-      } else {
       }
       // event exists
     } else {
