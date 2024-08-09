@@ -3,9 +3,9 @@ import { v4 as uuid } from 'uuid'
 import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
-import { EventRepositoryInterface } from './availability_repository_interface'
+import { AvailabilityRepositoryInterface } from './availability_repository_interface'
 
-export class EventRepositoryMock implements EventRepositoryInterface {
+export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterface {
   static events: Event[] = [
     new Event(
       '550e8400-e29b-41d4-a716-446655440000',
@@ -48,63 +48,27 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     )
   ]
 
-  async createEvent(
-    name: string,
-    dates: number[],
-    notEarlier: number,
-    notLater: number,
-    description?: string | undefined
-  ): Promise<Event> {
-    const createdEvent = new Event(
-      uuid(),
-      name,
-      dates,
-      notEarlier,
-      notLater,
-      [],
-      description
-    )
-
-    EventRepositoryMock.events.push(createdEvent)
-    return createdEvent
-  }
-
-  async getEvent(eventId: string): Promise<Event> {
-    const event = EventRepositoryMock.events.find(
-      (event) => event.id === eventId
-    )
-    if (!event) {
-      throw new Error('Event not found for eventId: ' + eventId)
-    }
-    return event
-  }
-
-  async createMember(
+  async updateAvailabilities(
     eventId: string,
     memberId: string,
-    name: string,
-    password?: string | undefined
-  ): Promise<Event> {
-    const event = EventRepositoryMock.events.find(
+    availabilities: Availability[]
+  ): Promise<Availability[]> {
+    const event = AvailabilityRepositoryMock.events.find(
       (event) => event.id === eventId
     )
     if (!event) {
       throw new Error('Event not found for eventId: ' + eventId)
     }
-
-    const member = new Member(memberId, name, [], password)
-
-    const duplicateMember = event.members.find((member) => member.name === name)
-    if (duplicateMember) {
-      throw new Error('Member already exists with name: ' + name)
+    const member = event.members.find((member) => member.id === memberId)
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
     }
-
-    event.members.push(member)
-    return event
+    member.availabilities = availabilities
+    return availabilities
   }
 
   resetMock() {
-    EventRepositoryMock.events = [
+    AvailabilityRepositoryMock.events = [
       new Event(
         '550e8400-e29b-41d4-a716-446655440000',
         'Criar nova música para o Maroon 5',
@@ -147,9 +111,4 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     ]
   }
 
-  // getLastId() {
-  //   return (
-  //     +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
-  //   ).toString()
-  // }
 }

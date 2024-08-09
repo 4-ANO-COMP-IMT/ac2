@@ -4,7 +4,7 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { CreateEventUsecase } from './update_availability_usecase'
+import { CreateEventUsecase } from './update_availabilities_usecase'
 import { CreateEventRequest } from './protocols'
 
 interface CreateEventControllerProps {

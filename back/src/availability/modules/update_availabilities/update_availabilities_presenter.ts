@@ -9,8 +9,8 @@ import {
 import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
-import { CreateEventController } from './update_availability_controller'
-import { CreateEventUsecase } from './update_availability_usecase'
+import { CreateEventController } from './update_availabilities_controller'
+import { CreateEventUsecase } from './update_availabilities_usecase'
 import { CreateEventRequest } from './protocols'
 
 config()
