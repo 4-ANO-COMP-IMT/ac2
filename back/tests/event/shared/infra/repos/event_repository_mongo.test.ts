@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest'
 import { EventRepositoryMongo } from '../../../../../src/event/shared/infra/repos/event_repository_Mongo'
-import { skip } from 'node:test'
 
 test.skip('Test create event', async () => {
   const repo = new EventRepositoryMongo()
