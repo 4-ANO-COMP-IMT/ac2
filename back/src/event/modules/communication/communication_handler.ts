@@ -10,6 +10,7 @@ import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_h
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
 import { CommunicationRequest } from './protocols'
+import { Availability } from '../../../shared/domain/entities/availability'
 
 config()
 
@@ -54,8 +55,28 @@ export class CommunicationHandler implements CommunicationHandlerProps {
       } catch {
         return HttpResponse.badRequest('Member already exists')
       }
+    } else if (req.data?.type === 'updateAvailabilities') {
+      try {
+        const availabilities = await this.repo.updateAvailabilities(
+          req.data.params.eventId,
+          req.data.params.member.id,
+          req.data.params.member.availabilities.map((availability: Availability) => {
+            return new Availability(
+              availability.id,
+              availability.startDate,
+              availability.endDate
+            )
+          })
+        )
+        return HttpResponse.ok<undefined>(
+          'Availabilities updated',
+          undefined
+        )
+      } catch (error: any) {
+        return HttpResponse.notFound(error.message)
+      }
     } else {
-      return HttpResponse.badRequest('Invalid type')
+      return HttpResponse.ok<undefined>('no communication required', undefined)
     }
   }
 }

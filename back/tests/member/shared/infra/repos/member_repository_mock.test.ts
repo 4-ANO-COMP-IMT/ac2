@@ -1,6 +1,8 @@
 import { describe, expect, it, test } from 'vitest'
 
 import { MemberRepositoryMock } from '../../../../../src/member/shared/infra/repos/member_repository_mock'
+import { Member } from '../../../../../src/shared/domain/entities/member'
+import { Availability } from '../../../../../src/shared/domain/entities/availability'
 
 describe('Test createMember', () => {
   it('create a member', () => {
@@ -129,4 +131,114 @@ test('Test createEvent', () => {
   )
 
   repo.resetMock()
+})
+
+describe('Test getMember', () => {
+  it('get a member', async () => {
+    const repo = new MemberRepositoryMock()
+    const member = await repo.getMember(
+      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
+      'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d',
+    )
+    expect(member?.name).toBe('Adam Levine')
+    expect(member?.password).toBe('Brownas')
+    repo.resetMock()
+  })
+
+  it('event not found', () => {
+    const repo = new MemberRepositoryMock()
+    expect(
+      async () => await repo.getMember('123', 'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d')
+    ).rejects.toThrowError('Event not found for eventId: 123')
+    repo.resetMock()
+  })
+
+  it('member not found', () => {
+    const repo = new MemberRepositoryMock()
+    expect(
+      async () => await repo.getMember('9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
+      '123!')
+    ).rejects.toThrowError('Member not found for memberId: 123')
+    repo.resetMock()
+  })
+})
+
+describe('Test update availability', () => {
+  it('success', async () => {
+    const repo = new MemberRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    repo.updateAvailabilities(
+      MemberRepositoryMock.events[2].id,
+      MemberRepositoryMock.events[2].members[0].id,
+      new_availabilities
+    )
+    
+    expect(new_availabilities.length).toStrictEqual(MemberRepositoryMock.events[2].members[0].availabilities.length)
+    repo.resetMock()
+  })
+
+  it('event not found', async () => {
+    const repo = new MemberRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          '123',
+          MemberRepositoryMock.events[2].members[0].id,
+          new_availabilities
+        )
+      ).rejects.toThrowError('Event not found for eventId: 123')
+      
+      repo.resetMock()
+  })
+
+  it('member not found', async () => {
+    const repo = new MemberRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          MemberRepositoryMock.events[2].id,
+          '123',
+          new_availabilities
+        )
+      ).rejects.toThrowError('Member not found for memberId: 123')
+      
+      repo.resetMock()
+  })
 })

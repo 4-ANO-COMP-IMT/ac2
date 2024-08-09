@@ -118,6 +118,39 @@ export class MemberRepositoryMock implements MemberRepositoryInterface {
     return member
   }
 
+   async getMember(eventId: string, memberId: string): Promise<Member> {
+    const event = MemberRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    const member = event.members.find((member) => member.id === memberId)
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+    return member
+   }
+
+   async updateAvailabilities(
+      eventId: string,
+      memberId: string,
+      availabilities: Availability[]
+    ): Promise<Availability[]> {
+      const event = MemberRepositoryMock.events.find(
+        (event) => event.id === eventId
+      )
+      if (!event) {
+        throw new Error('Event not found for eventId: ' + eventId)
+      }
+      const member = event.members.find((member) => member.id === memberId)
+      if (!member) {
+        throw new Error('Member not found for memberId: ' + memberId)
+      }
+      member.availabilities = availabilities
+      return availabilities
+    }
+
   resetMock() {
     MemberRepositoryMock.events = [
       new Event(

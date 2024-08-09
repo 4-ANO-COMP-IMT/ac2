@@ -87,7 +87,7 @@ const server = async () => {
         )
         res.status(response.status).send(response.data)
       } catch {
-        console.log('Invalid request! 1')
+        console.log('Invalid request for specific MSS request!')
         res.status(500).send({ msg: 'MSS is off' })
       }
     }

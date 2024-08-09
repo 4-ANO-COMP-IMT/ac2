@@ -82,3 +82,57 @@ describe('Test update availability', () => {
       repo.resetMock()
   })
 })
+
+describe('Test get event', () => {
+  it('success', async () => {
+    const repo = new AvailabilityRepositoryMock()
+    const event = await repo.getEvent(
+      AvailabilityRepositoryMock.events[0].id
+    )
+    expect(event.toJson()).toStrictEqual(
+      AvailabilityRepositoryMock.events[0].toJson()
+    )
+
+    repo.resetMock()
+  })
+
+  it('not found', () => {
+    const repo = new AvailabilityRepositoryMock()
+
+    expect(
+      async () => await repo.getEvent(
+        '123!'
+      )
+    ).rejects.toThrowError('Event not found for eventId: 123!')
+
+    repo.resetMock()
+  })
+})
+
+describe('Test get member', () => {
+  it('success', async () => {
+    const repo = new AvailabilityRepositoryMock()
+    const member = await repo.getMember(
+      AvailabilityRepositoryMock.events[2].id,
+      AvailabilityRepositoryMock.events[2].members[0].id
+    )
+    expect(member.toJson()).toStrictEqual(
+      AvailabilityRepositoryMock.events[2].members[0].toJson()
+    )
+
+    repo.resetMock()
+  })
+
+  it('not found', () => {
+    const repo = new AvailabilityRepositoryMock()
+
+    expect(
+      async () => await repo.getMember(
+        AvailabilityRepositoryMock.events[0].id,
+        '123!'
+      )
+    ).rejects.toThrowError('Member not found for memberId: 123!')
+
+    repo.resetMock()
+  })
+})

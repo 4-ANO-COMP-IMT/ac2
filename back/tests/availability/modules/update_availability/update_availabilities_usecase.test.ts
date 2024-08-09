@@ -1,30 +1,85 @@
-import { expect, test } from 'vitest'
+import { expect, test, describe, it } from 'vitest'
 
-import { CreateEventUsecase } from '../../../../src/event/modules/create_event/create_event_usecase'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
-import { Event } from '../../../../src/shared/domain/entities/event'
+import { UpdateAvailabilitiesUsecase } from '../../../../src/availability/modules/update_availabilities/update_availabilities_usecase'
+import { AvailabilityRepositoryMock } from '../../../../src/availability/shared/infra/repos/availability_repository_mock'
+import { Availability } from '../../../../src/shared/domain/entities/availability'
 
-test('post event usecase created', async () => {
-  const repo = new EventRepositoryMock()
-  const lengthBefore = EventRepositoryMock.events.length
-  const usecase = new CreateEventUsecase(repo)
-  const event = await usecase.call(
-    'Treino Popeye',
-    [1719392400000],
-    32400000,
-    75600000,
-    'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
+test('Test update availabilities success', async () => {
+  const repo = new AvailabilityRepositoryMock()
+  const lengthBefore = AvailabilityRepositoryMock.events.length
+  const usecase = new UpdateAvailabilitiesUsecase(repo)
+  const new_availabilities = [
+    new Availability(
+      '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+      1719403200000,
+      1719405000000
+    ),
+    new Availability(
+      '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+      1719405200000,
+      1719407000000
+    )
+  ]
+  const availabilities = await usecase.call(
+    AvailabilityRepositoryMock.events[2].id,
+    AvailabilityRepositoryMock.events[2].members[0].id,
+    new_availabilities
   )
 
-  expect(event).toBeInstanceOf(Event)
-  expect(event.name).toBe('Treino Popeye')
-  expect(event.dates).toStrictEqual([1719392400000])
-  expect(event.notEarlier).toBe(32400000)
-  expect(event.notLater).toBe(75600000)
-  expect(event.description).toBe(
-    'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
-  )
-  expect(EventRepositoryMock.events.length).toBe(lengthBefore + 1)
-  expect(EventRepositoryMock.events[lengthBefore]).toEqual(event)
+  expect(availabilities[0]).toBeInstanceOf(Availability)
+  expect(availabilities.length).toBe(AvailabilityRepositoryMock.events[2].members[0].availabilities.length)
   repo.resetMock()
+})
+
+describe('Test update availabilities fail', async () => {
+  it('Event not found', async () => {
+    const repo = new AvailabilityRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          '123',
+          AvailabilityRepositoryMock.events[2].members[0].id,
+          new_availabilities
+        )
+      ).rejects.toThrowError('Event not found for eventId: 123')
+    repo.resetMock()
+  })
+
+  it('Member not found', async () => {
+    const repo = new AvailabilityRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          AvailabilityRepositoryMock.events[2].id,
+          '123',
+          new_availabilities
+        )
+      ).rejects.toThrowError('Member not found for memberId: 123')
+    repo.resetMock()
+  })
+
 })

@@ -103,6 +103,25 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     return event
   }
 
+  async updateAvailabilities(
+    eventId: string,
+    memberId: string,
+    availabilities: Availability[]
+  ): Promise<Availability[]> {
+    const event = EventRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    const member = event.members.find((member) => member.id === memberId)
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+    member.availabilities = availabilities
+    return availabilities
+  }
+
   resetMock() {
     EventRepositoryMock.events = [
       new Event(

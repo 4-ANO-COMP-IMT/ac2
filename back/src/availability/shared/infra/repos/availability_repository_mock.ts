@@ -67,6 +67,30 @@ export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterfa
     return availabilities
   }
 
+  async getEvent(eventId: string): Promise<Event> {
+    const event = AvailabilityRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    return event
+  }
+
+  async getMember(eventId: string, memberId: string): Promise<Member> {
+    const event = AvailabilityRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    const member = event.members.find((member) => member.id === memberId)
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+    return member
+  }
+
   resetMock() {
     AvailabilityRepositoryMock.events = [
       new Event(
