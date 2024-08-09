@@ -54,3 +54,7 @@ test.skip('Test create member', async () => {
   expect(event.members[0].name).toBe('Adam Levine')
   expect(event.members[0].password).toBe('Brownas')
 })
+
+test('Skip tests', async () => {
+  expect(1).toBe(1)
+})
