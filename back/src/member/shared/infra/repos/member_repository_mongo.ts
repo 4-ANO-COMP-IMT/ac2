@@ -123,7 +123,39 @@ export class MemberRepositoryMongo implements MemberRepositoryInterface {
       throw new Error('Event not found for eventId: ' + eventId)
     }
   }
-  getMemberByName(name: string, eventId: string): Promise<Member | null> {
-    throw new Error('Method not implemented.')
+  async getMemberByName(name: string, eventId: string): Promise<Member | null> {
+    try {
+      const event = await this.collection.findOne({ id: eventId })
+
+      const member = event.members.find(
+        (member: { name: string }) => member.name === name
+      )
+
+      if (!member) {
+        return null
+      }
+
+      return new Member(
+        member.id,
+        member.name,
+        member.availabilities
+          ? member.availabilities.map(
+              (availability: {
+                id: string
+                startDate: number
+                endDate: number
+              }) =>
+                new Availability(
+                  availability.id,
+                  availability.startDate,
+                  availability.endDate
+                )
+            )
+          : [],
+        member.password
+      )
+    } catch (error) {
+      throw new Error('Error getting member by name')
+    }
   }
 }

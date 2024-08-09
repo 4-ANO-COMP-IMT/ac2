@@ -77,3 +77,42 @@ describe.skip('TestGet event', () => {
     }
   })
 })
+
+describe.skip('TestGet member', () => {
+  it('Get member', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    const member = await repo.getMemberByName(
+      'Member 1',
+      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+    )
+
+    expect(member?.name).toBe('Member 1')
+  })
+
+  it('Member not found', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    const member = await repo.getMemberByName(
+      'Member 2',
+      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+    )
+
+    expect(member).toBe(null)
+  })
+
+  it('Event not found', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    try {
+      await repo.getMemberByName(
+        'Member 1',
+        '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+      )
+    } catch (error) {
+      expect(error.message).toBe(
+        'Event not found for eventId: 9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+      )
+    }
+  })
+})
