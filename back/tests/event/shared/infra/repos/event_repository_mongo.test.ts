@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { EventRepositoryMongo } from '../../../../../src/event/shared/infra/repos/event_repository_Mongo'
+import { EventRepositoryMongo } from '../../../../../src/event/shared/infra/repos/event_repository_mongo'
 
 test.skip('Test create event', async () => {
   const repo = new EventRepositoryMongo()
@@ -53,8 +53,4 @@ test.skip('Test create member', async () => {
 
   expect(event.members[0].name).toBe('Adam Levine')
   expect(event.members[0].password).toBe('Brownas')
-})
-
-test('Skip tests', async () => {
-  expect(1).toBe(1)
 })
