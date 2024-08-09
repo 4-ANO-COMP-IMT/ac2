@@ -21,8 +21,6 @@ export class Event implements EventInterface {
   private _notLater: number
   private _members: Member[]
   private _description?: string | undefined
-  event: any
-  event: any
 
   constructor(
     id: string,
