@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb'
 import { v4 as uuid } from 'uuid'
 
+import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
 import { environments } from '../../../../shared/env/environments'
 import { MemberRepositoryInterface } from './member_repository_interface'
-import { Availability } from '../../../../shared/domain/entities/availability'
 
 export class MemberRepositoryMongo implements MemberRepositoryInterface {
   mongoDBUser: string = environments.mongoDBUser
@@ -81,11 +81,13 @@ export class MemberRepositoryMongo implements MemberRepositoryInterface {
     return new Member(memberId, name, [], password)
   }
   async getEvent(eventId: string): Promise<Event> {
+    const event = await this.collection.findOne({ id: eventId })
+
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
     try {
-      const event = await this.collection.findOne({ id: eventId })
-
-      console.log('event:', event)
-
       return new Event(
         event.id,
         event.name,
@@ -120,14 +122,20 @@ export class MemberRepositoryMongo implements MemberRepositoryInterface {
         event.description
       )
     } catch (error) {
-      throw new Error('Event not found for eventId: ' + eventId)
+      console.log(error)
+      throw new Error('Erro getting event for eventId: ' + eventId)
     }
   }
   async getMemberByName(name: string, eventId: string): Promise<Member | null> {
+    let event
     try {
-      const event = await this.collection.findOne({ id: eventId })
+      event = await this.getEvent(eventId)
+    } catch (error) {
+      event = null
+    }
 
-      const member = event.members.find(
+    try {
+      const member = event?.members.find(
         (member: { name: string }) => member.name === name
       )
 
@@ -155,6 +163,7 @@ export class MemberRepositoryMongo implements MemberRepositoryInterface {
         member.password
       )
     } catch (error) {
+      console.log(error)
       throw new Error('Error getting member by name')
     }
   }
