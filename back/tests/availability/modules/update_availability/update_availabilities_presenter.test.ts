@@ -1,45 +1,57 @@
-import { describe, expect, it, test } from 'vitest'
+import { expect, test } from 'vitest'
 
-import { CreateEventPresenter } from '../../../../src/event/modules/create_event/create_event_presenter'
-import { CreateEventRequest } from '../../../../src/event/modules/create_event/protocols'
-import { EventRepositoryMock } from '../../../../src/event/shared/infra/repos/event_repository_mock'
+import { UpdateAvailabilitiesPresenter } from '../../../../src/availability/modules/update_availabilities/update_availabilities_presenter'
+import { UpdateAvailabilitiesRequest } from '../../../../src/availability/modules/update_availabilities/protocols'
+import { AvailabilityRepositoryMock } from '../../../../src/availability/shared/infra/repos/availability_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
 
-test('create event presenter created', async () => {
-  const repo = new EventRepositoryMock()
-  const presenter = new CreateEventPresenter()
-  const request = new HttpRequest('create', {
-    name: 'Treino Popeye',
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,
-    description:
-      'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
+test('update availabilities presenter OK', async () => {
+  const presenter = new UpdateAvailabilitiesPresenter()
+  const new_availabilities_json = [
+    {
+      startDate: 1719403200000,
+      endDate: 1719405000000
+    },
+    {
+      startDate: 1719405200000,
+      endDate: 1719407000000
+    }
+  ]
+  const request = new HttpRequest('put', {
+    eventId: AvailabilityRepositoryMock.events[2].id,
+    memberId: AvailabilityRepositoryMock.events[2].members[0].id,
+    availabilities: new_availabilities_json,
   })
   const response = await presenter.call(request)
-
-  const eventExpect = {
-    id: EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id,
-    name: 'Treino Popeye',
-    dates: [1719392400000],
-    notEarlier: 32400000,
-    notLater: 75600000,
-    members: [],
-    description:
-      'Treino apenas de antebraço, para os braços ficarem fortes como os do Popeye'
-  }
-  expect(response.status).toBe(HTTP_STATUS_CODE.CREATED)
-  expect(response.message).toBe('event created')
-  expect(response.data).toEqual(eventExpect)
-  repo.resetMock()
+  expect(response.status).toBe(HTTP_STATUS_CODE.OK)
 })
 
-test('create event presenter should return BAD REQUEST if body is missing', async () => {
-  const presenter = new CreateEventPresenter()
-  const request = new HttpRequest('post', {} as CreateEventRequest)
+test('update availabilities presenter BAD REQUEST', async () => {
+  const presenter = new UpdateAvailabilitiesPresenter()
+  const request = new HttpRequest('put', {
+  } as UpdateAvailabilitiesRequest)
   const response = await presenter.call(request)
   expect(response.status).toBe(HTTP_STATUS_CODE.BAD_REQUEST)
-  expect(response.message).toBe('missing body')
-  expect(response.data).toBe(undefined)
+})
+
+test('update availabilities presenter NOT FOUND', async () => {
+  const presenter = new UpdateAvailabilitiesPresenter()
+  const new_availabilities_json = [
+    {
+      startDate: 1719403200000,
+      endDate: 1719405000000
+    },
+    {
+      startDate: 1719405200000,
+      endDate: 1719407000000
+    }
+  ]
+  const request = new HttpRequest('put', {
+    eventId: '123!',
+    memberId: AvailabilityRepositoryMock.events[2].members[0].id,
+    availabilities: new_availabilities_json,
+  })
+  const response = await presenter.call(request)
+  expect(response.status).toBe(HTTP_STATUS_CODE.NOT_FOUND)
 })
