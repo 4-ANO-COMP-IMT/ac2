@@ -10,6 +10,7 @@ test('Test availability', () => {
   expect(availability.endDate).toBe(1719405000000)
 })
 
+
 test('Test availability with startDate after endDate', () => {
   expect(() => new Availability('1', 1719405000000, 1719403200000)).toThrow()
 })

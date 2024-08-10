@@ -1,15 +1,16 @@
-import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
 
-export type CreateEventRequest = {
-  name: string
-  dates: number[]
-  notEarlier: number
-  notLater: number
-  description?: string | undefined
+export type UpdateAvailabilitiesRequest = {
+  eventId: string,
+  memberId: string,
+  availabilities: {
+    startDate: number,
+    endDate: number
+  }[]
 }
 
-export type CreateEventResponse = {
+export type UpdateAvailabilitiesResponse = {
   status: number
   message: string
-  event?: EventJsonProps
+  availabilities?: AvailabilityJsonProps[]
 }

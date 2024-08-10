@@ -15,6 +15,14 @@ export class AvailabilityRepositoryHttp implements AvailabilityRepositoryInterfa
   async getMember(): Promise<Member> {
     throw new Error('Method not implemented.')
   }
+
+  async createEvent(): Promise<Event> {
+    throw new Error('Method not implemented.')
+  }
+
+  async createMember(): Promise<Member> {
+    throw new Error('Method not implemented.')
+  }
 }
 
 

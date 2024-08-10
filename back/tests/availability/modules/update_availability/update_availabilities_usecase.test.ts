@@ -4,9 +4,8 @@ import { UpdateAvailabilitiesUsecase } from '../../../../src/availability/module
 import { AvailabilityRepositoryMock } from '../../../../src/availability/shared/infra/repos/availability_repository_mock'
 import { Availability } from '../../../../src/shared/domain/entities/availability'
 
-test('Test update availabilities success', async () => {
+test('Test update availabilities controller success', async () => {
   const repo = new AvailabilityRepositoryMock()
-  const lengthBefore = AvailabilityRepositoryMock.events.length
   const usecase = new UpdateAvailabilitiesUsecase(repo)
   const new_availabilities = [
     new Availability(
@@ -31,7 +30,7 @@ test('Test update availabilities success', async () => {
   repo.resetMock()
 })
 
-describe('Test update availabilities fail', async () => {
+describe('Test update availabilities controller fail', async () => {
   it('Event not found', async () => {
     const repo = new AvailabilityRepositoryMock()
     const new_availabilities = [
@@ -81,5 +80,4 @@ describe('Test update availabilities fail', async () => {
       ).rejects.toThrowError('Member not found for memberId: 123')
     repo.resetMock()
   })
-
 })
