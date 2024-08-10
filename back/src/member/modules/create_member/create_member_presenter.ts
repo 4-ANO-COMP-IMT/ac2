@@ -6,9 +6,9 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
+import { MemberRepositoryMongo } from '../../shared/infra/repos/member_repository_mongo'
 import { CreateMemberController } from './create_member_controller'
 import { CreateMemberUsecase } from './create_member_usecase'
 import { CreateMemberRequest } from './protocols'
@@ -33,7 +33,9 @@ export class CreateMemberPresenter implements CreateMemberPresenterProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new MemberRepositoryMock() : new MemberRepositoryHttp()
+      stage === 'test'
+        ? new MemberRepositoryMock()
+        : new MemberRepositoryMongo()
     this.usecase = new CreateMemberUsecase(this.repo)
     this.controller = new CreateMemberController(this.usecase)
   }

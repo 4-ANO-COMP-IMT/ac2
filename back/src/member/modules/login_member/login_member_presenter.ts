@@ -1,14 +1,13 @@
 import { config } from 'dotenv'
 
-import { MemberJsonProps } from '../../../shared/domain/entities/member'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
+import { MemberRepositoryMongo } from '../../shared/infra/repos/member_repository_mongo'
 import { LoginMemberController } from './login_member_controller'
 import { LoginMemberUsecase } from './login_member_usecase'
 import { LoginMemberRequest } from './protocols'
@@ -33,7 +32,9 @@ export class LoginMemberPresenter implements LoginMemberPresenterProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new MemberRepositoryMock() : new MemberRepositoryHttp()
+      stage === 'test'
+        ? new MemberRepositoryMock()
+        : new MemberRepositoryMongo()
     this.usecase = new LoginMemberUsecase(this.repo)
     this.controller = new LoginMemberController(this.usecase)
   }

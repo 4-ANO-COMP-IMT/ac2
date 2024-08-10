@@ -9,14 +9,9 @@ export interface AvailabilityRepositoryInterface {
     availabilities: Availability[]
   ): Promise<Availability[]>
 
-  getEvent(
-    eventId: string
-  ): Promise<Event>
+  getEvent(eventId: string): Promise<Event>
 
-  getMember(
-    eventId: string,
-    memberId: string
-  ): Promise<Member>
+  getMember(eventId: string, memberId: string): Promise<Member>
 
   createEvent(
     id: string,
@@ -33,5 +28,4 @@ export interface AvailabilityRepositoryInterface {
     name: string,
     password?: string | undefined
   ): Promise<Member>
-
 }

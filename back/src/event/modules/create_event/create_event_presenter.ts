@@ -12,6 +12,7 @@ import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_m
 import { CreateEventController } from './create_event_controller'
 import { CreateEventUsecase } from './create_event_usecase'
 import { CreateEventRequest } from './protocols'
+import { EventRepositoryMongo } from '../../shared/infra/repos/event_repository_mongo'
 
 config()
 
@@ -33,7 +34,7 @@ export class CreateEventPresenter implements CreateEventPresenterProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
+      stage === 'test' ? new EventRepositoryMock() : new EventRepositoryMongo()
     this.usecase = new CreateEventUsecase(this.repo)
     this.controller = new CreateEventController(this.usecase)
   }
