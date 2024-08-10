@@ -49,11 +49,13 @@ export class CommunicationHandler implements CommunicationHandlerProps {
           req.data.params.eventId,
           req.data.params.memberId,
         )
+        console.log("ok")
         return HttpResponse.ok<MemberJsonProps>(
           'Member created',
           member.toJson()
         )
       } catch (error: any) {
+        console.log("error")
         return HttpResponse.notFound(error.message)
       }
     } else if (req.data?.type === 'updateAvailabilities') {

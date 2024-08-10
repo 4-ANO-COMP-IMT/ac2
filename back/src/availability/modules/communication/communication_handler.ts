@@ -33,7 +33,6 @@ export class CommunicationHandler implements CommunicationHandlerProps {
   async call(req: HttpRequest<CommunicationRequest>) {
     if (req.data?.type === 'getEvent') {
       try {
-        console.log('req.data.params.id: ', req.data.params.id)
         const event = await this.repo.getEvent(req.data.params.id)
         return HttpResponse.ok<EventJsonProps>('Event found', event.toJson())
       } catch {

@@ -3,23 +3,23 @@ import express from 'express'
 import ServerlessHttp from 'serverless-http'
 
 import { environments } from '../shared/env/environments'
-import { eventRouter } from './routes/availability.routes'
+import { availabilityRouter } from './routes/availability.routes'
 
 const server = async () => {
-  const PORT = environments.eventPort
+  const PORT = environments.availabilityPort
 
   const app = express()
   app.use(express.json())
   app.use(cors())
 
-  app.use('/', eventRouter)
+  app.use('/', availabilityRouter)
 
   app.get('/', (req, res) => {
     res.send('API is running! 🚀')
   })
 
   app.post('/eventBus', (req, res) => {
-    console.log('eventBus from EventMSS is listening!')
+    console.log('eventBus from AvailabilityMSS is listening!')
     res.status(200).send({ msg: 'ok' })
   })
 
