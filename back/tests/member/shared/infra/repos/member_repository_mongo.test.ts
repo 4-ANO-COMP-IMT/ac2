@@ -78,7 +78,7 @@ describe.skip('TestGet event', () => {
   })
 })
 
-describe.skip('TestGet member', () => {
+describe('TestGet member', () => {
   it('Get member', async () => {
     const repo = new MemberRepositoryMongo()
 
@@ -112,6 +112,47 @@ describe.skip('TestGet member', () => {
     } catch (error) {
       expect(error.message).toBe(
         'Event not found for eventId: ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
+      )
+    }
+  })
+
+  it('Get member by id', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    const member = await repo.getMember(
+      '4e67f6c8-c5db-41ed-996c-6031bb8e0b07',
+      'bae0ce09-8e73-4bf9-b9f1-c3fcdf41b2bf'
+    )
+
+    expect(member.name).toBe('vitor')
+  })
+
+  it('Member not found by id', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    try {
+      await repo.getMember(
+        '4e67f6c8-c5db-41ed-996c-6031bb8e0b07',
+        'ae02bbae-e1eb-4cb0-ac61-e852e80a3f07'
+      )
+    } catch (error) {
+      expect(error.message).toBe(
+        'Member not found for memberId: ae02bbae-e1eb-4cb0-ac61-e852e80a3f07'
+      )
+    }
+  })
+
+  it('Event not found by id', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    try {
+      await repo.getMember(
+        '4e67f6c8-c5db-41ed-996c-6031bb8e0b02',
+        'ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
+      )
+    } catch (error) {
+      expect(error.message).toBe(
+        'Event not found for eventId: 4e67f6c8-c5db-41ed-996c-6031bb8e0b02'
       )
     }
   })
