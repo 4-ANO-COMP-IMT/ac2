@@ -1,5 +1,6 @@
 import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
+import { Member } from '../../../../shared/domain/entities/member'
 
 export interface EventRepositoryInterface {
   createEvent(
@@ -17,7 +18,7 @@ export interface EventRepositoryInterface {
     memberId: string,
     name: string,
     password?: string | undefined
-  ): Promise<Event>
+  ): Promise<Member>
 
   updateAvailabilities(
     eventId: string,

@@ -141,7 +141,7 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
     memberId: string,
     name: string,
     password?: string | undefined
-  ): Promise<Event> {
+  ): Promise<Member> {
     try {
       await this.getEvent(eventId)
     } catch (error) {
@@ -163,35 +163,6 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
       throw new Error('Error creating member')
     }
 
-    const event = await this.getEvent(eventId)
-
-    return new Event(
-      event.id,
-      event.name,
-      event.dates,
-      event.notEarlier,
-      event.notLater,
-      event.members
-        ? event.members.map(
-            (member) =>
-              new Member(
-                member.id,
-                member.name,
-                member.availabilities
-                  ? member.availabilities.map(
-                      (availability) =>
-                        new Availability(
-                          availability.id,
-                          availability.startDate,
-                          availability.endDate
-                        )
-                    )
-                  : [],
-                member.password
-              )
-          )
-        : [],
-      event.description
-    )
+    return new Member(member.id, member.name, [], member.password)
   }
 }

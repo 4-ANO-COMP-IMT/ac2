@@ -46,15 +46,15 @@ test.skip('Test get event not found', async () => {
 test.skip('Test create member', async () => {
   const repo = new EventRepositoryMongo()
 
-  const event = await repo.createMember(
-    '5fd56f9a-4b75-4bb3-8b1b-e3abeb923fb4',
+  const member = await repo.createMember(
+    '738685f7-d351-4fab-9799-9f58d15e4738',
     'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d',
     'Adam Levine',
     'Brownas'
   )
 
-  expect(event.members[0].name).toBe('Adam Levine')
-  expect(event.members[0].password).toBe('Brownas')
+  expect(member.name).toBe('Adam Levine')
+  expect(member.password).toBe('Brownas')
 })
 
 describe.skip('Test update availability', () => {
