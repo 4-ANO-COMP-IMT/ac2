@@ -27,7 +27,7 @@ describe.skip('TestCreate member', () => {
     const repo = new MemberRepositoryMongo()
 
     const member = await repo.createMember(
-      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
+      'ae02bbae-e1eb-4cb0-ac61-e852e80a3f06',
       'Member 1',
       'password'
     )
@@ -57,12 +57,12 @@ describe.skip('TestGet event', () => {
   it('Get event', async () => {
     const repo = new MemberRepositoryMongo()
 
-    const event = await repo.getEvent('9b2f4e8c-8d59-11eb-8dcd-0242ac130003')
+    const event = await repo.getEvent('ae02bbae-e1eb-4cb0-ac61-e852e80a3f06')
 
-    expect(event.id).toBe('9b2f4e8c-8d59-11eb-8dcd-0242ac130003')
-    expect(event.name).toBe('Event 1')
+    expect(event.id).toBe('ae02bbae-e1eb-4cb0-ac61-e852e80a3f06')
+    expect(event.name).toBe('teste')
     expect(event.dates.length).toBe(2)
-    expect(event.dates[0]).toBe(1616434800000)
+    expect(event.dates[0]).toBe(1723258800000)
   })
 
   it('Event not found', async () => {
@@ -84,7 +84,7 @@ describe.skip('TestGet member', () => {
 
     const member = await repo.getMemberByName(
       'Member 1',
-      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+      'ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
     )
 
     expect(member?.name).toBe('Member 1')
@@ -95,7 +95,7 @@ describe.skip('TestGet member', () => {
 
     const member = await repo.getMemberByName(
       'Member 2',
-      '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+      'ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
     )
 
     expect(member).toBe(null)
@@ -106,12 +106,12 @@ describe.skip('TestGet member', () => {
 
     try {
       await repo.getMemberByName(
-        'Member 1',
-        '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+        'Member 2',
+        'ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
       )
     } catch (error) {
       expect(error.message).toBe(
-        'Event not found for eventId: 9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
+        'Event not found for eventId: ae02bbae-e1eb-4cb0-ac61-e852e80a3f06'
       )
     }
   })

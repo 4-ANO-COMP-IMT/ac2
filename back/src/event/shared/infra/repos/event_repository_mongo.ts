@@ -50,11 +50,13 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
   }
 
   async getEvent(eventId: string): Promise<Event> {
+    const event = await this.collection.findOne({ id: eventId })
+
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
     try {
-      const event = await this.collection.findOne({ id: eventId })
-
-      console.log('event:', event)
-
       return new Event(
         event.id,
         event.name,
@@ -89,7 +91,7 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
         event.description
       )
     } catch (error) {
-      throw new Error('Event not found for eventId: ' + eventId)
+      throw new Error('Erro getting event for eventId: ' + eventId)
     }
   }
   async createMember(
