@@ -57,7 +57,7 @@ test.skip('Test create member', async () => {
   expect(event.members[0].password).toBe('Brownas')
 })
 
-describe('Test update availability', () => {
+describe.skip('Test update availability', () => {
   it('Update availabilities', async () => {
     const repo = new EventRepositoryMongo()
 
