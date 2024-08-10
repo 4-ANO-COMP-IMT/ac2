@@ -1,69 +1,68 @@
-import { EventJsonProps } from '../../../shared/domain/entities/event'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { CreateEventUsecase } from './update_availabilities_usecase'
-import { CreateEventRequest } from './protocols'
+import { UpdateAvailabilitiesUsecase } from './update_availabilities_usecase'
+import { UpdateAvailabilitiesRequest } from './protocols'
+import { Availability, AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
+import { v4 as uuid } from 'uuid'
 
-interface CreateEventControllerProps {
-  usecase: CreateEventUsecase
+interface UpdateAvailabilitiesControllerProps {
+  usecase: UpdateAvailabilitiesUsecase
   call(
-    req: HttpRequest<CreateEventRequest>
-  ): Promise<HttpResponse<EventJsonProps> | HttpResponse<Error>>
+    req: HttpRequest<UpdateAvailabilitiesRequest>
+  ): Promise<HttpResponse<AvailabilityJsonProps[]> | HttpResponse<Error>>
 }
 
-export class CreateEventController implements CreateEventControllerProps {
-  constructor(public usecase: CreateEventUsecase) {
+export class UpdateAvailabilitiesController implements UpdateAvailabilitiesControllerProps {
+  constructor(public usecase: UpdateAvailabilitiesUsecase) {
     this.usecase = usecase
   }
 
-  async call(req: HttpRequest<CreateEventRequest>) {
+  async call(req: HttpRequest<UpdateAvailabilitiesRequest>) {
     if (
-      !req.data?.name &&
-      !req.data?.dates &&
-      !req.data?.notEarlier &&
-      !req.data?.notLater &&
-      !req.data?.description
+      !req.data?.eventId &&
+      !req.data?.memberId &&
+      !req.data?.availabilities
     ) {
       return HttpResponse.badRequest('missing body')
     }
 
-    const { name, dates, notEarlier, notLater, description } = req.data
+    const { eventId, memberId, availabilities } = req.data
 
-    if (!name) {
-      return HttpResponse.badRequest('missing name')
+    if (!eventId) {
+      return HttpResponse.badRequest('missing eventId')
     }
 
-    if (!dates) {
-      return HttpResponse.badRequest('missing dates')
+    if (!memberId) {
+      return HttpResponse.badRequest('missing memberId')
     }
 
-    if (!notEarlier) {
-      return HttpResponse.badRequest('missing notEarlier')
+    if (!availabilities) {
+      return HttpResponse.badRequest('missing availabilities')
     }
-
-    if (!notLater) {
-      return HttpResponse.badRequest('missing notLater')
-    }
+    const availabilitiesAsEntity = availabilities.map(
+      (availability) => new Availability(uuid(), availability.startDate, availability.endDate)
+    )
 
     try {
-      const event = await this.usecase.call(
-        name,
-        dates,
-        notEarlier,
-        notLater,
-        description
+      const availabilitiesResponse = await this.usecase.call(
+        eventId,
+        memberId,
+        availabilitiesAsEntity
       )
 
-      return HttpResponse.created<EventJsonProps>(
-        'event created',
-        event.toJson()
+      return HttpResponse.ok<AvailabilityJsonProps[]>(
+        'availabilities updated',
+        availabilitiesResponse.map((availability) => availability.toJson())
       )
+      
     } catch (error: any) {
-      if (error.message.indexOf('Error in entity Event:') != -1) {
+      if (error.message.indexOf('Error in entity Availability:') != -1) {
         return HttpResponse.badRequest(error.message)
+      } else if (error.message.indexOf('not found') != -1) {
+        return HttpResponse.notFound(error.message)
       } else {
         return HttpResponse.internalServerError(error.message)
       }
