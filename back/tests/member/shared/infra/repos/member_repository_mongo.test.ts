@@ -1,6 +1,7 @@
 import { describe, expect, it, test } from 'vitest'
 
 import { MemberRepositoryMongo } from '../../../../../src/member/shared/infra/repos/member_repository_mongo'
+import { Availability } from '../../../../../src/shared/domain/entities/availability'
 
 describe.skip('TestCreate event', () => {
   it('Create event', async () => {
@@ -153,6 +154,61 @@ describe('TestGet member', () => {
     } catch (error) {
       expect(error.message).toBe(
         'Event not found for eventId: 4e67f6c8-c5db-41ed-996c-6031bb8e0b02'
+      )
+    }
+  })
+})
+
+describe.skip('TestUpdate availabilities', () => {
+  it('Update availabilities', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    const availabilitiesToUpdate: Availability[] = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-987ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      )
+    ]
+
+    const availabilities = await repo.updateAvailabilities(
+      '4e67f6c8-c5db-41ed-996c-6031bb8e0b07',
+      'bae0ce09-8e73-4bf9-b9f1-c3fcdf41b2bf',
+      availabilitiesToUpdate
+    )
+
+    expect(availabilities.length).toBe(1)
+    expect(availabilities[0].startDate).toBe(1719403200000)
+  })
+
+  it('Event not found', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    try {
+      await repo.updateAvailabilities(
+        '4e67f6c8-c5db-41ed-996c-6031bb8e0b02',
+        'bae0ce09-8e73-4bf9-b9f1-c3fcdf41b2bf',
+        []
+      )
+    } catch (error) {
+      expect(error.message).toBe(
+        'Event not found for eventId: 4e67f6c8-c5db-41ed-996c-6031bb8e0b02'
+      )
+    }
+  })
+
+  it('Member not found', async () => {
+    const repo = new MemberRepositoryMongo()
+
+    try {
+      await repo.updateAvailabilities(
+        '4e67f6c8-c5db-41ed-996c-6031bb8e0b07',
+        'bae0ce09-8e73-4bf9-b9f1-c3fcdf41b2bf',
+        []
+      )
+    } catch (error) {
+      expect(error.message).toBe(
+        'Member not found for memberId: bae0ce09-8e73-4bf9-b9f1-c3fcdf41b2bf'
       )
     }
   })
