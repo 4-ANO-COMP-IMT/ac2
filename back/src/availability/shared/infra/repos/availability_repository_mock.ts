@@ -91,12 +91,50 @@ export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterfa
     return member
   }
 
-  async createEvent(): Promise<Event> {
-    throw new Error('Method not implemented.')
+  async createEvent(
+    id: string,
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    description?: string | undefined
+  ): Promise<Event> {
+    const createdEvent = new Event(
+      id,
+      name,
+      dates,
+      notEarlier,
+      notLater,
+      [],
+      description
+    )
+
+    AvailabilityRepositoryMock.events.push(createdEvent)
+    return createdEvent
   }
 
-  async createMember(): Promise<Member> {
-    throw new Error('Method not implemented.')
+  async createMember(
+    eventId: string,
+    memberId: string,
+    name: string,
+    password?: string | undefined
+  ): Promise<Member> {
+    const event = AvailabilityRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
+    const member = new Member(memberId, name, [], password)
+
+    const duplicateMember = event.members.find((member) => member.name === name)
+    if (duplicateMember) {
+      throw new Error('Member already exists with name: ' + name)
+    }
+
+    event.members.push(member)
+    return member
   }
 
   resetMock() {

@@ -84,7 +84,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     memberId: string,
     name: string,
     password?: string | undefined
-  ): Promise<Event> {
+  ): Promise<Member> {
     const event = EventRepositoryMock.events.find(
       (event) => event.id === eventId
     )
@@ -100,7 +100,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     }
 
     event.members.push(member)
-    return event
+    return member
   }
 
   async updateAvailabilities(

@@ -147,3 +147,56 @@ describe('Test update availability', () => {
       repo.resetMock()
   })
 })
+
+describe('Test create member', () => {
+  it('success', async () => {
+    const repo = new EventRepositoryMock()
+    const lengthBefore = EventRepositoryMock.events.length
+
+    repo.createMember(
+      EventRepositoryMock.events[0].id,
+      '123',
+      'Brownas'
+    )
+
+    const lengthMembersAfter = EventRepositoryMock.events[0].members.length
+    expect(EventRepositoryMock.events[0].members[lengthMembersAfter-1].name).toBe('Brownas')
+    repo.resetMock()
+  })
+
+  it('event not found', async () => {
+    const repo = new EventRepositoryMock()
+
+    expect(
+      async () =>
+        repo.createMember(
+          '123',
+          '123',
+          'Brownas'
+        )
+      ).rejects.toThrowError('Event not found for eventId: 123')
+      
+      repo.resetMock()
+  })
+
+  it('member already exists', async () => {
+    const repo = new EventRepositoryMock()
+
+    repo.createMember(
+      EventRepositoryMock.events[0].id,
+      '123',
+      'Brownas'
+    )
+
+    expect(
+      async () =>
+        repo.createMember(
+          EventRepositoryMock.events[0].id,
+          '123',
+          'Brownas'
+        )
+      ).rejects.toThrowError('Member already exists with name: Brownas')
+      
+      repo.resetMock()
+  })
+})

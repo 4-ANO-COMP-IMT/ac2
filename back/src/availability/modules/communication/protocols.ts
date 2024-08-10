@@ -1,4 +1,4 @@
-import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
 
 export type CommunicationRequest = {
   mss: string
@@ -9,5 +9,5 @@ export type CommunicationRequest = {
 export type CommunicationResponse = {
   status: number
   message: string
-  event?: EventJsonProps
+  availability?: AvailabilityJsonProps
 }
