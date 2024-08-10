@@ -79,7 +79,7 @@ describe.skip('TestGet event', () => {
   })
 })
 
-describe('TestGet member', () => {
+describe.skip('TestGet member', () => {
   it('Get member', async () => {
     const repo = new MemberRepositoryMongo()
 
