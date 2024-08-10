@@ -91,6 +91,14 @@ export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterfa
     return member
   }
 
+  async createEvent(): Promise<Event> {
+    throw new Error('Method not implemented.')
+  }
+
+  async createMember(): Promise<Member> {
+    throw new Error('Method not implemented.')
+  }
+
   resetMock() {
     AvailabilityRepositoryMock.events = [
       new Event(

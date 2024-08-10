@@ -18,4 +18,19 @@ export interface AvailabilityRepositoryInterface {
     memberId: string
   ): Promise<Member>
 
+  createEvent(
+    id: string,
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    description?: string | undefined
+  ): Promise<Event>
+
+  createMember(
+    eventId: string,
+    name: string,
+    password?: string | undefined
+  ): Promise<Member>
+
 }
