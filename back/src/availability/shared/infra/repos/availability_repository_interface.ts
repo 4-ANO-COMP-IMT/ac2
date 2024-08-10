@@ -29,6 +29,7 @@ export interface AvailabilityRepositoryInterface {
 
   createMember(
     eventId: string,
+    memberId: string,
     name: string,
     password?: string | undefined
   ): Promise<Member>
