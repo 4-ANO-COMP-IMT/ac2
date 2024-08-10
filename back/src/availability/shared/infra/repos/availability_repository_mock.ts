@@ -5,7 +5,9 @@ import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
 import { AvailabilityRepositoryInterface } from './availability_repository_interface'
 
-export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterface {
+export class AvailabilityRepositoryMock
+  implements AvailabilityRepositoryInterface
+{
   static events: Event[] = [
     new Event(
       '550e8400-e29b-41d4-a716-446655440000',
@@ -142,5 +144,4 @@ export class AvailabilityRepositoryMock implements AvailabilityRepositoryInterfa
       )
     ]
   }
-
 }
