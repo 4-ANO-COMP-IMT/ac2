@@ -9,6 +9,8 @@ import {
 } from '../../../shared/domain/helpers/http/http_response'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
+import { MemberJsonProps } from '../../../shared/domain/entities/member'
+import { Availability } from '../../../shared/domain/entities/availability'
 import { MemberRepositoryMongo } from '../../shared/infra/repos/member_repository_mongo'
 
 config()
@@ -43,7 +45,41 @@ export class CommunicationHandler implements CommunicationHandlerProps {
         req.data.params.description
       )
       return HttpResponse.ok<EventJsonProps>('Event created', event.toJson())
+    } else if (req.data?.type === 'getMember') {
+      try {
+        const member = await this.repo.getMember(
+          req.data.params.eventId,
+          req.data.params.memberId,
+        )
+        return HttpResponse.ok<MemberJsonProps>(
+          'Member created',
+          member.toJson()
+        )
+      } catch (error: any) {
+        return HttpResponse.notFound(error.message)
+      }
+    } else if (req.data?.type === 'updateAvailabilities') {
+      try {
+        const availabilities = await this.repo.updateAvailabilities(
+          req.data.params.eventId,
+          req.data.params.member.id,
+          req.data.params.member.availabilities.map((availability: Availability) => {
+            return new Availability(
+              availability.id,
+              availability.startDate,
+              availability.endDate
+            )
+          })
+        )
+        return HttpResponse.ok<undefined>(
+          'Availabilities updated',
+          undefined
+        )
+      } catch (error: any) {
+        return HttpResponse.notFound(error.message)
+      }
+    } else {
+      return HttpResponse.ok<undefined>('no communication required', undefined)
     }
-    return HttpResponse.ok<undefined>('no communication required', undefined)
   }
 }

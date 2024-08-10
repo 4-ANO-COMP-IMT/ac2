@@ -84,7 +84,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     memberId: string,
     name: string,
     password?: string | undefined
-  ): Promise<Event> {
+  ): Promise<Member> {
     const event = EventRepositoryMock.events.find(
       (event) => event.id === eventId
     )
@@ -100,7 +100,26 @@ export class EventRepositoryMock implements EventRepositoryInterface {
     }
 
     event.members.push(member)
-    return event
+    return member
+  }
+
+  async updateAvailabilities(
+    eventId: string,
+    memberId: string,
+    availabilities: Availability[]
+  ): Promise<Availability[]> {
+    const event = EventRepositoryMock.events.find(
+      (event) => event.id === eventId
+    )
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+    const member = event.members.find((member) => member.id === memberId)
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+    member.availabilities = availabilities
+    return availabilities
   }
 
   resetMock() {
@@ -146,10 +165,4 @@ export class EventRepositoryMock implements EventRepositoryInterface {
       )
     ]
   }
-
-  // getLastId() {
-  //   return (
-  //     +EventRepositoryMock.events[EventRepositoryMock.events.length - 1].id + 1
-  //   ).toString()
-  // }
 }

@@ -2,7 +2,17 @@ import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
 
-export interface MemberRepositoryInterface {
+export interface AvailabilityRepositoryInterface {
+  updateAvailabilities(
+    eventId: string,
+    memberId: string,
+    availabilities: Availability[]
+  ): Promise<Availability[]>
+
+  getEvent(eventId: string): Promise<Event>
+
+  getMember(eventId: string, memberId: string): Promise<Member>
+
   createEvent(
     id: string,
     name: string,
@@ -14,19 +24,8 @@ export interface MemberRepositoryInterface {
 
   createMember(
     eventId: string,
+    memberId: string,
     name: string,
     password?: string | undefined
   ): Promise<Member>
-
-  getEvent(eventId: string): Promise<Event>
-
-  getMemberByName(name: string, eventId: string): Promise<Member | null>
-
-  getMember(eventId: string, memberId: string): Promise<Member>
-
-  updateAvailabilities(
-    eventId: string,
-    memberId: string,
-    availabilities: Availability[]
-  ): Promise<Availability[]>
 }

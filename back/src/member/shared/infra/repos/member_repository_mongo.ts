@@ -25,6 +25,87 @@ export class MemberRepositoryMongo implements MemberRepositoryInterface {
     const db = client.db(this.memberCollection)
     this.collection = db.collection(this.memberCollection)
   }
+  async getMember(eventId: string, memberId: string): Promise<Member> {
+    const event = await this.getEvent(eventId)
+
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
+    const member = event.members.find(
+      (member: { id: string }) => member.id === memberId
+    )
+
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+
+    try {
+      return new Member(
+        member.id,
+        member.name,
+        member.availabilities
+          ? member.availabilities.map(
+              (availability: {
+                id: string
+                startDate: number
+                endDate: number
+              }) =>
+                new Availability(
+                  availability.id,
+                  availability.startDate,
+                  availability.endDate
+                )
+            )
+          : [],
+        member.password
+      )
+    } catch (error) {
+      console.log(error)
+      throw new Error('Error getting member for memberId: ' + memberId)
+    }
+  }
+  async updateAvailabilities(
+    eventId: string,
+    memberId: string,
+    availabilities: Availability[]
+  ): Promise<Availability[]> {
+    const event = await this.getEvent(eventId)
+
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
+    const member = event.members.find(
+      (member: { id: string }) => member.id === memberId
+    )
+
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+
+    try {
+      const availabilitiesToUpdate = availabilities.map(
+        (availability: Availability) => ({
+          id: availability.id,
+          startDate: availability.startDate,
+          endDate: availability.endDate
+        })
+      )
+
+      console.log('availabilitiesToUpdate:', availabilitiesToUpdate)
+
+      await this.collection.updateOne(
+        { id: eventId, 'members.id': memberId },
+        { $set: { 'members.$.availabilities': availabilitiesToUpdate } }
+      )
+    } catch (error) {
+      console.log(error)
+      throw new Error('Error updating availabilities')
+    }
+
+    return availabilities
+  }
 
   async createEvent(
     id: string,

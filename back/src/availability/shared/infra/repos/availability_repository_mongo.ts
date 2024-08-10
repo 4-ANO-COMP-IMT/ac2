@@ -1,19 +1,20 @@
 import { MongoClient } from 'mongodb'
-import { v4 as uuid } from 'uuid'
 
 import { Availability } from '../../../../shared/domain/entities/availability'
 import { Event } from '../../../../shared/domain/entities/event'
 import { Member } from '../../../../shared/domain/entities/member'
 import { environments } from '../../../../shared/env/environments'
-import { EventRepositoryInterface } from './event_repository_interface'
+import { AvailabilityRepositoryInterface } from './availability_repository_interface'
 
-export class EventRepositoryMongo implements EventRepositoryInterface {
+export class AvailabilityRepositoryMongo
+  implements AvailabilityRepositoryInterface
+{
   mongoDBUser: string = environments.mongoDBUser
   mongoDBPassword: string = environments.mongoDBPassword
   mongoDBCluster: string = environments.mongoDBCluster
   mongoDBAppName: string = environments.mongoDBAppName
   urlConnect: string = `mongodb+srv://${this.mongoDBUser}:${this.mongoDBPassword}@${this.mongoDBCluster}/?retryWrites=true&w=majority&appName=${this.mongoDBAppName}`
-  eventCollection: string = environments.mongoDBEventName
+  availabilityCollection: string = environments.mongoDBAvailabilityName
   collection: any
 
   constructor() {
@@ -22,8 +23,8 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
     client.connect().then(() => {
       console.log('Connected to MongoDB')
     })
-    const db = client.db(this.eventCollection)
-    this.collection = db.collection(this.eventCollection)
+    const db = client.db(this.availabilityCollection)
+    this.collection = db.collection(this.availabilityCollection)
   }
 
   async updateAvailabilities(
@@ -66,29 +67,6 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
     }
 
     return availabilities
-  }
-
-  async createEvent(
-    name: string,
-    dates: number[],
-    notEarlier: number,
-    notLater: number,
-    description?: string | undefined
-  ): Promise<Event> {
-    try {
-      const id = uuid()
-      await this.collection.insertOne({
-        id,
-        name,
-        dates,
-        notEarlier,
-        notLater,
-        description
-      })
-      return new Event(id, name, dates, notEarlier, notLater, [], description)
-    } catch (error) {
-      throw new Error('Error creating event')
-    }
   }
 
   async getEvent(eventId: string): Promise<Event> {
@@ -136,6 +114,72 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
       throw new Error('Erro getting event for eventId: ' + eventId)
     }
   }
+
+  async getMember(eventId: string, memberId: string): Promise<Member> {
+    const event = await this.getEvent(eventId)
+
+    if (!event) {
+      throw new Error('Event not found for eventId: ' + eventId)
+    }
+
+    const member = event.members.find(
+      (member: { id: string }) => member.id === memberId
+    )
+
+    if (!member) {
+      throw new Error('Member not found for memberId: ' + memberId)
+    }
+
+    try {
+      return new Member(
+        member.id,
+        member.name,
+        member.availabilities
+          ? member.availabilities.map(
+              (availability: {
+                id: string
+                startDate: number
+                endDate: number
+              }) =>
+                new Availability(
+                  availability.id,
+                  availability.startDate,
+                  availability.endDate
+                )
+            )
+          : [],
+        member.password
+      )
+    } catch (error) {
+      console.log(error)
+      throw new Error('Error getting member for memberId: ' + memberId)
+    }
+  }
+
+  async createEvent(
+    id: string,
+    name: string,
+    dates: number[],
+    notEarlier: number,
+    notLater: number,
+    description?: string | undefined
+  ): Promise<Event> {
+    try {
+      await this.collection.insertOne({
+        id,
+        name,
+        dates,
+        notEarlier,
+        notLater,
+        description
+      })
+      return new Event(id, name, dates, notEarlier, notLater, [], description)
+    } catch (error) {
+      console.log(error)
+      throw new Error('Error creating event')
+    }
+  }
+
   async createMember(
     eventId: string,
     memberId: string,
@@ -163,6 +207,6 @@ export class EventRepositoryMongo implements EventRepositoryInterface {
       throw new Error('Error creating member')
     }
 
-    return new Member(member.id, member.name, [], member.password)
+    return new Member(memberId, name, [], password)
   }
 }

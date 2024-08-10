@@ -10,6 +10,8 @@ import { EventRepositoryInterface } from '../../shared/infra/repos/event_reposit
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
 import { EventRepositoryMongo } from '../../shared/infra/repos/event_repository_mongo'
 import { CommunicationRequest } from './protocols'
+import { Availability } from '../../../shared/domain/entities/availability'
+import { MemberJsonProps } from '../../../shared/domain/entities/member'
 
 config()
 
@@ -33,7 +35,6 @@ export class CommunicationHandler implements CommunicationHandlerProps {
   async call(req: HttpRequest<CommunicationRequest>) {
     if (req.data?.type === 'getEvent') {
       try {
-        console.log('req.data.params.id: ', req.data.params.id)
         const event = await this.repo.getEvent(req.data.params.id)
         return HttpResponse.ok<EventJsonProps>('Event found', event.toJson())
       } catch {
@@ -47,15 +48,35 @@ export class CommunicationHandler implements CommunicationHandlerProps {
           req.data.params.name,
           req.data.params.password
         )
-        return HttpResponse.ok<EventJsonProps>(
+        return HttpResponse.ok<MemberJsonProps>(
           'Member created',
           member.toJson()
         )
       } catch {
         return HttpResponse.badRequest('Member already exists')
       }
+    } else if (req.data?.type === 'updateAvailabilities') {
+      try {
+        const availabilities = await this.repo.updateAvailabilities(
+          req.data.params.eventId,
+          req.data.params.member.id,
+          req.data.params.member.availabilities.map((availability: Availability) => {
+            return new Availability(
+              availability.id,
+              availability.startDate,
+              availability.endDate
+            )
+          })
+        )
+        return HttpResponse.ok<undefined>(
+          'Availabilities updated',
+          undefined
+        )
+      } catch (error: any) {
+        return HttpResponse.notFound(error.message)
+      }
     } else {
-      return HttpResponse.badRequest('Invalid type')
+      return HttpResponse.ok<undefined>('no communication required', undefined)
     }
   }
 }

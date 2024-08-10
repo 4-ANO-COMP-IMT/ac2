@@ -6,6 +6,7 @@
   "scripts": {
     "dev:event": "nodemon src/event/index.ts",
     "dev:member": "nodemon src/member/index.ts",
+    "dev:availability": "nodemon src/availability/index.ts",
     "dev:eventBus": "nodemon src/eventBus/index.ts",
     "build": "npx tsc",
     "lint": "eslint src",

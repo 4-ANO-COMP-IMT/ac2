@@ -10,6 +10,7 @@ const server = async () => {
   const PORT = environments.eventBusPort
   const PORT_EVENT = environments.eventPort
   const PORT_MEMBER = environments.memberPort
+  const PORT_AVAILABILITY = environments.availabilityPort
 
   app.use(express.json())
 
@@ -58,15 +59,15 @@ const server = async () => {
         console.log(error)
         console.log('Member MSS is off')
       }
-      // try{
-      //   response = await axios.post(
-      //    'http://localhost:' + PORT_AVAILABILITY + '/communication',
-      //    req.body
-      //   )
-      // }
-      // catch{
-      //   console.log('Availability MSS is off')
-      // }
+      try{
+        response = await axios.post(
+         'http://localhost:' + PORT_AVAILABILITY + '/communication',
+         req.body
+        )
+      }
+      catch{
+        console.log('Availability MSS is off')
+      }
       res.status(200).send('ok')
     } else {
       try {
@@ -74,8 +75,8 @@ const server = async () => {
           port = PORT_EVENT
         } else if (req.body.mss === 'member') {
           port = PORT_MEMBER
-          // } else if (req.body.mss === 'availability') {
-          //   port = PORT_AVAILABILITY
+        } else if (req.body.mss === 'availability') {
+          port = PORT_AVAILABILITY
         } else {
           console.log(req.body)
           console.log('Invalid request!')
@@ -87,7 +88,7 @@ const server = async () => {
         )
         res.status(response.status).send(response.data)
       } catch {
-        console.log('Invalid request! 1')
+        console.log('Invalid request for specific MSS request!')
         res.status(500).send({ msg: 'MSS is off' })
       }
     }

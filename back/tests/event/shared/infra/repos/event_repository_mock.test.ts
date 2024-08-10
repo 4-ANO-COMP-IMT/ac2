@@ -2,6 +2,7 @@ import { describe, expect, it, test } from 'vitest'
 
 import { EventRepositoryMock } from '../../../../../src/event/shared/infra/repos/event_repository_mock'
 import { Event } from '../../../../../src/shared/domain/entities/event'
+import { Availability } from '../../../../../src/shared/domain/entities/availability'
 
 test('Test create event', () => {
   const repo = new EventRepositoryMock()
@@ -31,7 +32,7 @@ test('Test create event', () => {
 })
 
 describe('Test get event', () => {
-  it('Test get event', async () => {
+  it('success', async () => {
     const repo = new EventRepositoryMock()
     const lengthBefore = EventRepositoryMock.events.length
 
@@ -54,12 +55,148 @@ describe('Test get event', () => {
     repo.resetMock()
   })
 
-  // it('Test get event not found', () => {
-  //     const repo = new EventRepositoryMock()
-  //     expect(async () => {
-  //         await repo.getEvent("123")
-  //     }).toThrowError('Event not found for eventId: 123')
+  it('not found', () => {
+    const repo = new EventRepositoryMock()
 
-  //     repo.resetMock()
-  // })
+    expect(
+      async () => await repo.getEvent(
+        '123!'
+      )
+    ).rejects.toThrowError('Event not found for eventId: 123!')
+
+    repo.resetMock()
+  })
+})
+
+describe('Test update availability', () => {
+  it('success', async () => {
+    const repo = new EventRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    repo.updateAvailabilities(
+      EventRepositoryMock.events[2].id,
+      EventRepositoryMock.events[2].members[0].id,
+      new_availabilities
+    )
+    
+    expect(new_availabilities.length).toStrictEqual(EventRepositoryMock.events[2].members[0].availabilities.length)
+    repo.resetMock()
+  })
+
+  it('event not found', async () => {
+    const repo = new EventRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          '123',
+          EventRepositoryMock.events[2].members[0].id,
+          new_availabilities
+        )
+      ).rejects.toThrowError('Event not found for eventId: 123')
+      
+      repo.resetMock()
+  })
+
+  it('member not found', async () => {
+    const repo = new EventRepositoryMock()
+    const new_availabilities = [
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-977ec3d6f3cd',
+        1719403200000,
+        1719405000000
+      ),
+      new Availability(
+        '9276e4ba-3f72-4c47-ae7d-967ec3d6f3cd',
+        1719405200000,
+        1719407000000
+      )
+    ]
+    
+    expect(
+      async () =>
+        repo.updateAvailabilities(
+          EventRepositoryMock.events[2].id,
+          '123',
+          new_availabilities
+        )
+      ).rejects.toThrowError('Member not found for memberId: 123')
+      
+      repo.resetMock()
+  })
+})
+
+describe('Test create member', () => {
+  it('success', async () => {
+    const repo = new EventRepositoryMock()
+    const lengthBefore = EventRepositoryMock.events.length
+
+    repo.createMember(
+      EventRepositoryMock.events[0].id,
+      '123',
+      'Brownas'
+    )
+
+    const lengthMembersAfter = EventRepositoryMock.events[0].members.length
+    expect(EventRepositoryMock.events[0].members[lengthMembersAfter-1].name).toBe('Brownas')
+    repo.resetMock()
+  })
+
+  it('event not found', async () => {
+    const repo = new EventRepositoryMock()
+
+    expect(
+      async () =>
+        repo.createMember(
+          '123',
+          '123',
+          'Brownas'
+        )
+      ).rejects.toThrowError('Event not found for eventId: 123')
+      
+      repo.resetMock()
+  })
+
+  it('member already exists', async () => {
+    const repo = new EventRepositoryMock()
+
+    repo.createMember(
+      EventRepositoryMock.events[0].id,
+      '123',
+      'Brownas'
+    )
+
+    expect(
+      async () =>
+        repo.createMember(
+          EventRepositoryMock.events[0].id,
+          '123',
+          'Brownas'
+        )
+      ).rejects.toThrowError('Member already exists with name: Brownas')
+      
+      repo.resetMock()
+  })
 })
