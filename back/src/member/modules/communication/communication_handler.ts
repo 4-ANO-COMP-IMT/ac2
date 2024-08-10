@@ -7,11 +7,11 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { MemberRepositoryHttp } from '../../shared/infra/repos/member_repository_http'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
 import { MemberRepositoryMock } from '../../shared/infra/repos/member_repository_mock'
 import { MemberJsonProps } from '../../../shared/domain/entities/member'
 import { Availability } from '../../../shared/domain/entities/availability'
+import { MemberRepositoryMongo } from '../../shared/infra/repos/member_repository_mongo'
 
 config()
 
@@ -29,7 +29,9 @@ export class CommunicationHandler implements CommunicationHandlerProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new MemberRepositoryMock() : new MemberRepositoryHttp()
+      stage === 'test'
+        ? new MemberRepositoryMock()
+        : new MemberRepositoryMongo()
   }
 
   async call(req: HttpRequest<CommunicationRequest>) {

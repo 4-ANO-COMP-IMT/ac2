@@ -6,9 +6,9 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { EventRepositoryHttp } from '../../shared/infra/repos/event_repository_http'
 import { EventRepositoryInterface } from '../../shared/infra/repos/event_repository_interface'
 import { EventRepositoryMock } from '../../shared/infra/repos/event_repository_mock'
+import { EventRepositoryMongo } from '../../shared/infra/repos/event_repository_mongo'
 import { CommunicationRequest } from './protocols'
 import { Availability } from '../../../shared/domain/entities/availability'
 
@@ -28,7 +28,7 @@ export class CommunicationHandler implements CommunicationHandlerProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new EventRepositoryMock() : new EventRepositoryHttp()
+      stage === 'test' ? new EventRepositoryMock() : new EventRepositoryMongo()
   }
 
   async call(req: HttpRequest<CommunicationRequest>) {
