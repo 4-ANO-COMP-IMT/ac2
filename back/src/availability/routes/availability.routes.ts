@@ -7,7 +7,7 @@ import { UpdateAvailabilitiesPresenter } from '../modules/update_availabilities/
 export const availabilityRouter = Router()
 
 availabilityRouter.put('/', async (req, res) => {
-  const request = new HttpRequest('post', req.body)
+  const request = new HttpRequest('put', req.body)
   const presenter = new UpdateAvailabilitiesPresenter()
   const response = await presenter.call(request)
 
@@ -17,7 +17,7 @@ availabilityRouter.put('/', async (req, res) => {
 })
 
 availabilityRouter.post('/communication', async (req, res) => {
-  console.log("Got a request to /communication!")
+  console.log('Got a request to /communication!')
   const request = new HttpRequest('post', req.body)
   const handler = new CommunicationHandler()
   const response = await handler.call(request)
