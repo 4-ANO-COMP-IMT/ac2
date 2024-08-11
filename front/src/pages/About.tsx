@@ -6,7 +6,8 @@ import {
   CardHeader,
   CardTitle
 } from '../components/ui/card'
-import { Github, Linkedin } from 'lucide-react'
+import { Linkedin } from 'lucide-react'
+import { FaGithub } from 'react-icons/fa'
 
 type Contributor = {
   img: string
@@ -108,13 +109,13 @@ export function About() {
               </Avatar>
               <CardTitle>{contributor.name}</CardTitle>
               <CardDescription>{contributor.position}</CardDescription>
-              <div className="flex space-x-4 pt-1">
+              <div className="flex items-center space-x-4 pt-1">
                 <a
                   href={contributor.github}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="text-xl text-gray-500 hover:text-black" />
+                  <FaGithub className="text-xl text-gray-500 hover:text-black" />
                 </a>
                 <a
                   href={contributor.linkedin}
