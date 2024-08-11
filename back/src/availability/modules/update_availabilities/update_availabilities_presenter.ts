@@ -5,13 +5,13 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { AvailabilityRepositoryHttp } from '../../shared/infra/repos/availability_repository_http'
 import { AvailabilityRepositoryInterface } from '../../shared/infra/repos/availability_repository_interface'
 import { AvailabilityRepositoryMock } from '../../shared/infra/repos/availability_repository_mock'
 import { UpdateAvailabilitiesController } from './update_availabilities_controller'
 import { UpdateAvailabilitiesUsecase } from './update_availabilities_usecase'
 import { UpdateAvailabilitiesRequest } from './protocols'
 import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
+import { AvailabilityRepositoryMongo } from '../../shared/infra/repos/availability_repository_mongo'
 
 config()
 
@@ -33,7 +33,7 @@ export class UpdateAvailabilitiesPresenter implements UpdateAvailabilitiesPresen
 
   constructor() {
     this.repo =
-      stage === 'test' ? new AvailabilityRepositoryMock() : new AvailabilityRepositoryHttp()
+      stage === 'test' ? new AvailabilityRepositoryMock() : new AvailabilityRepositoryMongo()
     this.usecase = new UpdateAvailabilitiesUsecase(this.repo)
     this.controller = new UpdateAvailabilitiesController(this.usecase)
   }

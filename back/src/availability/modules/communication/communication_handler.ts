@@ -6,12 +6,12 @@ import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { AvailabilityRepositoryHttp } from '../../shared/infra/repos/availability_repository_http'
 import { AvailabilityRepositoryInterface } from '../../shared/infra/repos/availability_repository_interface'
 import { AvailabilityRepositoryMock } from '../../shared/infra/repos/availability_repository_mock'
 import { CommunicationRequest } from './protocols'
 import { MemberJsonProps } from '../../../shared/domain/entities/member'
 import { EventJsonProps } from '../../../shared/domain/entities/event'
+import { AvailabilityRepositoryMongo } from '../../shared/infra/repos/availability_repository_mongo'
 
 config()
 
@@ -29,7 +29,7 @@ export class CommunicationHandler implements CommunicationHandlerProps {
 
   constructor() {
     this.repo =
-      stage === 'test' ? new AvailabilityRepositoryMock() : new AvailabilityRepositoryHttp()
+      stage === 'test' ? new AvailabilityRepositoryMock() : new AvailabilityRepositoryMongo()
   }
 
   async call(req: HttpRequest<CommunicationRequest>) {
