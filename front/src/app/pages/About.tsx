@@ -7,6 +7,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Github, Linkedin } from 'lucide-react'
+import { AnimatedBalls } from '@/components/animated-balls'
 
 type Contributor = {
   img: string
@@ -72,22 +73,15 @@ export function About() {
   }, [])
 
   return (
-    <main className="flex w-full flex-col items-center justify-center gap-2 bg-background px-4 pt-20 text-center font-geist transition-all duration-500">
-      <div
-        className={`absolute grid h-full w-full grid-cols-1 justify-items-center gap-12 transition-all duration-2000 sm:grid-cols-2 ${fade ? 'opacity-100' : 'opacity-0'}`}
-      >
-        <div className="h-[320px] w-[320px] animate-one self-end justify-self-end rounded-full bg-blue-900 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-500 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-two rounded-full  bg-blue-300 opacity-50 blur-[7rem]"></div>
-        <div className="h-[320px] w-[320px] animate-one self-start justify-self-start rounded-full  bg-blue-600 opacity-50 blur-[7rem]"></div>
-      </div>
+    <main className="relative flex w-full flex-col items-center justify-center gap-2 overflow-x-hidden bg-background px-4 pb-20 pt-32 text-center font-geist transition-all duration-500 sm:pb-12">
+      <AnimatedBalls />
       <h1
-        className={`transform text-4xl font-bold transition-all duration-1000 sm:text-6xl lg:text-8xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
+        className={`transform text-4xl font-bold transition-all duration-1000 sm:text-6xl lg:text-6xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
       >
         Contribuidores
       </h1>
       <p
-        className={`transform text-wrap text-lg font-light transition-all duration-2000 lg:text-2xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
+        className={`transform text-wrap text-lg font-light transition-all duration-2000 lg:text-xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
       >
         Conheça nossa equipe de desenvolvedores
       </p>
