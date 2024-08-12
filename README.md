@@ -87,7 +87,7 @@ npm run build
 
 ## Documentação
 
-O projeto foi documentado utilizando o Postman e sua documentação pode ser encontraa aqui:
+O projeto foi documentado utilizando o Postman e sua documentação pode ser encontrada aqui:
 [https://docs.boramacar.app.br/](https://docs.boramacar.app.br/)
 
 
@@ -95,7 +95,7 @@ O projeto foi documentado utilizando o Postman e sua documentação pode ser enc
 A infraestrutura do BoraMarcar foi desenvolvida utilizando o AWS CloudFormation, que é uma ferramenta de infraestrutura como código que permite criar e gerenciar recursos da AWS de forma programática.
 Para o backend foi utilizado um EC2 t2.micro com cada microsserviço rodando de forma independente com Caddy como reverse proxy e conectado ao MongoDB Atlas.
 Para o frontend foi utilizado um S3 para armazenar os arquivos estáticos e um CloudFront para servir os arquivos estáticos com menor latência.
-Além disso foi utilizado o Route53 para gerenciar o domínio e o ACM para gerenciar os certificados SSL.
+Além disso, foi utilizado o Route53 para gerenciar o domínio e o ACM para gerenciar os certificados SSL.
 E por fim o Github Actions foi utilizado para CI/CD do projeto para acelerar o desenvolvimento.
 
 ## Contribuidores
