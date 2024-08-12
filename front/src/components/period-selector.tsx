@@ -1,8 +1,8 @@
 import { Card } from '@/components/ui/card'
-import { useTheme } from '@/hooks/use-theme'
 import { useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { useEvent } from '@/hooks/use-event'
+import { Interval } from '@/types/interval'
 
 type PeriodSelectorProps = {
   dates: number[]
@@ -11,19 +11,13 @@ type PeriodSelectorProps = {
   timezone: number
 }
 
-type Interval = {
-  startDate: Date
-  endDate: Date
-}
-
 export function PeriodSelector({
   dates,
   notEarlier,
   notLater,
   timezone
 }: PeriodSelectorProps) {
-  const { theme } = useTheme()
-  const { isLogged, paintedDivs, setPaintedDivs } = useEvent()
+  const { isLogged, paintedDivs, setPaintedDivs, next } = useEvent()
   const [isDragging, setIsDragging] = useState(false)
 
   const intervals: Interval[] = dates
@@ -54,8 +48,8 @@ export function PeriodSelector({
         return {
           ...prev,
           [id]: isIndexPainted
-            ? currentIndices.filter((i) => i !== index) // Remove o index se já estiver pintado
-            : [...currentIndices, index] // Adiciona o index se não estiver pintado
+            ? currentIndices.filter((i) => i !== index).sort((a, b) => a - b) // Remove o index se já estiver pintado
+            : [...currentIndices, index].sort((a, b) => a - b) // Adiciona o index se não estiver pintado
         }
       })
     } else {
@@ -75,15 +69,15 @@ export function PeriodSelector({
         return {
           ...prev,
           [id]: isIndexPainted
-            ? currentIndices.filter((i) => i !== index) // Remove o index se já estiver pintado
-            : [...currentIndices, index] // Adiciona o index se não estiver pintado
+            ? currentIndices.filter((i) => i !== index).sort((a, b) => a - b) // Remove o index se já estiver pintado
+            : [...currentIndices, index].sort((a, b) => a - b) // Adiciona o index se não estiver pintado
         }
       })
     }
   }
 
   return (
-    <Card className="relative flex py-2 pl-2 pr-4">
+    <Card className="relative flex w-full py-2 pl-2 pr-4">
       <div
         className="absolute left-0 top-0 z-[5] flex h-full w-full"
         onMouseOver={handleMouseUp}
@@ -97,7 +91,7 @@ export function PeriodSelector({
         }).map((_, index) => (
           <p
             key={index}
-            className={`text-sm text-foreground ${index !== 0 ? `pt-[32px]` : ''}`}
+            className={`text-sm text-foreground ${index !== 0 ? `pt-8` : ''}`}
           >
             {(index + intervals[0].startDate.getHours() - timezone)
               .toString()
@@ -105,58 +99,62 @@ export function PeriodSelector({
           </p>
         ))}
       </div>
-      {intervals.map((interval, id) => (
-        <div
-          key={id}
-          className="z-10 flex w-28 flex-col items-center justify-center gap-2"
-        >
-          <div className="flex flex-col items-center justify-center">
-            <p className={`text-sm text-foreground`}>
-              {interval.startDate.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'short'
-              })}
-            </p>
-            <p className={`text-sm font-bold text-foreground`}>
-              {interval.startDate
-                .toLocaleDateString('pt-BR', {
-                  weekday: 'long'
-                })
-                .charAt(0)
-                .toUpperCase() +
-                interval.startDate
-                  .toLocaleDateString('pt-BR', {
-                    weekday: 'long'
-                  })
-                  .slice(1)}
-            </p>
-          </div>
-          <div
-            className={`flex w-full select-none flex-col items-center justify-center border-y-[1px] ${theme === 'light' ? 'border-primary/20' : 'border-primary'} ${id === 0 ? 'rounded-l-md border-l-[1px] border-r-[1px]' : 'border-r-[1px]'} ${id === intervals.length - 1 ? 'rounded-r-md' : ''}`}
-          >
-            {Array.from({
-              length:
-                ((interval.endDate.getHours() - interval.startDate.getHours()) *
-                  60) /
-                30
-            }).map((_, index) => (
+      {intervals.map((interval, id) => {
+        if (window.innerWidth < 768 ? id >= next && id < next + 3 : true)
+          return (
+            <div
+              key={id}
+              className="z-10 flex w-full flex-col items-center justify-center gap-2"
+            >
+              <div className="flex flex-col items-center justify-center">
+                <p className={`text-sm text-foreground`}>
+                  {interval.startDate.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'short'
+                  })}
+                </p>
+                <p className={`text-sm font-bold text-foreground`}>
+                  {interval.startDate
+                    .toLocaleDateString('pt-BR', {
+                      weekday: 'long'
+                    })
+                    .charAt(0)
+                    .toUpperCase() +
+                    interval.startDate
+                      .toLocaleDateString('pt-BR', {
+                        weekday: 'short'
+                      })
+                      .slice(1)}
+                </p>
+              </div>
               <div
-                key={index}
-                onMouseUp={handleMouseUp}
-                onMouseDown={() => handleMouseDown(id, index)}
-                onMouseOver={() => handleMouseOver(id, index)}
-                className={`flex h-[26px] w-full ${theme === 'light' ? 'border-primary/20' : 'border-primary'} ${paintedDivs[id] && paintedDivs[id].includes(index) ? 'bg-blue-400/80' : 'bg-transparent'} ${
-                  index === 0
-                    ? 'border-t-0'
-                    : index % 2 === 0
-                      ? 'border-t-[1px] border-solid'
-                      : 'border-t-[1px] border-dashed'
-                }`}
-              ></div>
-            ))}
-          </div>
-        </div>
-      ))}
+                className={`flex w-full select-none flex-col items-center justify-center border-y-[1px] border-foreground/20 ${id === 0 ? 'rounded-l-md border-l-[1px] border-r-[1px]' : 'border-l-[1px] border-r-[1px] md:border-l-[0px]'} ${id === intervals.length - 1 ? 'rounded-r-md' : ''}`}
+              >
+                {Array.from({
+                  length:
+                    ((interval.endDate.getHours() -
+                      interval.startDate.getHours()) *
+                      60) /
+                    30
+                }).map((_, index) => (
+                  <div
+                    key={index}
+                    onMouseUp={handleMouseUp}
+                    onMouseDown={() => handleMouseDown(id, index)}
+                    onMouseOver={() => handleMouseOver(id, index)}
+                    className={`flex h-[26px] w-full border-foreground/20 ${paintedDivs[id] && paintedDivs[id].includes(index) ? 'bg-blue-400/80' : 'bg-transparent'} ${
+                      index === 0
+                        ? 'border-t-0'
+                        : index % 2 === 0
+                          ? 'border-t-[1px] border-solid'
+                          : 'border-t-[1px] border-dashed'
+                    }`}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          )
+      })}
     </Card>
   )
 }

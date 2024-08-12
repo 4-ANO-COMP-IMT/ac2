@@ -1,3 +1,4 @@
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { AnimatedBalls } from '@/components/animated-balls'
 import { PeriodSelector } from '@/components/period-selector'
 import { Button } from '@/components/ui/button'
@@ -37,13 +38,16 @@ import { FaCheck } from 'react-icons/fa6'
 import { Event as EventType } from '@/types/event'
 import { toast } from '@/components/ui/use-toast'
 import { useMember } from '@/hooks/use-member'
+import { separateConsecutiveNumbers } from '@/utils/functions/array-separator'
+import { Interval } from '@/types/interval'
 
 export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { createMember, loginMember } = useMember()
   const { getEvent } = useEvent()
-  const { isLogged, setIsLogged, setPaintedDivs } = useEvent()
+  const { isLogged, setIsLogged, paintedDivs, setPaintedDivs, next, setNext } =
+    useEvent()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
@@ -132,6 +136,55 @@ export function Event() {
     setPaintedDivs({})
   }
 
+  const handleUpdate = async () => {
+    if (isLogged && event?.dates.length) {
+      const intervals: Interval[] = event.dates
+        .sort((a, b) => a - b)
+        .map((date) => {
+          const startDate = new Date(date)
+          startDate.setHours(event?.notEarlier)
+          const endDate = new Date(date)
+          endDate.setHours(event?.notLater)
+          return {
+            // Add timezone offset
+            startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
+            endDate: new Date(endDate.getTime() + -3 * 60 * 60 * 1000)
+          }
+        })
+
+      const availableIntervals: { startDate: number; endDate: number }[] = []
+
+      Object.keys(paintedDivs).map((key) => {
+        const interval = intervals[parseInt(key)]
+        separateConsecutiveNumbers(paintedDivs[parseInt(key)]).map(
+          (numbers) => {
+            const startDate = new Date(interval.startDate)
+            const endDate = new Date(interval.startDate)
+
+            startDate.setMinutes(
+              interval.startDate.getMinutes() + numbers[0] * 30
+            )
+            endDate.setMinutes(
+              interval.startDate.getMinutes() + numbers[numbers.length - 1] * 30
+            )
+
+            availableIntervals.push({
+              startDate: startDate.getTime(),
+              endDate: endDate.getTime()
+            })
+          }
+        )
+      })
+
+      console.log(availableIntervals)
+    } else {
+      toast({
+        title: 'Você precisa estar logado para selecionar um horário',
+        description: 'Clique no botão "Editar" para fazer login'
+      })
+    }
+  }
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -142,17 +195,48 @@ export function Event() {
   })
 
   return (
-    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden">
+    <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden pb-24">
       <AnimatedBalls />
       {event?.dates.length ? (
-        <div className="flex flex-col items-center justify-center gap-6">
-          <h1 className="transform text-4xl font-bold transition-all duration-1000 sm:text-6xl lg:text-6xl">
-            {event.name}
-          </h1>
-          <p className="mb-6 transform text-wrap text-lg lg:text-2xl">
-            {event.description}
-          </p>
-          <div className="flex gap-4">
+        <div className="z-10 flex w-4/5 flex-col items-center justify-center gap-6 pt-24 md:w-4/5">
+          <div className="flex w-full items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-3xl font-bold">{event.name}</h1>
+              <h2>{event.description}</h2>
+            </div>
+            <Button
+              variant="outline"
+              className={`transition-all duration-300 ${isCopied ? 'bg-green-100' : ''}`}
+              disabled={isCopied}
+              onClick={() => {
+                toast({
+                  title: 'Link copiado',
+                  description: 'Agora você pode compartilhar com seus amigos'
+                })
+                setIsCopied(true)
+                setTimeout(() => {
+                  setIsCopied(false)
+                }, 1000)
+                navigator.clipboard.writeText(
+                  `${window.origin}/event/${event.id}`
+                )
+              }}
+            >
+              {!isCopied ? (
+                <div className="flex gap-2">
+                  <p className="hidden text-sm lg:flex">Copiar link</p>
+                  <MdContentCopy
+                    className={`text-xl transition-all duration-500 ${!isCopied ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                </div>
+              ) : (
+                <FaCheck
+                  className={`text-xl text-green-600 transition-all duration-500 ${isCopied ? 'opacity-100' : 'opacity-0'}`}
+                />
+              )}
+            </Button>
+          </div>
+          <div className="flex w-full flex-col-reverse gap-4 lg:flex-row">
             <PeriodSelector
               dates={event?.dates}
               notEarlier={event.notEarlier}
@@ -160,142 +244,127 @@ export function Event() {
               timezone={-3}
             />
             <div className="flex flex-col gap-4">
-              <Card className="h-auto w-72">
-                <CardHeader>
-                  <CardTitle>Link do evento</CardTitle>
-                  <CardContent className="flex gap-[2px] p-0 pt-4">
-                    <Input
-                      readOnly
-                      value={`${window.origin}/event/${event.id}`}
-                      className="bg-foreground/5 focus-visible:ring-0"
-                    />
-                    <Button
-                      variant="ghost"
-                      className={`transition-all duration-300 ${isCopied ? 'bg-green-100' : ''}`}
-                      disabled={isCopied}
-                      onClick={() => {
-                        toast({
-                          title: 'Link copiado',
-                          description:
-                            'Agora você pode compartilhar com seus amigos'
-                        })
-                        setIsCopied(true)
-                        setTimeout(() => {
-                          setIsCopied(false)
-                        }, 1000)
-                        navigator.clipboard.writeText(
-                          `${window.origin}/event/${event.id}`
-                        )
-                      }}
-                    >
-                      {!isCopied ? (
-                        <MdContentCopy
-                          className={`text-xl duration-500 ${!isCopied ? 'opacity-100' : 'opacity-0'}`}
-                        />
-                      ) : (
-                        <FaCheck className="text-xl text-green-600" />
-                      )}
-                    </Button>
-                  </CardContent>
-                </CardHeader>
-              </Card>
-              <Card className="h-auto w-72">
+              <Card className="h-auto w-full lg:w-80">
                 <CardHeader>
                   <CardTitle>Usuários ({event.members.length})</CardTitle>
-                  <CardContent className="flex flex-col gap-1 p-0 pt-4">
-                    {event.members.map((member, index) => (
-                      <p key={index}>{member.name}</p>
-                    ))}
-                  </CardContent>
                 </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-1 lg:flex lg:flex-col">
+                  {event.members.map((member, index) => (
+                    <p key={index}>{member.name}</p>
+                  ))}
+                </CardContent>
               </Card>
-              <div className="flex items-start justify-start gap-2">
-                {isLogged && (
-                  <Button variant="outline" disabled={!isLogged}>
-                    Salvar
+              <div className="flex justify-between">
+                <div className="flex justify-start gap-2">
+                  {isLogged && (
+                    <Button
+                      variant="outline"
+                      disabled={!isLogged}
+                      onClick={handleUpdate}
+                    >
+                      Salvar
+                    </Button>
+                  )}
+                  {!isLogged && (
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline">Editar</Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>
+                            Registre ou logue com seu usuário
+                          </DialogTitle>
+                          <DialogDescription>
+                            Usando pela primeira vez? Digite um nome de usuário
+                            a ser exibido e uma senha (opcional)
+                          </DialogDescription>
+                        </DialogHeader>
+                        <Form {...form}>
+                          <form className="space-y-3">
+                            <FormField
+                              control={form.control}
+                              name="username"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Nome do usuário</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Pedro Soller"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name="password"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Senha</FormLabel>
+                                  <FormControl>
+                                    <Input type="password" {...field} />
+                                  </FormControl>
+                                  <FormDescription>
+                                    A senha é opcional, mas recomendada
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </form>
+                        </Form>
+                        <DialogFooter>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              form.setValue(
+                                'username',
+                                form
+                                  .getValues('username')
+                                  .trim()
+                                  .split(/\s+/)
+                                  .join('.')
+                                  .toLowerCase()
+                              )
+                              form.setValue('eventId', event.id)
+                              return onSubmit(form.getValues())
+                            }}
+                          >
+                            {isLoading ? <LoadingSpin /> : 'Enviar'}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                  <Button
+                    variant="destructive"
+                    onClick={handleReset}
+                    disabled={!isLogged}
+                  >
+                    Limpar
                   </Button>
-                )}
-                {!isLogged && (
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Editar</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>
-                          Registre ou logue com seu usuário
-                        </DialogTitle>
-                        <DialogDescription>
-                          Usando pela primeira vez? Digite um nome de usuário a
-                          ser exibido e uma senha (opcional)
-                        </DialogDescription>
-                      </DialogHeader>
-                      <Form {...form}>
-                        <form className="space-y-3">
-                          <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Nome do usuário</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="Pedro Soller"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Senha</FormLabel>
-                                <FormControl>
-                                  <Input type="password" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                  A senha é opcional, mas recomendada
-                                </FormDescription>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </form>
-                      </Form>
-                      <DialogFooter>
-                        <Button
-                          type="button"
-                          onClick={() => {
-                            form.setValue(
-                              'username',
-                              form
-                                .getValues('username')
-                                .trim()
-                                .split(/\s+/)
-                                .join('.')
-                                .toLowerCase()
-                            )
-                            form.setValue('eventId', event.id)
-                            return onSubmit(form.getValues())
-                          }}
-                        >
-                          {isLoading ? <LoadingSpin /> : 'Enviar'}
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                )}
-                <Button
-                  variant="destructive"
-                  onClick={handleReset}
-                  disabled={!isLogged}
-                >
-                  Limpar
-                </Button>
+                </div>
+                <div className="flex gap-2 md:hidden">
+                  <Button
+                    disabled={next === 0}
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => setNext((prev) => prev - 3)}
+                  >
+                    <FaArrowLeft />
+                  </Button>
+                  <Button
+                    disabled={next + 3 >= event.dates.length}
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => setNext((prev) => prev + 3)}
+                  >
+                    <FaArrowRight />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
