@@ -25,7 +25,7 @@ export const useMember = () => {
 
     const response = await api.post('/member/', request)
 
-    setMember(response.data)
+    setMember(response.data.data)
 
     return response.data.data
   }

@@ -228,7 +228,6 @@ export function Event() {
           })
           setIsLogged(true)
           setIsDialogOpen(false)
-          handleEvent()
           handleReset()
         } catch (error) {
           console.log(error)
