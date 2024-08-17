@@ -199,6 +199,110 @@ export function Event() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleEditMember = (username: string) => {
+    const intervals = event?.dates
+      .sort((a, b) => a - b)
+      .map((date) => {
+        const startDate = new Date(date)
+        startDate.setHours(
+          event.notEarlier ? event.notEarlier / 1000 / 60 / 60 : 8
+        )
+        const endDate = new Date(date)
+        endDate.setHours(event.notLater ? event.notLater / 1000 / 60 / 60 : 18)
+        return {
+          // Add timezone offset
+          startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
+          endDate: new Date(endDate.getTime() + -3 * 60 * 60 * 1000)
+        }
+      })
+
+    if (!intervals?.length) {
+      return
+    }
+
+    const divs = intervals.map((interval) => {
+      return Array.from({
+        length:
+          2 * (interval.endDate.getHours() - interval.startDate.getHours())
+      }).map((_, index) => {
+        const startDate = new Date(
+          interval.startDate.getTime() +
+            index * 30 * 60 * 1000 +
+            3 * 60 * 60 * 1000
+        )
+        const endDate = new Date(
+          interval.startDate.getTime() +
+            (index + 1) * 30 * 60 * 1000 +
+            3 * 60 * 60 * 1000
+        )
+        return {
+          index,
+          startDate,
+          endDate
+        }
+      })
+    })
+    console.log(divs)
+
+    const memberPaintedDivs: { [id: number]: number[] } = {}
+
+    // Initialize the object with numeric keys and empty arrays
+    for (let i = 0; i < intervals.length; i++) {
+      memberPaintedDivs[i] = []
+    }
+
+    handleReset()
+
+    event?.members
+      .filter(
+        (member) =>
+          member.name.trim().split(/\s+/).join('.').toLowerCase() === username
+      )[0]
+      .availabilities.map((availability) => {
+        const index = divs.findIndex((div) => {
+          return (
+            div[0].startDate.getDate() ===
+              new Date(availability.startDate).getDate() &&
+            div[0].endDate.getDate() ===
+              new Date(availability.endDate).getDate()
+          )
+        })
+
+        if (index === -1) {
+          return
+        }
+
+        const startDivIndex = divs[index].findIndex((div) => {
+          return (
+            div.startDate.getTime() ===
+            availability.startDate + 3 * 60 * 60 * 1000
+          )
+        })
+
+        const endDivIndex = divs[index].findIndex((div) => {
+          return (
+            div.endDate.getTime() === availability.endDate + 3 * 60 * 60 * 1000
+          )
+        })
+
+        if (startDivIndex === -1 || endDivIndex === -1) {
+          return
+        }
+
+        memberPaintedDivs[index].push(divs[index][startDivIndex].index)
+        if (startDivIndex !== endDivIndex) {
+          for (let i = startDivIndex + 1; i <= endDivIndex; i++) {
+            memberPaintedDivs[index].push(divs[index][i].index)
+          }
+        }
+      })
+
+    console.log('memberPaintedDivs')
+    console.log(memberPaintedDivs)
+
+    setPaintedDivs(memberPaintedDivs)
+  }
+
   const onSubmit = async (values: LoginFormValues) => {
     setIsLoading(true)
     try {
@@ -217,7 +321,7 @@ export function Event() {
       )
       setIsLogged(true)
       setIsDialogOpen(false)
-      handleReset()
+      handleEditMember(values.username)
     } catch (error) {
       if ((error as AxiosError).response?.status === 404) {
         try {
