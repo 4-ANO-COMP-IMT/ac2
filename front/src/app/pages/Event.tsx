@@ -39,12 +39,13 @@ import { Event as EventType } from '@/types/event'
 import { toast } from '@/components/ui/use-toast'
 import { useMember } from '@/hooks/use-member'
 import { separateConsecutiveNumbers } from '@/utils/functions/array-separator'
-import { Interval } from '@/types/interval'
+import { useAvailability } from '@/hooks/use-availability'
 
 export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { createMember, loginMember } = useMember()
+  const { createMember, loginMember, member, setMember } = useMember()
+  const { updateAvailability } = useAvailability()
   const { getEvent } = useEvent()
   const { isLogged, setIsLogged, paintedDivs, setPaintedDivs, next, setNext } =
     useEvent()
@@ -81,7 +82,107 @@ export function Event() {
             : [],
           description: response.data?.description
         })
+        const intervals = response.data?.dates
+          .sort((a, b) => a - b)
+          .map((date) => {
+            const startDate = new Date(date)
+            startDate.setHours(
+              response.data?.notEarlier
+                ? response.data?.notEarlier / 1000 / 60 / 60
+                : 8
+            )
+            const endDate = new Date(date)
+            endDate.setHours(
+              response.data?.notLater
+                ? response.data?.notLater / 1000 / 60 / 60
+                : 18
+            )
+            return {
+              // Add timezone offset
+              startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
+              endDate: new Date(endDate.getTime() + -3 * 60 * 60 * 1000)
+            }
+          })
+
+        if (!intervals?.length || !response.data?.members?.length) {
+          return
+        }
+
+        const divs = intervals.map((interval) => {
+          return Array.from({
+            length:
+              2 * (interval.endDate.getHours() - interval.startDate.getHours())
+          }).map((_, index) => {
+            const startDate = new Date(
+              interval.startDate.getTime() +
+                index * 30 * 60 * 1000 +
+                3 * 60 * 60 * 1000
+            )
+            const endDate = new Date(
+              interval.startDate.getTime() +
+                (index + 1) * 30 * 60 * 1000 +
+                3 * 60 * 60 * 1000
+            )
+            return {
+              index,
+              startDate,
+              endDate
+            }
+          })
+        })
+
+        const memberPaintedDivs: { [id: number]: number[] } = {}
+
+        // Initialize the object with numeric keys and empty arrays
+        for (let i = 0; i < intervals.length; i++) {
+          memberPaintedDivs[i] = []
+        }
+
+        response.data?.members.map((member) => {
+          member.availabilities.map((availability) => {
+            const index = divs.findIndex((div) => {
+              return (
+                div[0].startDate.getDate() ===
+                  new Date(availability.startDate).getDate() &&
+                div[0].endDate.getDate() ===
+                  new Date(availability.endDate).getDate()
+              )
+            })
+
+            if (index === -1) {
+              return
+            }
+
+            const startDivIndex = divs[index].findIndex((div) => {
+              return (
+                div.startDate.getTime() ===
+                availability.startDate + 3 * 60 * 60 * 1000
+              )
+            })
+
+            const endDivIndex = divs[index].findIndex((div) => {
+              return (
+                div.endDate.getTime() ===
+                availability.endDate + 3 * 60 * 60 * 1000
+              )
+            })
+
+            if (startDivIndex === -1 || endDivIndex === -1) {
+              return
+            }
+
+            memberPaintedDivs[index].push(divs[index][startDivIndex].index)
+            if (startDivIndex !== endDivIndex) {
+              for (let i = startDivIndex + 1; i <= endDivIndex; i++) {
+                memberPaintedDivs[index].push(divs[index][i].index)
+              }
+            }
+          })
+        })
+
+        setPaintedDivs(memberPaintedDivs)
       } catch (error) {
+        console.log(error)
         if ((error as AxiosError).response?.status === 404) {
           navigate('/404')
         } else {
@@ -106,8 +207,17 @@ export function Event() {
         title: 'Usuário logado',
         description: 'Agora você pode salvar suas preferências de horário!'
       })
+
+      setMember(
+        event?.members.find(
+          (member) =>
+            member.name.trim().split(/\s+/).join('.').toLowerCase() ===
+            values.username
+        )
+      )
       setIsLogged(true)
       setIsDialogOpen(false)
+      handleReset()
     } catch (error) {
       if ((error as AxiosError).response?.status === 404) {
         try {
@@ -119,6 +229,7 @@ export function Event() {
           setIsLogged(true)
           setIsDialogOpen(false)
           handleEvent()
+          handleReset()
         } catch (error) {
           console.log(error)
         }
@@ -138,21 +249,21 @@ export function Event() {
 
   const handleUpdate = async () => {
     if (isLogged && event?.dates.length) {
-      const intervals: Interval[] = event.dates
+      const availableIntervals: { startDate: number; endDate: number }[] = []
+
+      const intervals = event?.dates
         .sort((a, b) => a - b)
         .map((date) => {
           const startDate = new Date(date)
-          startDate.setHours(event?.notEarlier)
+          startDate.setHours(event!.notEarlier)
           const endDate = new Date(date)
-          endDate.setHours(event?.notLater)
+          endDate.setHours(event!.notLater)
           return {
             // Add timezone offset
             startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
             endDate: new Date(endDate.getTime() + -3 * 60 * 60 * 1000)
           }
         })
-
-      const availableIntervals: { startDate: number; endDate: number }[] = []
 
       Object.keys(paintedDivs).map((key) => {
         const interval = intervals[parseInt(key)]
@@ -165,7 +276,8 @@ export function Event() {
               interval.startDate.getMinutes() + numbers[0] * 30
             )
             endDate.setMinutes(
-              interval.startDate.getMinutes() + numbers[numbers.length - 1] * 30
+              interval.startDate.getMinutes() +
+                (numbers[numbers.length - 1] + 1) * 30
             )
 
             availableIntervals.push({
@@ -175,8 +287,15 @@ export function Event() {
           }
         )
       })
-
-      console.log(availableIntervals)
+      setIsLoading(true)
+      await updateAvailability(event.id, member!.id, availableIntervals)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setIsLoading(false)
+      window.location.reload()
+      toast({
+        title: 'Horários salvos',
+        description: 'Obrigado por participar!'
+      })
     } else {
       toast({
         title: 'Você precisa estar logado para selecionar um horário',
@@ -259,10 +378,10 @@ export function Event() {
                   {isLogged && (
                     <Button
                       variant="outline"
-                      disabled={!isLogged}
+                      disabled={!isLogged || isLoading}
                       onClick={handleUpdate}
                     >
-                      Salvar
+                      {isLoading ? <LoadingSpin /> : 'Salvar'}
                     </Button>
                   )}
                   {!isLogged && (
@@ -342,7 +461,7 @@ export function Event() {
                   <Button
                     variant="destructive"
                     onClick={handleReset}
-                    disabled={!isLogged}
+                    disabled={!isLogged || isLoading}
                   >
                     Limpar
                   </Button>
