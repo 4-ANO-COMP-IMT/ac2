@@ -6,7 +6,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { Github, Linkedin } from 'lucide-react'
+import { Linkedin } from 'lucide-react'
+import { FaGithub } from 'react-icons/fa'
 import { AnimatedBalls } from '@/components/animated-balls'
 
 type Contributor = {
@@ -107,8 +108,9 @@ export function About() {
                   href={contributor.github}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="flex items-center"
                 >
-                  <Github className="text-xl text-gray-500 hover:text-black" />
+                  <FaGithub className="text-xl text-gray-500 hover:text-black" />
                 </a>
                 <a
                   href={contributor.linkedin}
