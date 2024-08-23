@@ -88,7 +88,7 @@ npm run build
 ## Documentação
 
 O projeto foi documentado utilizando o Postman e sua documentação pode ser encontrada aqui:
-[https://docs.boramacar.app.br/](https://docs.boramacar.app.br/)
+[https://docs.boramarcar.app.br/](https://docs.boramarcar.app.br/)
 
 
 ## Infraestrutura
