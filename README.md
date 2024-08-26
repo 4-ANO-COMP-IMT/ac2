@@ -122,6 +122,16 @@ Para o frontend foi utilizado um S3 para armazenar os arquivos estáticos e um C
 Além disso, foi utilizado o Route53 para gerenciar o domínio e o ACM para gerenciar os certificados SSL.
 E por fim o Github Actions foi utilizado para CI/CD do projeto para acelerar o desenvolvimento.
 
+### Backend
+<p align="center">
+  <img width="500" alt="back-end" src="https://github.com/user-attachments/assets/ea9e83b2-3ba8-4ca3-ac7d-43a761999751">
+</p>
+
+### Frontend
+<p align="center">
+  <img width="500" alt="front-end" src="https://github.com/user-attachments/assets/07ac1f48-350e-4f4d-8950-d723e339fae5">
+</p>
+
 ## Como rodar
 
 ### Backend
