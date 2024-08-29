@@ -204,11 +204,9 @@ export function Event() {
       .sort((a, b) => a - b)
       .map((date) => {
         const startDate = new Date(date)
-        startDate.setHours(
-          event.notEarlier ? event.notEarlier / 1000 / 60 / 60 : 8
-        )
+        startDate.setHours(event.notEarlier || 8)
         const endDate = new Date(date)
-        endDate.setHours(event.notLater ? event.notLater / 1000 / 60 / 60 : 18)
+        endDate.setHours(event.notLater || 18)
         return {
           // Add timezone offset
           startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
@@ -220,11 +218,14 @@ export function Event() {
       return
     }
 
+    console.log(intervals)
+
     const divs = intervals.map((interval) => {
       return Array.from({
         length:
           2 * (interval.endDate.getHours() - interval.startDate.getHours())
       }).map((_, index) => {
+        console.log(index)
         const startDate = new Date(
           interval.startDate.getTime() +
             index * 30 * 60 * 1000 +
@@ -242,7 +243,6 @@ export function Event() {
         }
       })
     })
-    console.log(divs)
 
     const memberPaintedDivs: { [id: number]: number[] } = {}
 
@@ -297,7 +297,6 @@ export function Event() {
         }
       })
 
-    console.log('memberPaintedDivs')
     console.log(memberPaintedDivs)
 
     setPaintedDivs(memberPaintedDivs)
@@ -417,7 +416,7 @@ export function Event() {
   })
 
   return (
-    <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden pb-24">
+    <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-background pb-24 transition-all duration-500">
       <AnimatedBalls />
       {event?.dates.length ? (
         <div className="z-10 flex w-4/5 flex-col items-center justify-center gap-6 pt-24 md:w-4/5">
