@@ -1,67 +1,39 @@
+import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
-import { UpdateAvailabilitiesUsecase } from './get_best_availabilities_usecase'
+import { GetBestAvailabilitiesUsecase } from './get_best_availabilities_usecase'
 import { UpdateAvailabilitiesRequest } from './protocols'
-import { Availability, AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
-import { v4 as uuid } from 'uuid'
 
-interface UpdateAvailabilitiesControllerProps {
-  usecase: UpdateAvailabilitiesUsecase
+interface GetBestAvailabilitiesControllerProps {
+  usecase: GetBestAvailabilitiesUsecase
   call(
     req: HttpRequest<UpdateAvailabilitiesRequest>
-  ): Promise<HttpResponse<AvailabilityJsonProps[]> | HttpResponse<Error>>
+  ): Promise<HttpResponse<AvailabilityJsonProps> | HttpResponse<Error>>
 }
 
-export class UpdateAvailabilitiesController implements UpdateAvailabilitiesControllerProps {
-  constructor(public usecase: UpdateAvailabilitiesUsecase) {
+export class GetBestAvailabilitiesController implements GetBestAvailabilitiesControllerProps {
+  constructor(public usecase: GetBestAvailabilitiesUsecase) {
     this.usecase = usecase
   }
 
   async call(req: HttpRequest<UpdateAvailabilitiesRequest>) {
-    if (
-      !req.data?.eventId &&
-      !req.data?.memberId &&
-      !req.data?.availabilities
-    ) {
-      return HttpResponse.badRequest('missing body')
-    }
-
-    const { eventId, memberId, availabilities } = req.data
-
-    if (!eventId) {
+    if (!req.data?.eventId) {
       return HttpResponse.badRequest('missing eventId')
     }
 
-    if (!memberId) {
-      return HttpResponse.badRequest('missing memberId')
-    }
-
-    if (!availabilities) {
-      return HttpResponse.badRequest('missing availabilities')
-    }
-    const availabilitiesAsEntity = availabilities.map(
-      (availability) => new Availability(uuid(), availability.startDate, availability.endDate)
-    )
+    const { eventId } = req.data
 
     try {
-      const availabilitiesResponse = await this.usecase.call(
-        eventId,
-        memberId,
-        availabilitiesAsEntity
-      )
+      const event = await this.usecase.call(eventId)
 
-      return HttpResponse.ok<AvailabilityJsonProps[]>(
-        'availabilities updated',
-        availabilitiesResponse.map((availability) => availability.toJson())
-      )
-      
+      return HttpResponse.ok<AvailabilityJsonProps>('event found', event.toJson())
     } catch (error: any) {
-      if (error.message.indexOf('Error in entity Availability:') != -1) {
+      if (error.message.indexOf('Error in entity Event:') != -1) {
         return HttpResponse.badRequest(error.message)
-      } else if (error.message.indexOf('not found') != -1) {
+      } else if (error.message.indexOf('Event not found for eventId:') != -1) {
         return HttpResponse.notFound(error.message)
       } else {
         return HttpResponse.internalServerError(error.message)
