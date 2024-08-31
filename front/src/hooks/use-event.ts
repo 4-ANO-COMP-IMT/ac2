@@ -13,8 +13,16 @@ export const useEvent = () => {
     throw new Error('useEvent must be used within an EventProvider')
   }
 
-  const { isLogged, setIsLogged, paintedDivs, setPaintedDivs, next, setNext } =
-    context
+  const {
+    isLogged,
+    setIsLogged,
+    paintedDivs,
+    setPaintedDivs,
+    next,
+    setNext,
+    countDivs,
+    setCountDivs
+  } = context
 
   const createEvent = async (
     data: FormEventValues
@@ -49,6 +57,8 @@ export const useEvent = () => {
     paintedDivs,
     setPaintedDivs,
     next,
-    setNext
+    setNext,
+    countDivs,
+    setCountDivs
   }
 }

@@ -9,15 +9,25 @@ type PeriodSelectorProps = {
   notEarlier: number
   notLater: number
   timezone: number
+  membersDispatch: React.Dispatch<
+    React.SetStateAction<
+      {
+        name: string
+        available: boolean
+        availabilities: { [id: number]: number[] }
+      }[]
+    >
+  >
 }
 
 export function PeriodSelector({
   dates,
   notEarlier,
   notLater,
-  timezone
+  timezone,
+  membersDispatch
 }: PeriodSelectorProps) {
-  const { isLogged, paintedDivs, setPaintedDivs, next } = useEvent()
+  const { isLogged, paintedDivs, setPaintedDivs, next, countDivs } = useEvent()
   const [isDragging, setIsDragging] = useState(false)
 
   const intervals: Interval[] = dates
@@ -36,6 +46,14 @@ export function PeriodSelector({
 
   const handleMouseUp = () => {
     setIsDragging(false)
+    membersDispatch((prev) => {
+      return prev.map((member) => {
+        return {
+          ...member,
+          available: true
+        }
+      })
+    })
   }
 
   const handleMouseDown = (id: number, index: number) => {
@@ -72,6 +90,18 @@ export function PeriodSelector({
             ? currentIndices.filter((i) => i !== index).sort((a, b) => a - b) // Remove o index se já estiver pintado
             : [...currentIndices, index].sort((a, b) => a - b) // Adiciona o index se não estiver pintado
         }
+      })
+    } else {
+      membersDispatch((prev) => {
+        return prev.map((member) => {
+          const memberAvailabilities = member.availabilities[id] || []
+          const isIndexAvailable = memberAvailabilities.includes(index)
+
+          return {
+            ...member,
+            available: isIndexAvailable
+          }
+        })
       })
     }
   }
@@ -142,7 +172,18 @@ export function PeriodSelector({
                     onMouseUp={handleMouseUp}
                     onMouseDown={() => handleMouseDown(id, index)}
                     onMouseOver={() => handleMouseOver(id, index)}
-                    className={`flex h-[26px] w-full border-foreground/20 ${paintedDivs[id] && paintedDivs[id].includes(index) ? 'bg-blue-400/80' : 'bg-transparent'} ${
+                    style={{
+                      backgroundColor: isLogged
+                        ? paintedDivs[id] && paintedDivs[id].includes(index)
+                          ? 'rgba(210, 200, 255, 0.8)'
+                          : 'transparent'
+                        : countDivs[id] &&
+                            countDivs[id].find((c) => c.index === index)!
+                              .count > 0
+                          ? `rgba(${210 - 30 * countDivs[id].find((c) => c.index === index)!.count >= 0 ? 210 - 30 * countDivs[id].find((c) => c.index === index)!.count : 0}, ${200 - 30 * countDivs[id].find((c) => c.index === index)!.count > 0 ? 200 - 30 * countDivs[id].find((c) => c.index === index)!.count : 0}, 255, 0.8)`
+                          : 'transparent'
+                    }}
+                    className={`flex h-[26px] w-full border-foreground/20 ${
                       index === 0
                         ? 'border-t-0'
                         : index % 2 === 0
