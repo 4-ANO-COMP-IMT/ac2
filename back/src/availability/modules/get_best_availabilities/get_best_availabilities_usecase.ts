@@ -84,16 +84,20 @@ export class GetBestAvailabilitiesUsecase
     let best_number_of_members = 0
 
     // caso a lista de membros não seja um object, retorna um erro
-    if (event.data.members.length === 0) {
-      return []
-    }
+    try {
+      if (event.data.members.length === 0) {
+        return []
+      }
+    } catch (err) {}
 
     // transformar o object em Member
-    const members = event.data.members
+    try {
+      const members = event.data.members
 
-    event.members = members.map((member: any) => {
-      return new Member(member.id, member.name, member.availabilities)
-    })
+      event.members = members.map((member: any) => {
+        return new Member(member.id, member.name, member.availabilities)
+      })
+    } catch (err) {}
 
     //caso nao tenha avaliabilidades, retorna um erro
 
