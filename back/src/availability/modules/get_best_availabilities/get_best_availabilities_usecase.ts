@@ -76,7 +76,7 @@ export class GetBestAvailabilitiesUsecase implements GetBestAvailabilitiesUsecas
         name: string,
       }[]
     }
-    const all_availabilities: AllAvailabilities[] = []
+    let all_availabilities: AllAvailabilities[] = []
 
     // create a variable with the best/biggest number of members 
     let best_number_of_members = 0
@@ -115,7 +115,7 @@ export class GetBestAvailabilitiesUsecase implements GetBestAvailabilitiesUsecas
     }
     else {
       // get the best availabilities
-      all_availabilities.filter(availability => possible_availabilities[availability.startDate] == best_number_of_members)
+      all_availabilities = all_availabilities.filter(availability => possible_availabilities[availability.startDate] == best_number_of_members)
   
       // sort the list by startDate
       all_availabilities.sort((a, b) => a.startDate - b.startDate)
