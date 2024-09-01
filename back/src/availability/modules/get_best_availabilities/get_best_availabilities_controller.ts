@@ -1,25 +1,22 @@
-import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
 import { HttpRequest } from '../../../shared/domain/helpers/http/http_request'
 import {
   Error,
   HttpResponse
 } from '../../../shared/domain/helpers/http/http_response'
 import { GetBestAvailabilitiesUsecase } from './get_best_availabilities_usecase'
-import { UpdateAvailabilitiesRequest } from './protocols'
+import { BestAvailabilitiesProps, GetBestAvailabilitiesRequest } from './protocols'
 
 interface GetBestAvailabilitiesControllerProps {
   usecase: GetBestAvailabilitiesUsecase
   call(
-    req: HttpRequest<UpdateAvailabilitiesRequest>
-  ): Promise<HttpResponse<AvailabilityJsonProps> | HttpResponse<Error>>
+    req: HttpRequest<GetBestAvailabilitiesRequest>
+  ): Promise<HttpResponse<BestAvailabilitiesProps | Error>>
 }
 
 export class GetBestAvailabilitiesController implements GetBestAvailabilitiesControllerProps {
-  constructor(public usecase: GetBestAvailabilitiesUsecase) {
-    this.usecase = usecase
-  }
+  constructor(public usecase: GetBestAvailabilitiesUsecase) {}
 
-  async call(req: HttpRequest<UpdateAvailabilitiesRequest>) {
+  async call(req: HttpRequest<GetBestAvailabilitiesRequest>): Promise<HttpResponse<BestAvailabilitiesProps | Error>> {
     if (!req.data?.eventId) {
       return HttpResponse.badRequest('missing eventId')
     }
@@ -27,13 +24,15 @@ export class GetBestAvailabilitiesController implements GetBestAvailabilitiesCon
     const { eventId } = req.data
 
     try {
-      const event = await this.usecase.call(eventId)
+      const availabilities = await this.usecase.call(eventId)
 
-      return HttpResponse.ok<AvailabilityJsonProps>('event found', event.toJson())
+      return HttpResponse.ok<BestAvailabilitiesProps>('best availabilities found', availabilities)
     } catch (error: any) {
-      if (error.message.indexOf('Error in entity Event:') != -1) {
+      if (error.message.includes('Error in entity Event:')) {
         return HttpResponse.badRequest(error.message)
-      } else if (error.message.indexOf('Event not found for eventId:') != -1) {
+      } else if (error.message.includes('Event not found for eventId:')) {
+        return HttpResponse.notFound(error.message)
+      } else if (error.message.includes('No best availability found')) {
         return HttpResponse.notFound(error.message)
       } else {
         return HttpResponse.internalServerError(error.message)

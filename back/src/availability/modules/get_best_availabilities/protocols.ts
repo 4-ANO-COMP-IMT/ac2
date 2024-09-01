@@ -1,16 +1,21 @@
 import { AvailabilityJsonProps } from '../../../shared/domain/entities/availability'
 
-export type UpdateAvailabilitiesRequest = {
+export type GetBestAvailabilitiesRequest = {
   eventId: string,
-  memberId: string,
-  availabilities: {
-    startDate: number,
-    endDate: number
-  }[]
 }
 
-export type UpdateAvailabilitiesResponse = {
+export type BestAvailabilitiesProps = {
+  members: {
+    id: string,
+    name: string
+  }[], 
+  startDate: number,
+  endDate: number
+}[]
+
+export type GetBestAvailabilitiesResponse = {
   status: number
   message: string
-  availabilities?: AvailabilityJsonProps[]
+  availabilities: BestAvailabilitiesProps
 }
+

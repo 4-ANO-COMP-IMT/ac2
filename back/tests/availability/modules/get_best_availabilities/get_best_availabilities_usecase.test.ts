@@ -1,4 +1,4 @@
-import { expect, test, describe, it } from 'vitest'
+import { expect, test } from 'vitest'
 
 import { GetBestAvailabilitiesUsecase } from '../../../../src/availability/modules/get_best_availabilities/get_best_availabilities_usecase'
 import { AvailabilityRepositoryMock } from '../../../../src/availability/shared/infra/repos/availability_repository_mock'
