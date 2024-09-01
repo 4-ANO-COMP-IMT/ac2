@@ -46,4 +46,4 @@ jobs:
           TARGET: "~/app"
           EXCLUDE: "node_modules, .git, .env, .github, .gitignore, .prettierrc, tests, README.md, src"
           SCRIPT_AFTER: |
-            cd app && npm install && sudo systemctl restart event_mss.service member_mss.service eventbus_mss.service && sudo systemctl availability_mss.service
+            cd app && npm install && sudo systemctl restart event_mss.service member_mss.service eventbus_mss.service availability_mss.service
