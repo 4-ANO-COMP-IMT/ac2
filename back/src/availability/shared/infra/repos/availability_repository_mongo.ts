@@ -73,7 +73,7 @@ export class AvailabilityRepositoryMongo
     const event = await this.collection.findOne({ id: eventId })
 
     if (!event) {
-      throw new Error('Event not found for eventId: ' + eventId)
+      throw new Error('Event not found for eventId: ' + eventId) 
     }
 
     try {

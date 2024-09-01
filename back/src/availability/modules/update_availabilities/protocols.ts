@@ -12,5 +12,5 @@ export type UpdateAvailabilitiesRequest = {
 export type UpdateAvailabilitiesResponse = {
   status: number
   message: string
-  availabilities?: AvailabilityJsonProps[]
+  availabilities: AvailabilityJsonProps[]
 }

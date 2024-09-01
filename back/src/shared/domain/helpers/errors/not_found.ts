@@ -11,3 +11,10 @@ export class EntityError extends Error {
     this.name = 'EntityError'
   }
 }
+
+export class NoBestAvailability extends Error {
+  constructor() {
+    super('No best availability found')
+    this.name = 'NoBestAvailability'
+  }
+}
