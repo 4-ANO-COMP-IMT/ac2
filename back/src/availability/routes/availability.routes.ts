@@ -16,6 +16,17 @@ availabilityRouter.put('/', async (req, res) => {
     .json({ message: response.message, data: response.data })
 })
 
+availabilityRouter.get('/get_best_availability', async (req, res) => {
+  const request = new HttpRequest('get', req.body)
+  const handler = new CommunicationHandler()
+  const response = await handler.call(request)
+
+  res
+    .status(response.status)
+    .json({ message: response.message, data: response.data })
+})
+
+
 availabilityRouter.post('/communication', async (req, res) => {
   console.log('Got a request to /communication!')
   const request = new HttpRequest('post', req.body)
@@ -26,3 +37,4 @@ availabilityRouter.post('/communication', async (req, res) => {
     .status(response.status)
     .json({ message: response.message, data: response.data })
 })
+
