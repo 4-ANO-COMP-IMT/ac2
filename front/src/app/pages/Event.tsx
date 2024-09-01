@@ -45,7 +45,10 @@ export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { createMember, loginMember, member, setMember } = useMember()
-  const { updateAvailability } = useAvailability()
+  const {
+    updateAvailability
+    // getBestTime
+  } = useAvailability()
   const {
     getEvent,
     isLogged,
@@ -55,7 +58,6 @@ export function Event() {
     next,
     setNext,
     setCountDivs
-    // countDivs
   } = useEvent()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -68,7 +70,6 @@ export function Event() {
       availabilities: { [id: number]: number[] }
     }[]
   >([])
-  // const [bestTime, setBestTime] = useState<any[]>([])
 
   const handleEvent = async () => {
     if (id) {
@@ -179,10 +180,6 @@ export function Event() {
             }
           )
         )
-
-        // console.log(countDivs)
-
-        // setBestTime()
 
         const memberPaintedDivs: { [id: number]: number[] } = {}
 
@@ -517,7 +514,7 @@ export function Event() {
             </div>
             <Button
               variant="outline"
-              className={`transition-all duration-300 ${isCopied ? 'bg-green-100' : ''}`}
+              className={`transition-all ${isCopied ? 'bg-green-100' : ''}`}
               disabled={isCopied}
               onClick={() => {
                 toast({
