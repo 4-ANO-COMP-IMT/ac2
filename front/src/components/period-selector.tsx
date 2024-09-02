@@ -3,21 +3,33 @@ import { useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { useEvent } from '@/hooks/use-event'
 import { Interval } from '@/types/interval'
+import { useTheme } from '@/hooks/use-theme'
 
 type PeriodSelectorProps = {
   dates: number[]
   notEarlier: number
   notLater: number
   timezone: number
+  membersDispatch: React.Dispatch<
+    React.SetStateAction<
+      {
+        name: string
+        available: boolean
+        availabilities: { [id: number]: number[] }
+      }[]
+    >
+  >
 }
 
 export function PeriodSelector({
   dates,
   notEarlier,
   notLater,
-  timezone
+  timezone,
+  membersDispatch
 }: PeriodSelectorProps) {
-  const { isLogged, paintedDivs, setPaintedDivs, next } = useEvent()
+  const { isLogged, paintedDivs, setPaintedDivs, next, countDivs } = useEvent()
+  const { theme } = useTheme()
   const [isDragging, setIsDragging] = useState(false)
 
   const intervals: Interval[] = dates
@@ -36,6 +48,14 @@ export function PeriodSelector({
 
   const handleMouseUp = () => {
     setIsDragging(false)
+    membersDispatch((prev) => {
+      return prev.map((member) => {
+        return {
+          ...member,
+          available: true
+        }
+      })
+    })
   }
 
   const handleMouseDown = (id: number, index: number) => {
@@ -73,11 +93,23 @@ export function PeriodSelector({
             : [...currentIndices, index].sort((a, b) => a - b) // Adiciona o index se não estiver pintado
         }
       })
+    } else {
+      membersDispatch((prev) => {
+        return prev.map((member) => {
+          const memberAvailabilities = member.availabilities[id] || []
+          const isIndexAvailable = memberAvailabilities.includes(index)
+
+          return {
+            ...member,
+            available: isIndexAvailable
+          }
+        })
+      })
     }
   }
 
   return (
-    <Card className="relative flex w-full py-2 pl-2 pr-4">
+    <Card className="relative flex w-full py-2 pl-2 pr-4 transition-all duration-500">
       <div
         className="absolute left-0 top-0 z-[5] flex h-full w-full"
         onMouseOver={handleMouseUp}
@@ -142,7 +174,22 @@ export function PeriodSelector({
                     onMouseUp={handleMouseUp}
                     onMouseDown={() => handleMouseDown(id, index)}
                     onMouseOver={() => handleMouseOver(id, index)}
-                    className={`flex h-[26px] w-full border-foreground/20 ${paintedDivs[id] && paintedDivs[id].includes(index) ? 'bg-blue-400/80' : 'bg-transparent'} ${
+                    style={{
+                      backgroundColor: isLogged
+                        ? paintedDivs[id] && paintedDivs[id].includes(index)
+                          ? theme === 'light'
+                            ? 'rgba(210, 200, 255, 0.8)'
+                            : 'rgba(50, 78, 158, 0.8)'
+                          : 'transparent'
+                        : countDivs[id] &&
+                            countDivs[id].find((c) => c.index === index)!
+                              .count > 0
+                          ? theme === 'light'
+                            ? `rgba(${210 - 30 * countDivs[id].find((c) => c.index === index)!.count}, ${200 - 30 * countDivs[id].find((c) => c.index === index)!.count}, 255, 0.8)`
+                            : `rgba(50, 78, 158, ${1 - 0.15 * countDivs[id].find((c) => c.index === index)!.count})`
+                          : 'transparent'
+                    }}
+                    className={`flex h-[26px] w-full border-foreground/20 transition-all duration-500 ${
                       index === 0
                         ? 'border-t-0'
                         : index % 2 === 0

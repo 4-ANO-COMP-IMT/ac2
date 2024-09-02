@@ -45,14 +45,31 @@ export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { createMember, loginMember, member, setMember } = useMember()
-  const { updateAvailability } = useAvailability()
-  const { getEvent } = useEvent()
-  const { isLogged, setIsLogged, paintedDivs, setPaintedDivs, next, setNext } =
-    useEvent()
+  const {
+    updateAvailability
+    // getBestTime
+  } = useAvailability()
+  const {
+    getEvent,
+    isLogged,
+    setIsLogged,
+    paintedDivs,
+    setPaintedDivs,
+    next,
+    setNext,
+    setCountDivs
+  } = useEvent()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
   const [event, setEvent] = useState<EventType | null>(null)
+  const [members, setMembers] = useState<
+    {
+      name: string
+      available: boolean
+      availabilities: { [id: number]: number[] }
+    }[]
+  >([])
 
   const handleEvent = async () => {
     if (id) {
@@ -82,6 +99,17 @@ export function Event() {
             : [],
           description: response.data?.description
         })
+        setMembers(
+          response.data?.members
+            ? response.data?.members.map((member) => {
+                return {
+                  name: member.name,
+                  available: true,
+                  availabilities: []
+                }
+              })
+            : []
+        )
         const intervals = response.data?.dates
           .sort((a, b) => a - b)
           .map((date) => {
@@ -131,6 +159,28 @@ export function Event() {
           })
         })
 
+        setCountDivs(
+          divs.reduce(
+            (acc, div, index) => {
+              acc[index] = div.map((item) => {
+                return {
+                  index: item.index,
+                  count: 0,
+                  members: []
+                }
+              })
+              return acc
+            },
+            {} as {
+              [id: number]: {
+                index: number
+                count: number
+                members: string[]
+              }[]
+            }
+          )
+        )
+
         const memberPaintedDivs: { [id: number]: number[] } = {}
 
         // Initialize the object with numeric keys and empty arrays
@@ -177,6 +227,48 @@ export function Event() {
                 memberPaintedDivs[index].push(divs[index][i].index)
               }
             }
+
+            setMembers((prev) => {
+              return prev.map((item) => {
+                if (item.name === member.name) {
+                  const aux: number[] = []
+                  for (
+                    let i = divs[index][startDivIndex].index;
+                    i <= divs[index][endDivIndex].index;
+                    i++
+                  ) {
+                    aux.push(i)
+                  }
+                  return {
+                    ...item,
+                    availabilities: {
+                      ...item.availabilities,
+                      [index]: [...(item.availabilities[index] || []), ...aux]
+                    }
+                  }
+                }
+                return item
+              })
+            })
+
+            setCountDivs((prev) => {
+              return {
+                ...prev,
+                [index]: prev[index].map((item) => {
+                  if (
+                    item.index >= divs[index][startDivIndex].index &&
+                    item.index <= divs[index][endDivIndex].index
+                  ) {
+                    return {
+                      index: item.index,
+                      count: item.count + 1,
+                      members: [...item.members, member.name]
+                    }
+                  }
+                  return item
+                })
+              }
+            })
           })
         })
 
@@ -204,11 +296,9 @@ export function Event() {
       .sort((a, b) => a - b)
       .map((date) => {
         const startDate = new Date(date)
-        startDate.setHours(
-          event.notEarlier ? event.notEarlier / 1000 / 60 / 60 : 8
-        )
+        startDate.setHours(event.notEarlier || 8)
         const endDate = new Date(date)
-        endDate.setHours(event.notLater ? event.notLater / 1000 / 60 / 60 : 18)
+        endDate.setHours(event.notLater || 18)
         return {
           // Add timezone offset
           startDate: new Date(startDate.getTime() + -3 * 60 * 60 * 1000),
@@ -242,7 +332,6 @@ export function Event() {
         }
       })
     })
-    console.log(divs)
 
     const memberPaintedDivs: { [id: number]: number[] } = {}
 
@@ -296,9 +385,6 @@ export function Event() {
           }
         }
       })
-
-    console.log('memberPaintedDivs')
-    console.log(memberPaintedDivs)
 
     setPaintedDivs(memberPaintedDivs)
   }
@@ -417,7 +503,7 @@ export function Event() {
   })
 
   return (
-    <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden pb-24">
+    <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-background pb-24 transition-all duration-500">
       <AnimatedBalls />
       {event?.dates.length ? (
         <div className="z-10 flex w-4/5 flex-col items-center justify-center gap-6 pt-24 md:w-4/5">
@@ -428,7 +514,7 @@ export function Event() {
             </div>
             <Button
               variant="outline"
-              className={`transition-all duration-300 ${isCopied ? 'bg-green-100' : ''}`}
+              className={`transition-all ${isCopied ? 'bg-green-100' : ''}`}
               disabled={isCopied}
               onClick={() => {
                 toast({
@@ -464,6 +550,7 @@ export function Event() {
               notEarlier={event.notEarlier}
               notLater={event.notLater}
               timezone={-3}
+              membersDispatch={setMembers}
             />
             <div className="flex flex-col gap-4">
               <Card className="h-auto w-full lg:w-80">
@@ -471,11 +558,46 @@ export function Event() {
                   <CardTitle>Usuários ({event.members.length})</CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-1 lg:flex lg:flex-col">
-                  {event.members.map((member, index) => (
-                    <p key={index}>{member.name}</p>
-                  ))}
+                  {members.map((member, index) => {
+                    if (member.available)
+                      return (
+                        <p key={index}>
+                          {member.name
+                            .replace(/\./g, ' ')
+                            .split(' ')
+                            .map(
+                              (item) =>
+                                item.charAt(0).toUpperCase() + item.slice(1)
+                            )
+                            .join(' ')}
+                        </p>
+                      )
+                    else
+                      return (
+                        <s key={index}>
+                          {member.name
+                            .replace(/\./g, ' ')
+                            .split(' ')
+                            .map(
+                              (item) =>
+                                item.charAt(0).toUpperCase() + item.slice(1)
+                            )
+                            .join(' ')}
+                        </s>
+                      )
+                  })}
                 </CardContent>
               </Card>
+              {/* <Card className="h-auto w-full lg:w-80">
+                <CardHeader>
+                  <CardTitle>Melhor horário</CardTitle>
+                </CardHeader>
+                <CardContent className="">
+                  {bestTime.map((time, index) => (
+                    <p key={index}>{time}</p>
+                  ))}
+                </CardContent>
+              </Card> */}
               <div className="flex justify-between">
                 <div className="flex justify-start gap-2">
                   {isLogged && (

@@ -15,5 +15,13 @@ export const useAvailability = () => {
     return response.data
   }
 
-  return { updateAvailability }
+  const getBestTime = async (eventId: string) => {
+    const response = await api.post(`/availability/get_best_availability/`, {
+      eventId
+    })
+
+    return response.data
+  }
+
+  return { updateAvailability, getBestTime }
 }
