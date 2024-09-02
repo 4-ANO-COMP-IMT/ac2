@@ -63,6 +63,11 @@ export class GetBestAvailabilitiesUsecase
       event = await this.repo.getEvent(eventId)
     }
 
+    // check if event have members
+    if (event.members == null || event.members.length == 0) {
+      throw new NoBestAvailability()
+    }
+
     // create a dictionary with relation of all availability and members
     type PossibleAvailabilities = {
       [key: string]: number
@@ -83,28 +88,8 @@ export class GetBestAvailabilitiesUsecase
     // create a variable with the best/biggest number of members
     let best_number_of_members = 0
 
-    // caso a lista de membros não seja um object, retorna um erro
-    try {
-      if (event.data.members.length === 0) {
-        return []
-      }
-    } catch (err) {}
-
-    // transformar o object em Member
-    try {
-      const members = event.data.members
-
-      event.members = members.map((member: any) => {
-        return new Member(member.id, member.name, member.availabilities)
-      })
-    } catch (err) {}
-
-    //caso nao tenha avaliabilidades, retorna um erro
-
+    // without availabilities
     for (const member of event!.members) {
-      if (member.availabilities.length === 0) {
-        return []
-      }
       for (const availability of member.availabilities) {
         if (possible_availabilities[availability.startDate] == null) {
           possible_availabilities[availability.startDate] = 1
@@ -136,6 +121,11 @@ export class GetBestAvailabilitiesUsecase
             possible_availabilities[availability.startDate]
         }
       }
+    }
+
+    // check if exist at least one availability
+    if (all_availabilities.length == 0) {
+      throw new NoBestAvailability()  
     }
 
     // check if the best availabilities's number of members is greater than number of members - 1

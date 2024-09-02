@@ -425,9 +425,26 @@ test('Test get best availabilities failure availability common for 3 members but
   )
 })
 
-test('Refresh Mock', async () => {
+test('Test get best availabilities failure event without members', async () => {
   const repo = new AvailabilityRepositoryMock()
+  // reset old tests
   repo.resetMock()
+  const usecase = new GetBestAvailabilitiesUsecase(repo)
 
-  expect(1).toEqual(1)
+
+  expect(async () => await usecase.call('550e8400-e29b-41d4-a716-446655440000')).rejects.toThrowError(
+    'No best availability found'
+  )
+})
+
+test('Test get best availabilities failure member without availability', async () => {
+  const repo = new AvailabilityRepositoryMock()
+  // reset old tests
+  repo.resetMock()
+  const usecase = new GetBestAvailabilitiesUsecase(repo)
+
+
+  expect(async () => await usecase.call('123e4567-e89b-12d3-a456-426614174000')).rejects.toThrowError(
+    'No best availability found'
+  )
 })
