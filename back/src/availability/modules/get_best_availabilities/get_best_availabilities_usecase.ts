@@ -63,6 +63,52 @@ export class GetBestAvailabilitiesUsecase
       event = await this.repo.getEvent(eventId)
     }
 
+    // check if event have members
+    if (event.members == null || event.members.length == 0) {
+      throw new NoBestAvailability()
+    }
+
+    type AvailabilityViewmodel = {
+      startDate: number
+      endDate: number
+      member: {
+        id: string
+        name: string
+      }
+    }
+
+    // get all availabilities as a list with members principal information
+    const original_availabilities: AvailabilityViewmodel[] = []
+    for (const member of event.members) {
+      for (const availability of member.availabilities) {
+        original_availabilities.push({
+          startDate: availability.startDate,
+          endDate: availability.endDate,
+          member: {
+            id: member.id,
+            name: member.name
+          }
+        })
+      }
+    }
+
+    // slice availabilities into blocks of 1800000 ms (30 minutes)
+    const sliced_availabilities: AvailabilityViewmodel[] = []
+    for (const availability of original_availabilities) {
+      let current_date = availability.startDate
+      while (current_date < availability.endDate) {
+        sliced_availabilities.push({
+          startDate: current_date,
+          endDate:
+            current_date + 1800000 < availability.endDate
+              ? current_date + 1800000
+              : availability.endDate,
+          member: availability.member
+        })
+        current_date += 1800000
+      }
+    }
+
     // create a dictionary with relation of all availability and members
     type PossibleAvailabilities = {
       [key: string]: number
@@ -83,59 +129,41 @@ export class GetBestAvailabilitiesUsecase
     // create a variable with the best/biggest number of members
     let best_number_of_members = 0
 
-    // caso a lista de membros não seja um object, retorna um erro
-    try {
-      if (event.data.members.length === 0) {
-        return []
-      }
-    } catch (err) {}
-
-    // transformar o object em Member
-    try {
-      const members = event.data.members
-
-      event.members = members.map((member: any) => {
-        return new Member(member.id, member.name, member.availabilities)
-      })
-    } catch (err) {}
-
-    //caso nao tenha avaliabilidades, retorna um erro
-
-    for (const member of event!.members) {
-      if (member.availabilities.length === 0) {
-        return []
-      }
-      for (const availability of member.availabilities) {
-        if (possible_availabilities[availability.startDate] == null) {
-          possible_availabilities[availability.startDate] = 1
-          all_availabilities.push({
-            startDate: availability.startDate,
-            endDate: availability.endDate,
-            members: [
-              {
-                id: member.id,
-                name: member.name
-              }
-            ]
+    for (const availability of sliced_availabilities) {
+      if (possible_availabilities[availability.startDate] == null) {
+        possible_availabilities[availability.startDate] = 1
+        all_availabilities.push({
+          startDate: availability.startDate,
+          endDate: availability.endDate,
+          members: [
+            {
+              id: availability.member.id,
+              name: availability.member.name
+            }
+          ]
+        })
+      } else {
+        possible_availabilities[availability.startDate] += 1
+        all_availabilities
+          .filter((a) => a.startDate == availability.startDate)[0]
+          .members.push({
+            id: availability.member.id,
+            name: availability.member.name
           })
-        } else {
-          possible_availabilities[availability.startDate] += 1
-          all_availabilities
-            .filter((a) => a.startDate == availability.startDate)[0]
-            .members.push({
-              id: member.id,
-              name: member.name
-            })
-        }
-
-        if (
-          possible_availabilities[availability.startDate] >
-          best_number_of_members
-        ) {
-          best_number_of_members =
-            possible_availabilities[availability.startDate]
-        }
       }
+
+      if (
+        possible_availabilities[availability.startDate] >
+        best_number_of_members
+      ) {
+        best_number_of_members =
+          possible_availabilities[availability.startDate]
+      }
+    }
+
+    // check if exist at least one availability
+    if (all_availabilities.length == 0) {
+      throw new NoBestAvailability()  
     }
 
     // check if the best availabilities's number of members is greater than number of members - 1

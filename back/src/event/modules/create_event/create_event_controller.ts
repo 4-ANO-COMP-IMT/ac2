@@ -40,11 +40,11 @@ export class CreateEventController implements CreateEventControllerProps {
       return HttpResponse.badRequest('missing dates')
     }
 
-    if (!notEarlier) {
+    if (!notEarlier && notEarlier !== 0) {
       return HttpResponse.badRequest('missing notEarlier')
     }
 
-    if (!notLater) {
+    if (!notLater && notLater !== 0) {
       return HttpResponse.badRequest('missing notLater')
     }
 
