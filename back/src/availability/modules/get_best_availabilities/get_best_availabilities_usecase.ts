@@ -2,10 +2,10 @@ import axios from 'axios'
 
 import { environments } from '../../../shared/env/environments'
 import { AvailabilityRepositoryInterface } from '../../shared/infra/repos/availability_repository_interface'
-import { Availability } from '../../../shared/domain/entities/availability'
 import { Member } from '../../../shared/domain/entities/member'
 import { NoBestAvailability } from '../../../shared/domain/helpers/errors/not_found'
-import { BSON } from 'mongodb'
+import { Event } from '../../../shared/domain/entities/event'
+import { Availability } from '../../../shared/domain/entities/availability'
 
 const PORT_EVENTBUS = environments.eventBusPort
 
@@ -55,7 +55,26 @@ export class GetBestAvailabilitiesUsecase
         // MSS is off, check locally if event exists
         event = await this.repo.getEvent(eventId)
       }
-      event = response.data
+      event = new Event(
+        response.data.id,
+        response.data.name,
+        response.data.dates,
+        response.data.notEarlier,
+        response.data.notLater,
+        response.data.members.map((member: any) => {
+          return new Member(member.id, member.name, member.availabilities.map(
+            (availability: any) => {
+              return new Availability(
+                availability.id,
+                availability.startDate,
+                availability.endDate
+              )
+            }
+          ))
+        }),
+        response.data.description
+      )
+      
 
       // event exists
     } else {
