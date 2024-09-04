@@ -56,12 +56,12 @@ export class GetBestAvailabilitiesUsecase
         event = await this.repo.getEvent(eventId)
       }
       event = new Event(
-        response.data.id,
-        response.data.name,
-        response.data.dates,
-        response.data.notEarlier,
-        response.data.notLater,
-        response.data.members.map((member: any) => {
+        response.data.data.id,
+        response.data.data.name,
+        response.data.data.dates,
+        response.data.data.notEarlier,
+        response.data.data.notLater,
+        response.data.data.members.map((member: any) => {
           return new Member(member.id, member.name, member.availabilities.map(
             (availability: any) => {
               return new Availability(
