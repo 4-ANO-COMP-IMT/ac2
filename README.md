@@ -145,7 +145,7 @@ npm install
 Para rodar cada microsserviço, utilize o comando:
 
 ```bash
-npm dev:<nome do microsserviço>
+npm run dev:<nome do microsserviço>
 ```
 
 ### Frontend
