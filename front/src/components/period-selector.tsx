@@ -191,7 +191,7 @@ export function PeriodSelector({
                             : `rgba(50, 78, 158, ${1 - 0.15 * countDivs[id].find((c) => c.index === index)!.count})`
                           : 'transparent'
                     }}
-                    className={`flex h-[26px] w-full border-foreground/20 transition-all duration-500 ${
+                    className={`flex h-[26px] w-full border-foreground/20 transition-all duration-0 ${
                       index === 0
                         ? 'border-t-0'
                         : index % 2 === 0
