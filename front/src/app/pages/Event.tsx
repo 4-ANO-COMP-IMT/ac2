@@ -40,15 +40,13 @@ import { toast } from '@/components/ui/use-toast'
 import { useMember } from '@/hooks/use-member'
 import { separateConsecutiveNumbers } from '@/utils/functions/array-separator'
 import { useAvailability } from '@/hooks/use-availability'
+import { BestTime } from '@/types/best-time'
 
 export function Event() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { createMember, loginMember, member, setMember } = useMember()
-  const {
-    updateAvailability
-    // getBestTime
-  } = useAvailability()
+  const { updateAvailability, getBestTime } = useAvailability()
   const {
     getEvent,
     isLogged,
@@ -70,6 +68,7 @@ export function Event() {
       availabilities: { [id: number]: number[] }
     }[]
   >([])
+  const [bestTime, setBestTime] = useState<BestTime[]>([])
 
   const handleEvent = async () => {
     if (id) {
@@ -99,6 +98,14 @@ export function Event() {
             : [],
           description: response.data?.description
         })
+
+        try {
+          const { data } = await getBestTime(id)
+          setBestTime(data || [])
+        } catch (error) {
+          // console.error(error)
+        }
+
         setMembers(
           response.data?.members
             ? response.data?.members.map((member) => {
@@ -569,16 +576,30 @@ export function Event() {
                   })}
                 </CardContent>
               </Card>
-              {/* <Card className="h-auto w-full lg:w-80">
-                <CardHeader>
-                  <CardTitle>Melhor horário</CardTitle>
-                </CardHeader>
-                <CardContent className="">
-                  {bestTime.map((time, index) => (
-                    <p key={index}>{time}</p>
-                  ))}
-                </CardContent>
-              </Card> */}
+              {bestTime.length !== 0 && (
+                <Card className="h-auto w-full lg:w-80">
+                  <CardHeader>
+                    <CardTitle>
+                      Melhor{bestTime.length > 1 ? 'es' : ''} horário
+                      {bestTime.length > 1 ? 's' : ''}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="">
+                    {bestTime.map((bestTime, index) => {
+                      const startDate = new Date(bestTime.startDate)
+                      const endDate = new Date(bestTime.endDate)
+                      return (
+                        <p key={index}>
+                          {`${startDate.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: 'long'
+                          })} | ${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}`}
+                        </p>
+                      )
+                    })}
+                  </CardContent>
+                </Card>
+              )}
               <div className="flex justify-between">
                 <div className="flex justify-start gap-2">
                   {isLogged && (

@@ -1,3 +1,4 @@
+import { BestTime } from '@/types/best-time'
 import { api } from '@/utils/http/api'
 
 export const useAvailability = () => {
@@ -16,8 +17,11 @@ export const useAvailability = () => {
   }
 
   const getBestTime = async (eventId: string) => {
-    const response = await api.post(`/availability/get_best_availability/`, {
-      eventId
+    const response = await api.get<{
+      message: string
+      data: BestTime[] | undefined
+    }>(`/availability/get_best_availabilities/`, {
+      params: { eventId }
     })
 
     return response.data
