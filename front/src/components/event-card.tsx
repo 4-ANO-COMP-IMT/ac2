@@ -56,7 +56,6 @@ export function EventCard() {
       })
       form.reset()
       await new Promise((resolve) => setTimeout(resolve, 3000))
-      // await new Promise((resolve) => setTimeout(resolve, 2000))
       navigate('/event/' + data?.id)
     } catch (error) {
       toast({
@@ -156,14 +155,15 @@ export function EventCard() {
                             <SelectContent position="popper">
                               {hours.map((hour) => {
                                 const hourFormatted = `${hour.toString().padStart(2, '0')}:00`
-                                return (
-                                  <SelectItem
-                                    key={hour}
-                                    value={hour.toString()}
-                                  >
-                                    {hourFormatted}
-                                  </SelectItem>
-                                )
+                                if (hour < 23)
+                                  return (
+                                    <SelectItem
+                                      key={hour}
+                                      value={hour.toString()}
+                                    >
+                                      {hourFormatted}
+                                    </SelectItem>
+                                  )
                               })}
                             </SelectContent>
                           </Select>
@@ -194,14 +194,15 @@ export function EventCard() {
                             <SelectContent position="popper">
                               {hours.map((hour) => {
                                 const hourFormatted = `${hour.toString().padStart(2, '0')}:00`
-                                return (
-                                  <SelectItem
-                                    key={hour}
-                                    value={hour.toString()}
-                                  >
-                                    {hourFormatted}
-                                  </SelectItem>
-                                )
+                                if (hour > 0)
+                                  return (
+                                    <SelectItem
+                                      key={hour}
+                                      value={hour.toString()}
+                                    >
+                                      {hourFormatted}
+                                    </SelectItem>
+                                  )
                               })}
                             </SelectContent>
                           </Select>

@@ -25,7 +25,7 @@ export function PeriodSelector({
   dates,
   notEarlier,
   notLater,
-  timezone,
+  // timezone,
   membersDispatch
 }: PeriodSelectorProps) {
   const { isLogged, paintedDivs, setPaintedDivs, next, countDivs } = useEvent()
@@ -41,8 +41,8 @@ export function PeriodSelector({
       endDate.setHours(notLater)
       return {
         // Add timezone offset
-        startDate: new Date(startDate.getTime() + timezone * 60 * 60 * 1000),
-        endDate: new Date(endDate.getTime() + timezone * 60 * 60 * 1000)
+        startDate,
+        endDate
       }
     })
 
@@ -120,16 +120,18 @@ export function PeriodSelector({
             intervals[0].endDate.getHours() -
             intervals[0].startDate.getHours() +
             1
-        }).map((_, index) => (
-          <p
-            key={index}
-            className={`text-sm text-foreground ${index !== 0 ? `pt-8` : ''}`}
-          >
-            {(index + intervals[0].startDate.getHours() - timezone)
-              .toString()
-              .padStart(2, '0') + ':00'}
-          </p>
-        ))}
+        }).map((_, index) => {
+          return (
+            <p
+              key={index}
+              className={`text-sm text-foreground ${index !== 0 ? `pt-8` : ''}`}
+            >
+              {(index + intervals[0].startDate.getHours())
+                .toString()
+                .padStart(2, '0') + ':00'}
+            </p>
+          )
+        })}
       </div>
       {intervals.map((interval, id) => {
         if (window.innerWidth < 768 ? id >= next && id < next + 3 : true)
@@ -189,7 +191,7 @@ export function PeriodSelector({
                             : `rgba(50, 78, 158, ${1 - 0.15 * countDivs[id].find((c) => c.index === index)!.count})`
                           : 'transparent'
                     }}
-                    className={`flex h-[26px] w-full border-foreground/20 transition-all duration-500 ${
+                    className={`flex h-[26px] w-full border-foreground/20 transition-all duration-0 ${
                       index === 0
                         ? 'border-t-0'
                         : index % 2 === 0
