@@ -541,11 +541,11 @@ export function Event() {
               membersDispatch={setMembers}
             />
             <div className="flex flex-col gap-4">
-              <Card className="h-auto w-full lg:w-80">
+              <Card className="h-auto max-h-48 w-full overflow-y-scroll lg:w-80">
                 <CardHeader>
                   <CardTitle>Usuários ({event.members.length})</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-1 lg:flex lg:flex-col">
+                <CardContent className="grid grid-cols-2 gap-1">
                   {members.map((member, index) => {
                     if (member.available)
                       return (
