@@ -109,7 +109,7 @@ export function PeriodSelector({
   }
 
   return (
-    <Card className="relative flex w-full py-2 pl-2 pr-4 transition-all duration-500">
+    <Card className="relative flex w-full max-w-[720px] py-2 pl-2 pr-4 transition-all duration-500">
       <div
         className="absolute left-0 top-0 z-[5] flex h-full w-full"
         onMouseOver={handleMouseUp}

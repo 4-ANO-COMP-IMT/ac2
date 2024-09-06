@@ -494,7 +494,7 @@ export function Event() {
     <main className="relative flex h-auto min-h-screen w-full items-center justify-center overflow-y-auto overflow-x-hidden bg-background pb-24 transition-all duration-500">
       <AnimatedBalls />
       {event?.dates.length ? (
-        <div className="z-10 flex w-4/5 flex-col items-center justify-center gap-6 pt-24 md:w-4/5">
+        <div className="z-10 flex w-4/5 max-w-[1010px] flex-col items-center justify-center gap-6 pt-24 md:w-4/5">
           <div className="flex w-full items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="text-3xl font-bold">{event.name}</h1>
