@@ -15,7 +15,7 @@ test('create member usecase success', async () => {
 
   expect(member).toBeInstanceOf(Member)
   expect(member.name).toBe('Adam Leviners')
-  expect(member.password).toStrictEqual('Brownas123!')
+  expect(member.password).toStrictEqual('b7e7e71450ee5072fb96e76a53ba04b775d506ec778de20e0e61fed5354ead9b')
   repo.resetMock()
 })
 

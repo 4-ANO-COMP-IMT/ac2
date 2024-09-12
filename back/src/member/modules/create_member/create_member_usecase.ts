@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Member } from '../../../shared/domain/entities/member'
 import { environments } from '../../../shared/env/environments'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
+import { sha256Hash } from '../../../shared/utils/crypto'
 
 const PORT_EVENTBUS = environments.eventBusPort
 
@@ -54,7 +55,7 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
       throw new Error('Member already exists with name: ' + name)
     }
 
-    const new_member = await this.repo.createMember(eventId, name, password)
+    const new_member = await this.repo.createMember(eventId, name, sha256Hash(password))
 
     // inform to other MSS the creation of a member
     try {
