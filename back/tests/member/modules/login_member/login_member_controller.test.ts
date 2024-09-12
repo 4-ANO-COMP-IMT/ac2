@@ -5,6 +5,9 @@ import { LoginMemberRequest } from '../../../../src/member/modules/login_member/
 import { MemberRepositoryMock } from '../../../../src/member/shared/infra/repos/member_repository_mock'
 import { HttpRequest } from '../../../../src/shared/domain/helpers/http/http_request'
 import { HTTP_STATUS_CODE } from '../../../../src/shared/domain/helpers/http/http_status_code'
+import { Event } from '../../../../src/shared/domain/entities/event'
+import { Member } from '../../../../src/shared/domain/entities/member'
+import { Availability } from '../../../../src/shared/domain/entities/availability'
 
 test('login member controller ok', async () => {
   const repo = new MemberRepositoryMock()

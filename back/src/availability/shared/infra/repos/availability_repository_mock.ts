@@ -43,7 +43,7 @@ export class AvailabilityRepositoryMock
               1719405000000
             )
           ],
-          'Brownas'
+          'a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f'
         )
       ],
       'Descrição do evento'
@@ -242,7 +242,7 @@ export class AvailabilityRepositoryMock
                 1719405000000
               )
             ],
-            'Brownas'
+            'a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f'
           )
         ],
         'Descrição do evento'
