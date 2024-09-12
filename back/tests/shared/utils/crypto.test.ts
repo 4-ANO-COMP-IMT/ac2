@@ -16,3 +16,19 @@ test('Test md5Hash', () => {
   
     expect(hash).toBe(hashExpected)
   })
+  
+test('Test sha256Hash with undefined input', () => {
+  const password = undefined
+  const hash = sha256Hash(password)
+  const hashExpected = undefined
+
+  expect(hash).toBe(hashExpected)
+})
+
+test('Test md5Hash with undefined input', () => {
+    const password = undefined
+    const hash = md5Hash(password)
+    const hashExpected = undefined
+  
+    expect(hash).toBe(hashExpected)
+  })
