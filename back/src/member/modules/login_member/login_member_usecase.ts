@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import { environments } from '../../../shared/env/environments'
 import { MemberRepositoryInterface } from '../../shared/infra/repos/member_repository_interface'
+import { sha256Hash } from '../../../shared/utils/crypto'
 
 const PORT_EVENTBUS = environments.eventBusPort
 
@@ -52,7 +53,7 @@ export class LoginMemberUsecase implements LoginMemberUsecaseProps {
 
     // validate password if exists
     if (member.password) {
-      if (member.password != password) {
+      if (member.password != sha256Hash(password)) {
         return false
       }
     }

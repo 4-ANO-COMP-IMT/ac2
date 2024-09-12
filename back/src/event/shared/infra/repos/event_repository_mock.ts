@@ -41,10 +41,76 @@ export class EventRepositoryMock implements EventRepositoryInterface {
               1719405000000
             )
           ],
-          'Brownas'
+          'a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f'
         )
       ],
       'Descrição do evento'
+    ),
+    new Event(
+      '883f5cf2-96dd-48e2-9ba9-24df8f01fb79', 
+      'Evento para Soller', 
+      [1725350400000], 
+      32400000, 
+      75600000, 
+      [
+        new Member(
+          '883f5cf2-96dd-48e2-9ba9-24df8f01fb79',
+          'soller',
+          [
+            new Availability(
+              '0b2771a4-8021-463f-a385-b6c2c7289d41',
+              1725350400000,
+              1725366600000
+            ),
+            new Availability(
+              'bd956287-9357-485a-8989-2776b1edbfa6',
+              1725436800000,
+              1725451200000
+            ),
+            new Availability(
+              '0f1092b4-b73c-45c8-8aa7-9263164f1a37',
+              1725523200000,
+              1725537600000
+            ),
+            new Availability(
+              'a3ae2360-d140-495f-bd34-1b4d0e4223f8',
+              1725609600000,
+              1725622200000
+            )
+          ],
+          ''
+        ),
+        new Member(
+          'ad820ed9-a3fb-4b1e-92b4-57c1b1d55070',
+          'joaobranco',
+          [
+            new Availability(
+              'a9aa7701-d3f2-4b17-928e-3a57eda1ff66',
+              1725350400000,
+              1725363000000
+            ),
+            new Availability(
+              'b01a8e68-a6a7-4f4a-bdf6-3922881d22d7',
+              1725436800000,
+              1725447600000
+            )
+          ],
+          ''
+        ),
+        new Member(
+          '13f9e31c-b800-4583-b1df-e4ab8e35e90e',
+          'saka',
+          [
+            new Availability(
+              '104c04c8-9cff-4ad7-aad2-c6d434762a7a',
+              1725350400000,
+              1725352200000
+            )
+          ],
+          ''
+        )
+      ],
+      'Descrição do evento' // Descrição do evento (ajuste conforme necessário)
     )
   ]
 
@@ -158,7 +224,7 @@ export class EventRepositoryMock implements EventRepositoryInterface {
                 1719405000000
               )
             ],
-            'Brownas'
+            'a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f'
           )
         ],
         'Descrição do evento'

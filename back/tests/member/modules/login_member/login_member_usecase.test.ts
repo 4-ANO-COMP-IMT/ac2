@@ -1,7 +1,9 @@
 import { expect, test, describe, it } from 'vitest'
-
 import { LoginMemberUsecase } from '../../../../src/member/modules/login_member/login_member_usecase'
 import { MemberRepositoryMock } from '../../../../src/member/shared/infra/repos/member_repository_mock'
+import { Event } from '../../../../src/shared/domain/entities/event'
+import { Member } from '../../../../src/shared/domain/entities/member'
+import { Availability } from '../../../../src/shared/domain/entities/availability'
 
 describe('login member usecase success',  () => {
   it('with password', async () => {
@@ -38,7 +40,7 @@ describe('login member usecase error',  () => {
       await usecase.call(
         '9b2f4e8-8d59-11eb-8dcd-0242ac130004',
         'Adam Leviner',
-        'Brownas123!'
+        'NotTheRealPassword'
       )
     } catch (err: any) {
       expect(err.message).toBe(

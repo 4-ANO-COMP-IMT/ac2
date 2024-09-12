@@ -11,7 +11,7 @@ describe('Test createMember', () => {
     repo.createMember(
       '9b2f4e8c-8d59-11eb-8dcd-0242ac130003',
       'Adam Leviner',
-      'Brownas123!'
+      'b7e7e71450ee5072fb96e76a53ba04b775d506ec778de20e0e61fed5354ead9b'
     )
     const lengthAfter = MemberRepositoryMock.events[2].members.length
     expect(lengthAfter).toBe(lengthBefore + 1)
@@ -20,7 +20,7 @@ describe('Test createMember', () => {
     )
     expect(
       MemberRepositoryMock.events[2].members[lengthAfter - 1].password
-    ).toBe('Brownas123!')
+    ).toBe('b7e7e71450ee5072fb96e76a53ba04b775d506ec778de20e0e61fed5354ead9b')
     expect(
       MemberRepositoryMock.events[2].members[lengthAfter - 1].availabilities
         .length
@@ -81,7 +81,7 @@ describe('Test getMemberByName', () => {
       '9b2f4e8c-8d59-11eb-8dcd-0242ac130003'
     )
     expect(member?.name).toBe('Adam Levine')
-    expect(member?.password).toBe('Brownas')
+    expect(member?.password).toBe('a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f')
     repo.resetMock()
   })
 
@@ -141,7 +141,7 @@ describe('Test getMember', () => {
       'a4f6b2b8-7f2a-4702-91f5-12d9c05d6b3d',
     )
     expect(member?.name).toBe('Adam Levine')
-    expect(member?.password).toBe('Brownas')
+    expect(member?.password).toBe('a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f')
     repo.resetMock()
   })
 

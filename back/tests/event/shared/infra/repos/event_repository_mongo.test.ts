@@ -54,7 +54,7 @@ test.skip('Test create member', async () => {
   )
 
   expect(member.name).toBe('Adam Levine')
-  expect(member.password).toBe('Brownas')
+  expect(member.password).toBe('a5d4e18f6383ef9f264d615498179fdded0814b99320193376ce7b75bebc556f')
 })
 
 describe.skip('Test update availability', () => {
