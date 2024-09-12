@@ -55,7 +55,8 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
       throw new Error('Member already exists with name: ' + name)
     }
 
-    const new_member = await this.repo.createMember(eventId, name, sha256Hash(password))
+    const hashPassword = sha256Hash(password)
+    const new_member = await this.repo.createMember(eventId, name, hashPassword)
 
     // inform to other MSS the creation of a member
     try {
@@ -68,7 +69,7 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
             eventId: eventId,
             memberId: new_member.id,
             name: name,
-            password: password
+            password: hashPassword
           }
         }
       )
