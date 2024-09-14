@@ -38,7 +38,7 @@ const reviews: Review[] = [
   {
     name: 'João Branco',
     position: 'Hacker ético, Anonymous',
-    img: 'https://media.licdn.com/dms/image/C4D03AQFiRdVm6Y3EpA/profile-displayphoto-shrink_800_800/0/1621979338107?e=1725494400&v=beta&t=-sBAQWAkvZYSLHr2qKXrqB3xNAOFogO6i-Qd3GZ8giM',
+    img: 'https://avatars.githubusercontent.com/u/85962841?v=4',
     review:
       'BoraMarcar é uma plataforma excepcional. A interface prática e profissional facilitou muito a gestão de nossos agendamentos. Recomendo fortemente!'
   },
