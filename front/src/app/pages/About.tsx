@@ -74,7 +74,7 @@ export function About() {
   }, [])
 
   return (
-    <main className="relative flex w-full flex-col items-center justify-center gap-2 overflow-x-hidden bg-background px-4 pb-20 pt-32 text-center font-geist transition-all duration-500 sm:pb-12">
+    <main className="relative flex min-h-screen w-full flex-col items-center gap-2 overflow-x-hidden bg-background px-4 pb-20 pt-32 text-center font-geist transition-all duration-500  sm:pb-12 md:justify-center">
       <AnimatedBalls />
       <h1
         className={`transform text-4xl font-bold transition-all duration-1000 sm:text-6xl lg:text-6xl ${fade ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
