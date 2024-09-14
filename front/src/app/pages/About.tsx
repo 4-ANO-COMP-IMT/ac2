@@ -21,7 +21,7 @@ type Contributor = {
 const contributors: Contributor[] = [
   {
     name: 'João Branco',
-    img: 'https://media.licdn.com/dms/image/C4D03AQFiRdVm6Y3EpA/profile-displayphoto-shrink_800_800/0/1621979338107?e=1725494400&v=beta&t=-sBAQWAkvZYSLHr2qKXrqB3xNAOFogO6i-Qd3GZ8giM',
+    img: 'https://avatars.githubusercontent.com/u/85962841?v=4',
     position: 'Hacker ético, Anonymous',
     github: 'https://github.com/JoaoVitorBranco',
     linkedin:
