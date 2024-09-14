@@ -31,7 +31,7 @@ const reviews: Review[] = [
   {
     name: 'Bruno Vilardi',
     position: 'CEO, e-Core',
-    img: 'https://media.licdn.com/dms/image/D5603AQFx8dIY-KAcPQ/profile-displayphoto-shrink_200_200/0/1709219070107?e=1724889600&v=beta&t=gpRSFh51T4whCsJNesglU5_VgnlGO96LRpKDHNCe6gs',
+    img: 'https://avatars.githubusercontent.com/u/62917140?v=4',
     review:
       'BoraMarcar é uma ferramenta excepcional. A interface intuitiva e profissional simplificou significativamente a coordenação de nossos compromissos. Altamente recomendada!'
   },
