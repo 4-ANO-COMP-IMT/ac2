@@ -13,6 +13,11 @@ COPY src/event app/src/event
 
 RUN npm run build
 
+RUN rm -rf app
+RUN rm -rf node_modules
+RUN npm install --only=production
+RUN rm tsconfig.json
+
 CMD ["node", "dist/event/index.js"]
 
 EXPOSE 3000
