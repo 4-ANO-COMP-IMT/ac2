@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: availability-deployment
+  labels:
+    app: availability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: availability
+  template:
+    metadata:
+      labels:
+        app: availability
+    spec:
+      containers:
+        - name: ac2-2024-availability-container
+          imagePullPolicy: Never
+          image: ac2-2024-availability-container:latest
+          ports:
+            - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: availability-service
+spec:
+  selector:
+    app: availability
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
