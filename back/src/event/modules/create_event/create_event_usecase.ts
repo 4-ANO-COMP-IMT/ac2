@@ -37,19 +37,26 @@ export class CreateEventUsecase implements CreateEventUsecaseProps {
       description
     )
     const idEvent = response.id
+
+    // get ip address
+    let ip_address = environments.localIpAddress
+
     try {
-      await axios.post('http://localhost:' + PORT_EVENTBUS + '/communication', {
-        mss: 'all',
-        type: 'createEvent',
-        params: {
-          id: idEvent,
-          name: name,
-          dates: dates,
-          notEarlier: notEarlier,
-          notLater: notLater,
-          description: description
+      await axios.post(
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
+        {
+          mss: 'all',
+          type: 'createEvent',
+          params: {
+            id: idEvent,
+            name: name,
+            dates: dates,
+            notEarlier: notEarlier,
+            notLater: notLater,
+            description: description
+          }
         }
-      })
+      )
     } catch (err) {}
     return response
   }

@@ -33,11 +33,14 @@ export class GetBestAvailabilitiesUsecase
   async call(eventId: string): Promise<AvailabilityViewmodel[]> {
     let response = null
 
+    // get ip address
+    let ip_address = environments.localIpAddress
+
     let event
     // verify if event exists
     try {
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'event',
           type: 'getEvent',
@@ -62,19 +65,20 @@ export class GetBestAvailabilitiesUsecase
         response.data.data.notEarlier,
         response.data.data.notLater,
         response.data.data.members.map((member: any) => {
-          return new Member(member.id, member.name, member.availabilities.map(
-            (availability: any) => {
+          return new Member(
+            member.id,
+            member.name,
+            member.availabilities.map((availability: any) => {
               return new Availability(
                 availability.id,
                 availability.startDate,
                 availability.endDate
               )
-            }
-          ))
+            })
+          )
         }),
         response.data.description
       )
-      
 
       // event exists
     } else {
@@ -172,17 +176,15 @@ export class GetBestAvailabilitiesUsecase
       }
 
       if (
-        possible_availabilities[availability.startDate] >
-        best_number_of_members
+        possible_availabilities[availability.startDate] > best_number_of_members
       ) {
-        best_number_of_members =
-          possible_availabilities[availability.startDate]
+        best_number_of_members = possible_availabilities[availability.startDate]
       }
     }
 
     // check if exist at least one availability
     if (all_availabilities.length == 0) {
-      throw new NoBestAvailability()  
+      throw new NoBestAvailability()
     }
 
     // check if the best availabilities's number of members is greater than number of members - 1

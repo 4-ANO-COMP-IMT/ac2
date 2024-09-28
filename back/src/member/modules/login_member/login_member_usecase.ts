@@ -19,8 +19,10 @@ export class LoginMemberUsecase implements LoginMemberUsecaseProps {
   async call(eventId: string, name: string, password: string) {
     let response = null
     try {
+      // get ip address
+      let ip_address = environments.localIpAddress
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'event',
           type: 'getEvent',
