@@ -15,18 +15,27 @@ export interface UpdateAvailabilitiesUsecaseProps {
   ): Promise<Availability[]>
 }
 
-export class UpdateAvailabilitiesUsecase implements UpdateAvailabilitiesUsecaseProps {
+export class UpdateAvailabilitiesUsecase
+  implements UpdateAvailabilitiesUsecaseProps
+{
   constructor(public repo: AvailabilityRepositoryInterface) {
     this.repo = repo
   }
 
-  async call(eventId: string, memberId: string, availabilities: Availability[]) {
+  async call(
+    eventId: string,
+    memberId: string,
+    availabilities: Availability[]
+  ) {
     let response = null
-    
+
+    // get ip address
+    let ip_address = environments.localIpAddress
+
     // verify if event exists
     try {
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'event',
           type: 'getEvent',
@@ -52,8 +61,11 @@ export class UpdateAvailabilitiesUsecase implements UpdateAvailabilitiesUsecaseP
 
     // verify if member exists
     try {
+      // get ip address
+      let ip_address = environments.localIpAddress
+
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'member',
           type: 'getMember',
@@ -78,13 +90,20 @@ export class UpdateAvailabilitiesUsecase implements UpdateAvailabilitiesUsecaseP
       const member = await this.repo.getMember(eventId, memberId)
     }
 
-    const new_availabilities = await this.repo.updateAvailabilities(eventId, memberId, availabilities)
+    const new_availabilities = await this.repo.updateAvailabilities(
+      eventId,
+      memberId,
+      availabilities
+    )
     const new_member = await this.repo.getMember(eventId, memberId)
-    
+
     // inform to other MSS the update of availabilities
     try {
+      // get ip address
+      let ip_address = environments.localIpAddress
+
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'all',
           type: 'updateAvailabilities',

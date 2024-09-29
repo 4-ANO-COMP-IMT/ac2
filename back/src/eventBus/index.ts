@@ -11,6 +11,7 @@ const server = async () => {
   const PORT_EVENT = environments.eventPort
   const PORT_MEMBER = environments.memberPort
   const PORT_AVAILABILITY = environments.availabilityPort
+  const IP_ADDRESS = environments.localIpAddress
 
   app.use(express.json())
 
@@ -20,7 +21,9 @@ const server = async () => {
 
   app.post('/eventBus', (req, res) => {
     console.log('Listen eventBus!')
-    axios.post('http://localhost:' + PORT_EVENT + '/eventBus', req.body)
+    // get ip address
+
+    axios.post('http://' + IP_ADDRESS + PORT_EVENT + '/eventBus', req.body)
     res.status(200).send({ msg: 'ok' })
   })
 
@@ -44,7 +47,7 @@ const server = async () => {
     if (req.body.mss === 'all') {
       try {
         response = await axios.post(
-          'http://localhost:' + PORT_EVENT + '/communication',
+          'http://' + IP_ADDRESS + PORT_EVENT + '/communication',
           req.body
         )
       } catch (error) {
@@ -52,20 +55,19 @@ const server = async () => {
       }
       try {
         response = await axios.post(
-          'http://localhost:' + PORT_MEMBER + '/communication',
+          'http://' + IP_ADDRESS + PORT_MEMBER + '/communication',
           req.body
         )
       } catch (error) {
         console.log(error)
         console.log('Member MSS is off')
       }
-      try{
+      try {
         response = await axios.post(
-         'http://localhost:' + PORT_AVAILABILITY + '/communication',
-         req.body
+          'http://' + IP_ADDRESS + PORT_AVAILABILITY + '/communication',
+          req.body
         )
-      }
-      catch{
+      } catch {
         console.log('Availability MSS is off')
       }
       res.status(200).send('ok')
@@ -83,7 +85,7 @@ const server = async () => {
           res.status(500).send({ msg: 'Invalid MSS' })
         }
         response = await axios.post(
-          'http://localhost:' + port + '/communication',
+          'http://' + IP_ADDRESS + port + '/communication',
           req.body
         )
         res.status(response.status).send(response.data)

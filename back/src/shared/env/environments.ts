@@ -16,6 +16,7 @@ type Environments = {
   mongoDBEventName: string
   mongoDBMemberName: string
   mongoDBAvailabilityName: string
+  localIpAddress: string
 }
 
 export const environments: Environments = {
@@ -32,5 +33,6 @@ export const environments: Environments = {
   mongoDBEventName: process.env.MONGO_DB_EVENT_NAME || 'events',
   mongoDBMemberName: process.env.MONGO_DB_MEMBER_NAME || 'members',
   mongoDBAvailabilityName:
-    process.env.MONGO_DB_AVAILABILITY_NAME || 'availabilities'
+    process.env.MONGO_DB_AVAILABILITY_NAME || 'availabilities',
+  localIpAddress: process.env.LOCAL_IP_ADDRESS || 'localhost'
 }

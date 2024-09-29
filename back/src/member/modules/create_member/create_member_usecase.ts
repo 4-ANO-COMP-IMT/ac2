@@ -24,8 +24,10 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
   async call(eventId: string, name: string, password?: string | undefined) {
     let response = null
     try {
+      // get ip address
+      let ip_address = environments.localIpAddress
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'event',
           type: 'getEvent',
@@ -60,8 +62,11 @@ export class CreateMemberUsecase implements CreateMemberUsecaseProps {
 
     // inform to other MSS the creation of a member
     try {
+      // get ip address
+      let ip_address = environments.localIpAddress
+
       response = await axios.post(
-        'http://localhost:' + PORT_EVENTBUS + '/communication',
+        'http://' + ip_address + PORT_EVENTBUS + '/communication',
         {
           mss: 'all',
           type: 'createMember',
