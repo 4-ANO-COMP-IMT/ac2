@@ -34,5 +34,5 @@ export const environments: Environments = {
   mongoDBMemberName: process.env.MONGO_DB_MEMBER_NAME || 'members',
   mongoDBAvailabilityName:
     process.env.MONGO_DB_AVAILABILITY_NAME || 'availabilities',
-  localIpAddress: process.env.LOCAL_IP_ADDRESS || 'localhost'
+  localIpAddress: process.env.LOCAL_IP_ADDRESS || 'localhost:'
 }
