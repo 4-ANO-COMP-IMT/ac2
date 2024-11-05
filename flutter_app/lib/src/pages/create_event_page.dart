@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({super.key});
@@ -49,7 +50,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
     }
   }
 
-  void _showAlert(BuildContext context, String title, String message) {
+  void _showAlert(
+      BuildContext context, String title, String message, String? id) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -57,6 +59,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
           title: Text(title),
           content: Text(message),
           actions: [
+            TextButton(
+              onPressed: () async {
+                await Clipboard.setData(
+                    ClipboardData(text: "https://boramarcar.app.br/event/$id"));
+                // copied successfully
+              },
+              child: const Text('Copiar link'),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Fecha o alerta
@@ -99,14 +109,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
       if (response.statusCode == 201) {
         final decodedJson = json.decode(response.body);
         print(decodedJson);
-        _showAlert(context, 'Sucesso',
-            'Evento criado com sucesso! ID: ${decodedJson['data']['id']}');
+        _showAlert(
+            context,
+            'Sucesso',
+            'Evento criado com sucesso! ID: ${decodedJson['data']['id']}',
+            decodedJson['data']['id']);
       } else {
-        _showAlert(context, 'Erro',
-            'Erro ao criar o evento: ${response.statusCode}\n${response.body}');
+        _showAlert(
+            context,
+            'Erro',
+            'Erro ao criar o evento: ${response.statusCode}\n${response.body}',
+            null);
       }
     } catch (e) {
-      _showAlert(context, 'Erro', 'Ocorreu um erro: $e');
+      _showAlert(context, 'Erro', 'Ocorreu um erro: $e', null);
     }
   }
 
