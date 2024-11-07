@@ -23,9 +23,11 @@ Cada usuário indica o período mais conveniente para si e então o sistema é c
 10. [Infraestrutura](#infraestrutura)
 11. [Como rodar](#como-rodar)
     - [Backend](#backend)
+    - [Docker e Kubernetes](#docker-e-kubernetes)
     - [Frontend](#frontend)
 12. [Documentação](#documentação)
-13. [Contribuidores](#contribuidores)
+13. [Vídeo](#vídeo)
+14. [Contribuidores](#contribuidores)
 
 ## Introdução
 
@@ -123,11 +125,13 @@ Além disso, foi utilizado o Route53 para gerenciar o domínio e o ACM para gere
 E por fim o Github Actions foi utilizado para CI/CD do projeto para acelerar o desenvolvimento.
 
 ### Backend
+
 <p align="center">
   <img width="500" alt="back-end" src="https://github.com/user-attachments/assets/ea9e83b2-3ba8-4ca3-ac7d-43a761999751">
 </p>
 
 ### Frontend
+
 <p align="center">
   <img width="500" alt="front-end" src="https://github.com/user-attachments/assets/07ac1f48-350e-4f4d-8950-d723e339fae5">
 </p>
@@ -146,6 +150,26 @@ Para rodar cada microsserviço, utilize o comando:
 
 ```bash
 npm run dev:<nome do microsserviço>
+```
+
+### Docker e Kubernetes
+
+Use o comando abaixo para acessar o diretório backdo projeto:
+
+```bash
+cd back
+```
+
+Execute o seguinte comando para construir a imagem Docker:
+
+```bash
+docker build -t ac2-2024-event-container -f src/event/Dockerfile .
+```
+
+Execute o seguinte comando para aplicar a configuração do Kubernetes e implantar a imagem:
+
+```bash
+kubectl apply -f kubernetes/event-deployment.yml
 ```
 
 ### Frontend
@@ -172,6 +196,11 @@ npm run dev
 
 O projeto foi documentado utilizando o Postman e sua documentação pode ser encontrada aqui:
 [https://docs.boramarcar.app.br/](https://docs.boramarcar.app.br/)
+
+## Vídeo
+
+Veja as principais funcionalidades do projeto no vídeo disponível no link!
+[https://youtu.be/aUh-YGuWkEw](https://youtu.be/aUh-YGuWkEw)
 
 ## Contribuidores
 
