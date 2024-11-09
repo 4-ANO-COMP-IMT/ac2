@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventbus-deployment
+  labels:
+    app: eventbus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventbus
+  template:
+    metadata:
+      labels:
+        app: eventbus
+    spec:
+      containers:
+        - name: ac2-2024-eventbus-container
+          imagePullPolicy: Never
+          image: ac2-2024-eventbus-container:latest
+          ports:
+            - containerPort: 10000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventbus-service
+spec:
+  selector:
+    app: eventbus
+  ports:
+    - protocol: TCP
+      port: 10000
+      targetPort: 10000
+  type: LoadBalancer
